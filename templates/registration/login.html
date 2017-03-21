@@ -9,6 +9,13 @@
   </form>
   <br>
   <p><strong>-- OR --</strong></p>
-  <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
-  <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a>
+  <div>
+    <button><a href="{% url 'social:begin' 'github' %}">Login with GitHub <i class="fa fa-github"></i></a></button>
+  </div>
+  <div>
+    <button><a href="{% url 'social:begin' 'twitter' %}">Login with Twitter <i class="fa fa-twitter"></i></a></button>
+  </div>
+  <div>
+    <button><a href="{% url 'social:begin' 'facebook' %}">Login with Facebook <i class="fa fa-facebook-official"></i></a></button>
+  </div>
 {% endblock %}
