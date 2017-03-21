@@ -1,5 +1,16 @@
+appdirs==1.4.3
 dj-database-url==0.4.1
 Django==1.10.4
 gunicorn==19.6.0
+oauthlib==2.0.2
+packaging==16.8
 psycopg2==2.6.2
+PyJWT==1.4.2
+pyparsing==2.2.0
+python-openid==2.2.5
+requests==2.13.0
+requests-oauthlib==0.8.0
+six==1.10.0
+social-auth-app-django==1.1.0
+social-auth-core==1.2.0
 whitenoise==3.2
