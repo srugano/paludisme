@@ -56,6 +56,15 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li>
+                        <a href="{% url 'stock-debut-journnee-list' %}">Stock debut de Journee</a>
+                    </li>
+                    <li>
+                        <a href="#">Stock Recu</a>
+                    </li>
+                    <li>
+                        <a href="#">Stock Distribue</a>
+                    </li>
+                    <li>
                         <a href="{% url 'logout' %}">Logout</a>
                     </li>
                     {% else %}
@@ -75,8 +84,7 @@
 
         <div class="row">
             {% block content %}
-                <h2>Homepage</h2>
-                <p>Hello {{ user.username }} !</p>
+                <h1>Homepage</h1>
             {% endblock content %}
         </div>
         <!-- /.row -->

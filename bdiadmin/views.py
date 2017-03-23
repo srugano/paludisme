@@ -115,5 +115,3 @@ class ProfileUserCreateView(CreateView):
         context = self.get_context_data(**kwargs)
         context['form'] = form
         return self.render_to_response(context)
-
-        

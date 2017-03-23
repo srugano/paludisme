@@ -1,0 +1,65 @@
+{% extends 'home.html' %}
+{% load staticfiles %}
+
+{% block titles %}Stock Debut de journnee{% endblock titles %}
+{% block extra_scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/angular-datatables.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/css/angular-datatables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/plugins/buttons/angular-datatables.buttons.min.js"></script>
+    <script src="{% static "export.js" %}"></script>
+{% endblock extra_scripts %}
+
+{% block content %}
+    <div class="container" ng-app="RepportApp" ng-controller="RepportCtrl">
+        <h1 class="heading">Les Rapports</h1>
+        <div >
+            <table datatable="ng" data-toggle='table' class="table row-border hover" dt-options="dtOptions">
+                <thead>
+                <tr>
+                    <th>CDS</th>
+                    <th>Produits</th>
+                    <th>Text</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in produits %}
+                    <tr>
+                        <td>{{object.report.facility}}</td>
+                        <td>{{object.product}}</td>
+                        <td>{{object.report|truncatechars:250}}</td>
+                        <td>{{object.dosage}}</td>
+                        <td>{{object.quantity}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="/export?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="/export?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+{% endblock content %}
+

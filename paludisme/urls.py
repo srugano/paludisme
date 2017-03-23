@@ -7,6 +7,7 @@ from paludisme.views import home, settings, password
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', home, name='home'),
+    url(r'^stock/', include('stock.urls')),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
