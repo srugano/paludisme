@@ -1,8 +1,10 @@
+-f file:///home/stock/.pip-wheelhouse
 appdirs==1.4.3
 diff-match-patch==20121119
 dj-database-url==0.4.1
 Django==1.10.4
 django-import-export==0.5.1
+djangorestframework==3.6.2
 gunicorn==19.6.0
 oauthlib==2.0.2
 packaging==16.8
