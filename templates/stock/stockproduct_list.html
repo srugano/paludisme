@@ -15,7 +15,7 @@
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/plugins/buttons/angular-datatables.buttons.min.js"></script>
-    <script src="{% static "exports.js" %}"></script>
+    <script src="{% static "export.js" %}"></script>
 {% endblock extra_scripts %}
 
 {% block content %}
@@ -26,6 +26,7 @@
                 <thead>
                 <tr>
                     <th>Id</th>
+                    <th>Date</th>
                     <th>Province</th>
                     <th>District</th>
                     <th>Produits</th>
@@ -37,6 +38,7 @@
                     {% verbatim %}
                     <tr ng-repeat="report in reports">
                         <td>{{report.id}}</td>
+                        <td>{{report.reporting_date}}</td>
                         <td>{{report.province}}</td>
                         <td>{{report.district}}</td>
                         <td>{{report.product}}</td>

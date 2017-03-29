@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import dj_database_url
+from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -177,8 +178,16 @@ SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
-
+# Import Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+# All reports
+KNOWN_PREFIXES = (
+    ("REG", _("Registering")),
+    ("SF", _("Final Stock")),
+    ("SR", _("Stoc Received")),
+    ("RUP", _("Rupture")),
+)
 
 # try to load local_settings.py if it exists
 try:

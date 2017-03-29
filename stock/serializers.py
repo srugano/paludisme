@@ -12,7 +12,7 @@ class StockProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StockProduct
-        fields = ('id', 'province', 'district', 'product', 'dosage', 'quantity', 'cds',)
+        fields = ('id', 'province', 'district', 'product', 'dosage', 'quantity', 'cds','reporting_date')
 
     def get_province(self, obj):
         return obj.report.facility.district.province.name
