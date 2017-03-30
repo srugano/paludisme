@@ -61,6 +61,8 @@ def add_reporter(request):
             temporary, created = Temporary.objects.get_or_create(facility=CDS.objects.get(code=message[1]), phone_number=validate_phone(message[2]), supervisor_phone_number=validate_phone(message[3]))
             if created:
                 return JsonResponse({'Ok': "True", 'info_to_contact': "Subira wandike numero zawe n'izuwugutwara gusa."}, safe=False)
+            else:
+                return JsonResponse({'Ok': "False", 'info_to_contact': "Rungika gusa izo nimero za terefone"}, safe=False)
         else:
             return JsonResponse({'Ok': "False", 'info_to_contact': "Muranditse."}, safe=False)
     else:
