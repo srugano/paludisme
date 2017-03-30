@@ -9,10 +9,11 @@ class StockProductSerializer(serializers.ModelSerializer):
     cds = serializers.SerializerMethodField()
     product = serializers.SerializerMethodField()
     dosage = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
 
     class Meta:
         model = StockProduct
-        fields = ('id', 'province', 'district', 'product', 'dosage', 'quantity', 'cds','reporting_date')
+        fields = ('id', 'province', 'district', 'cds', 'product', 'dosage', 'quantity', 'cds', 'reporting_date', 'category')
 
     def get_province(self, obj):
         return obj.report.facility.district.province.name
@@ -29,3 +30,5 @@ class StockProductSerializer(serializers.ModelSerializer):
     def get_dosage(self, obj):
         return obj.dosage.dosage
 
+    def get_category(self, obj):
+        return obj.report.category

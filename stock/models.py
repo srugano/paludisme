@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+from paludisme.utils import phone_regex
 
 
 class Dosage(models.Model):
@@ -33,8 +34,8 @@ class Product(models.Model):
 class Reporter(models.Model):
     '''In this model, we will store reporters'''
     facility = models.ForeignKey(CDS)
-    phone_number = models.CharField(max_length=20)
-    supervisor_phone_number = models.CharField(max_length=20)
+    phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
+    supervisor_phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
 
     def __unicode__(self):
         return "Tel: {0} on {1} cds".format(self.phone_number, self.facility)
@@ -69,3 +70,16 @@ class StockProduct(models.Model):
 
     class Meta:
         ordering = ('report',)
+
+
+class Temporary(models.Model):
+    '''
+    This model will be used to temporary store a reporter who doesn't finish his self registration
+    '''
+    facility = models.ForeignKey(CDS)
+    phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
+    supervisor_phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
+
+    def __unicode__(self):
+        return self.phone_number
+

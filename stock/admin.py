@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from stock.models import Product, Report, Reporter, Dosage, StockProduct
+from stock.models import Product, Report, Reporter, Dosage, StockProduct, Temporary
 
 
 @admin.register(Product)
@@ -25,4 +25,9 @@ class DosageAdmin(ImportExportModelAdmin):
 
 @admin.register(StockProduct)
 class StockProductAdmin(ImportExportModelAdmin):
+    pass
+
+
+@admin.register(Temporary)
+class TemporaryAdmin(ImportExportModelAdmin):
     pass

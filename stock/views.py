@@ -17,12 +17,18 @@ class StockProductListView(ListView):
 
 def create_stockproduct(report=None, product=None):
     products = [m.code for m in Product.objects.all().distinct()]
-    print product.code
     if product.code in products:
-        if product.code in ["ACT", "QUI", "ART", "TDR", "SP"]:
-            values = report.text.split(" ")[3:]
-            dosages = product.dosages.all()
-            for dose in dosages:
-                sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
-                sp.save()
-    print "Report {0}, for product {1}".format(report, product)
+        values = report.text.split(" ")[3:]
+        dosages = product.dosages.all()
+        for dose in dosages:
+            sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
+            sp.save()
+
+
+def update_stockproduct(report=None, product=None):
+    values = report.text.split(" ")[3:]
+    dosages = product.dosages.all()
+    for dose in dosages:
+        sp = StockProduct.objects.get(product=product, report=report, dosage=dose)
+        sp.quantity = values[dose.rank]
+        sp.save()

@@ -4,13 +4,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from social_django.models import UserSocialAuth
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
-from paludisme.utils import validate_date, split_message
-from stock.models import Report, Reporter, Product
-from stock.views import create_stockproduct
+from paludisme.utils import validate_date, split_message, validate_phone, get_or_none
+from stock.models import Report, Reporter, Product, Temporary
+from stock.views import create_stockproduct, update_stockproduct
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.http import JsonResponse
 from django.conf import settings as conf_settings
+from bdiadmin.models import CDS
 
 
 @csrf_exempt
@@ -21,29 +22,59 @@ def add_report(request):
     if response_data['text']:
         facility = Reporter.objects.get(phone_number=response_data['phone']).facility
         if response_data['text'] != "":
-            # import ipdb; ipdb.set_trace()
             message = response_data['text'].split(" ")
-            if message[0].upper() not in [y[0] for x, y in enumerate(conf_settings.KNOWN_PREFIXES)]:
+            if message[0] not in [y[0] for x, y in enumerate(conf_settings.KNOWN_PREFIXES)]:
                 return JsonResponse({'Ok': "False", 'info_to_contact': "Rapport mwarungitse ntibaho. Rungika iyitanguzwa na SF, SR, REG canke RUP"}, safe=False)
             if len(message) > 7:
                 return JsonResponse({'Ok': "False", 'info_to_contact': "Mwarungitse ibintu vyinshi. Subiramwo nkuko twabigishije."}, safe=False)
-            date_updated = validate_date(message[1])
-            if isinstance(date_updated, JsonResponse):
-                return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntiyandikwa uko.', 'error': message[1]}, safe=False)
-            if date_updated.date() > datetime.datetime.today().date():
-                return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntishobora kuba muri kazoza. Subira urungike mesaje.', 'error': date_updated}, safe=False)
-            report, created = Report.objects.get_or_create(facility=facility, reporting_date=date_updated, category=message[0].upper(), text__icontains=message[2])
-            if created:
-                report.text = response_data["text"]
-                report.save()
-                created = "Report created"
+            if message[2] in ["ACT", "QUI", "ART", "TDR", "SP"]:
+                date_updated = validate_date(message[1])
+                if isinstance(date_updated, JsonResponse):
+                    return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntiyandikwa uko.', 'error': message[1]}, safe=False)
+                if date_updated.date() > datetime.datetime.today().date():
+                    return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntishobora kuba muri kazoza. Subira urungike mesaje.', 'error': date_updated}, safe=False)
                 product = Product.objects.get(code=message[2])
-                create_stockproduct(product=product, report=report)
-            else:
-                report.text = response_data["text"]
-                report.save()
-                created = "Report updated"
+                report, created = Report.objects.get_or_create(facility=facility, reporting_date=date_updated, category=message[0].upper(), text__icontains=message[2])
+                if created:
+                    report.text = response_data["text"]
+                    report.save()
+                    created = "Report created"
+                    create_stockproduct(product=product, report=report)
+                else:
+                    report.text = response_data["text"]
+                    report.save()
+                    created = "Report updated"
+                    update_stockproduct(product=product, report=report)
             return JsonResponse({"facility": facility.name, "date_updated": date_updated, "message": message[0].upper(), "report": created}, safe=False)
+
+
+@csrf_exempt
+def add_reporter(request):
+    response_data = split_message(request)
+    message = response_data['text'].split(" ")
+    if message[0] == "REG":
+        if not CDS.objects.filter(code=message[1]):
+            return JsonResponse({'Ok': "False", 'info_to_contact': "Iryo vuriro ntiribaho."}, safe=False)
+        if not (validate_phone(message[2]) and validate_phone(message[3])):
+            return JsonResponse({'Ok': "False", 'info_to_contact': "Terefone ntizanditse neza."}, safe=False)
+        if Reporter.objects.filter(phone_number=message[2]).count() == 0:
+            temporary, created = Temporary.objects.get_or_create(facility=CDS.objects.get(code=message[1]), phone_number=validate_phone(message[2]), supervisor_phone_number=validate_phone(message[3]))
+            if created:
+                return JsonResponse({'Ok': "True", 'info_to_contact': "Subira wandike numero zawe n'izuwugutwara gusa."}, safe=False)
+        else:
+            return JsonResponse({'Ok': "False", 'info_to_contact': "Muranditse."}, safe=False)
+
+@csrf_exempt
+def confirm_reporter(request):
+    response_data = split_message(request)
+    message = response_data['text'].split(" ")
+    temporary = get_or_none(Temporary, phone_number=validate_phone(message[0]), supervisor_phone_number=validate_phone(message[1]))
+    if temporary:
+        Reporter.objects.get_or_create(facility=temporary.facility, phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
+        temporary.delete()
+        return JsonResponse({'Ok': "True", 'info_to_contact': "Vyagenze neza."}, safe=False)
+    else:
+        return JsonResponse({'Ok': "False", 'info_to_contact': "Sivyo ivyo wanditse."}, safe=False)
 
 
 def home(request):
