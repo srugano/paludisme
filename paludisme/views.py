@@ -62,7 +62,7 @@ def add_reporter(request):
             if created:
                 return JsonResponse({'Ok': "True", 'info_to_contact': "Subira wandike numero zawe n'izuwugutwara gusa."}, safe=False)
             else:
-                return JsonResponse({'Ok': "False", 'info_to_contact': "Rungika gusa izo nimero za terefone"}, safe=False)
+                return JsonResponse({'Ok': "True", 'info_to_contact': "Rungika gusa izo nimero za terefone"}, safe=False)
         else:
             return JsonResponse({'Ok': "False", 'info_to_contact': "Muranditse."}, safe=False)
     else:
