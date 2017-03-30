@@ -56,10 +56,10 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'stock-debut-journnee-list' %}">Stock de Fin de semaine</a>
+                        <a href="{% url 'show_reports_sf' %}">Stock de Fin de semaine</a>
                     </li>
                     <li>
-                        <a href="#">Stock Recu</a>
+                        <a href="{% url 'show_reports_sr' %}">Stock Recu</a>
                     </li>
                     <li>
                         <a href="#">Rupture</a>
@@ -84,7 +84,6 @@
 
         <div class="row">
             {% block content %}
-                <h1>Homepage</h1>
             {% endblock content %}
         </div>
         <!-- /.row -->

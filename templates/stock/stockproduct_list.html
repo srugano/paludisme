@@ -15,12 +15,14 @@
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/plugins/buttons/angular-datatables.buttons.min.js"></script>
-    <script src="{% static "export.js" %}"></script>
+    {% block stockproduct %}
+        
+    {% endblock stockproduct %}
 {% endblock extra_scripts %}
 
 {% block content %}
     <div class="container" ng-app="RepportApp" ng-controller="RepportCtrl">
-        <h1 class="heading">Les Rapports</h1>
+        <h1 class="heading">Raports de fin de Semaine</h1>
         <div >
             <table datatable="ng" data-toggle='table' class="table row-border hover" dt-options="dtOptions">
                 <thead>
@@ -32,7 +34,7 @@
                     <th>CDS</th>
                     <th>Produits</th>
                     <th>Category</th>
-                    <th>Text</th>
+                    <th>Dosage</th>
                     <th>Quantity</th>
                 </tr>
                 </thead>

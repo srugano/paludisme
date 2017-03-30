@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'import_export',
     'social_django',
+    'django_filters',
     'stock',
     'bdiadmin',
 ]
@@ -189,6 +190,10 @@ KNOWN_PREFIXES = (
     ("RUP", _("Rupture")),
 )
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}
 # try to load local_settings.py if it exists
 try:
     from local_settings import *

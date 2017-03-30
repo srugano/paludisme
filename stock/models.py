@@ -77,9 +77,19 @@ class Temporary(models.Model):
     This model will be used to temporary store a reporter who doesn't finish his self registration
     '''
     facility = models.ForeignKey(CDS)
-    phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
-    supervisor_phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
+    phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact the sender.'), max_length=16)
+    supervisor_phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact your supervisor.'), max_length=16)
 
     def __unicode__(self):
         return self.phone_number
 
+
+class StockOutReport(models.Model):
+    ''' Informations given in a stock out report are stored in this model '''
+    report = models.ForeignKey(Report)
+    produit = models.ForeignKey(Product)
+    remaining = models.FloatField(default=0.0)
+    reporting_date = models.DateField(default=timezone.now)
+
+    def __unicode__(self):
+        return "{0} => Remaining quantity: {1}".format(self.produit.designation, self.remaining)

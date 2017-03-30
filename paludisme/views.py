@@ -68,6 +68,7 @@ def add_reporter(request):
     else:
         return JsonResponse({'Ok': "False", 'info_to_contact': "Ivyo mwanditse sivyo."}, safe=False)
 
+
 @csrf_exempt
 def confirm_reporter(request):
     response_data = split_message(request)
@@ -79,6 +80,12 @@ def confirm_reporter(request):
         return JsonResponse({'Ok': "True", 'info_to_contact': "Vyagenze neza."}, safe=False)
     else:
         return JsonResponse({'Ok': "False", 'info_to_contact': "Sivyo ivyo wanditse."}, safe=False)
+
+
+@csrf_exempt
+def add_stockout(request):
+    pass
+
 
 
 def home(request):

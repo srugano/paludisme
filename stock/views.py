@@ -1,18 +1,34 @@
-from django.views.generic import ListView
 from stock.models import StockProduct, Product
 from rest_framework import viewsets
+import django_filters
 from stock.serializers import StockProductSerializer
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+
+class StockProductFilter(django_filters.rest_framework.FilterSet):
+    category = django_filters.CharFilter(name="report", lookup_expr='category')
+
+    class Meta:
+        model = StockProduct
+        fields = ['dosage', 'product', 'report', 'category']
 
 
 class StockProductViewsets(viewsets.ModelViewSet):
     queryset = StockProduct.objects.all()
     serializer_class = StockProductSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_class = StockProductFilter
 
 
-class StockProductListView(ListView):
-    model = StockProduct
-    paginate_by = 25
-    context_object_name = 'produits'
+@login_required
+def show_reports_sf(request):
+    return render(request, "stock/sf.html")
+
+
+@login_required
+def show_reports_sr(request):
+    return render(request, "stock/sr.html")
 
 
 def create_stockproduct(report=None, product=None):
@@ -39,4 +55,3 @@ def update_stockproduct(report=None, product=None):
         message += sp.quantity + " (" + dose.dosage + "), "
 
     return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
-
