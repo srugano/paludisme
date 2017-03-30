@@ -39,13 +39,13 @@ def add_report(request):
                     report.text = response_data["text"]
                     report.save()
                     created = "Report created"
-                    create_stockproduct(product=product, report=report)
+                    info_to_contact = create_stockproduct(product=product, report=report)
                 else:
                     report.text = response_data["text"]
                     report.save()
                     created = "Report updated"
-                    update_stockproduct(product=product, report=report)
-            return JsonResponse({"facility": facility.name, "date_updated": date_updated, "message": message[0].upper(), "report": created}, safe=False)
+                    info_to_contact = update_stockproduct(product=product, report=report)
+            return JsonResponse({'Ok': "True", 'info_to_contact': info_to_contact}, safe=False)
 
 
 @csrf_exempt
