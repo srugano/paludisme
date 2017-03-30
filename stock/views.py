@@ -25,7 +25,7 @@ def create_stockproduct(report=None, product=None):
             sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
             sp.save()
             message += sp.quantity + " (" + dose.dosage + "), "
-    return "Kuri {0}, handitswe {1} murakoze".format(report.facility, message)
+    return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
 
 
 def update_stockproduct(report=None, product=None):
@@ -38,5 +38,5 @@ def update_stockproduct(report=None, product=None):
         sp.save()
         message += sp.quantity + " (" + dose.dosage + "), "
 
-    return "Kuri {0}, handitswe {1} murakoze".format(report.facility, message)
+    return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
 
