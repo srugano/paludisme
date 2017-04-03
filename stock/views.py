@@ -1,4 +1,4 @@
-from stock.models import StockProduct, Product
+from stock.models import StockProduct, Product, StockOutReport
 from rest_framework import viewsets
 import django_filters
 from stock.serializers import StockProductSerializer
@@ -33,25 +33,37 @@ def show_reports_sr(request):
 
 def create_stockproduct(report=None, product=None):
     products = [m.code for m in Product.objects.all().distinct()]
-    message = ""
     if product.code in products:
         values = report.text.split(" ")[3:]
-        dosages = product.dosages.all()
-        for dose in dosages:
-            sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
-            sp.save()
-            message += sp.quantity + " (" + dose.dosage + "), "
-    return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
+        if report.text.split(" ")[0] in ["RP"]:
+            st = StockOutReport.objects.create(product=product, report=report, remaining=values[0])
+            st.save()            
+            return "Kuri {0}, handitswe ko hasigaye {1}, za {2} kw'itariki {3}. Murakoze".format(report.facility, values[0], product.designation, st.reporting_date)
+        else:
+            message = ""
+            dosages = product.dosages.all()
+            for dose in dosages:
+                sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
+                sp.save()
+                message += sp.quantity + " (" + dose.dosage + "), "
+                
+            return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
 
 
 def update_stockproduct(report=None, product=None):
     values = report.text.split(" ")[3:]
-    dosages = product.dosages.all()
-    message = ""
-    for dose in dosages:
-        sp, created = StockProduct.objects.get_or_create(product=product, report=report, dosage=dose)
-        sp.quantity = values[dose.rank]
-        sp.save()
-        message += sp.quantity + " (" + dose.dosage + "), "
+    if report.text.split(" ")[0] in ["RP"]:
+            st, created = StockOutReport.objects.get_or_create(product=product, report=report)
+            st.remaining=values[0]
+            st.save()            
+            return "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, values[0], product.designation, st.reporting_date)
+    else:
+        dosages = product.dosages.all()
+        message = ""
+        for dose in dosages:
+            sp, created = StockProduct.objects.get_or_create(product=product, report=report, dosage=dose)
+            sp.quantity = values[dose.rank]
+            sp.save()
+            message += sp.quantity + " (" + dose.dosage + "), "
 
-    return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
+        return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)

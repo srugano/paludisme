@@ -87,7 +87,7 @@ class Temporary(models.Model):
 class StockOutReport(models.Model):
     ''' Informations given in a stock out report are stored in this model '''
     report = models.ForeignKey(Report)
-    produit = models.ForeignKey(Product)
+    product = models.ForeignKey(Product)
     remaining = models.FloatField(default=0.0)
     reporting_date = models.DateField(default=timezone.now)
 

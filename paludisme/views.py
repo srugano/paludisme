@@ -24,7 +24,7 @@ def add_report(request):
         if response_data['text'] != "":
             message = response_data['text'].split(" ")
             if message[0] not in [y[0] for x, y in enumerate(conf_settings.KNOWN_PREFIXES)]:
-                return JsonResponse({'Ok': "False", 'info_to_contact': "Rapport mwarungitse ntibaho. Rungika iyitanguzwa na SF, SR, REG canke RUP"}, safe=False)
+                return JsonResponse({'Ok': "False", 'info_to_contact': "Rapport mwarungitse ntibaho. Rungika iyitanguzwa na SF, SR, REG canke RP"}, safe=False)
             if len(message) > 7:
                 return JsonResponse({'Ok': "False", 'info_to_contact': "Mwarungitse ibintu vyinshi. Subiramwo nkuko twabigishije."}, safe=False)
             if message[2] in ["ACT", "QUI", "ART", "TDR", "SP"]:
@@ -75,9 +75,9 @@ def confirm_reporter(request):
     message = response_data['text'].split(" ")
     temporary = get_or_none(Temporary, phone_number=validate_phone(message[0]), supervisor_phone_number=validate_phone(message[1]))
     if temporary:
-        Reporter.objects.get_or_create(facility=temporary.facility, phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
+        reporter = Reporter.objects.get_or_create(facility=temporary.facility, phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
         temporary.delete()
-        return JsonResponse({'Ok': "True", 'info_to_contact': "Vyagenze neza."}, safe=False)
+        return JsonResponse({'Ok': "True", 'info_to_contact': "Murahejeje kwandikisha inimero {0} izohora itanga raporo.".format(reporter.phone_number)}, safe=False)
     else:
         return JsonResponse({'Ok': "False", 'info_to_contact': "Sivyo ivyo wanditse."}, safe=False)
 
@@ -85,7 +85,6 @@ def confirm_reporter(request):
 @csrf_exempt
 def add_stockout(request):
     pass
-
 
 
 def home(request):

@@ -187,7 +187,7 @@ KNOWN_PREFIXES = (
     ("REG", _("Registering")),
     ("SF", _("Final Stock")),
     ("SR", _("Stoc Received")),
-    ("RUP", _("Rupture")),
+    ("RP", _("Rupture")),
 )
 
 
