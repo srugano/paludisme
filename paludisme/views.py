@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from social_django.models import UserSocialAuth
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
-from paludisme.utils import validate_date, split_message, validate_phone, get_or_none
+from paludisme.utils import validate_date, split_message, validate_phone, get_or_none, send_sms_through_rapidpro
 from stock.models import Report, Reporter, Product, Temporary
 from stock.views import create_stockproduct, update_stockproduct
 from django.views.decorators.csrf import csrf_exempt
@@ -39,12 +39,12 @@ def add_report(request):
                     report.text = response_data["text"]
                     report.save()
                     created = "Report created"
-                    info_to_contact = create_stockproduct(product=product, report=report)
+                    info_to_contact = create_stockproduct(product=product, report=report, phone=response_data['phone'])
                 else:
                     report.text = response_data["text"]
                     report.save()
                     created = "Report updated"
-                    info_to_contact = update_stockproduct(product=product, report=report)
+                    info_to_contact = update_stockproduct(product=product, report=report, phone=response_data['phone'])
             return JsonResponse({'Ok': "True", 'info_to_contact': info_to_contact}, safe=False)
 
 
@@ -75,11 +75,12 @@ def confirm_reporter(request):
     message = response_data['text'].split(" ")
     temporary = get_or_none(Temporary, phone_number=validate_phone(message[0]), supervisor_phone_number=validate_phone(message[1]))
     if temporary:
-        reporter = Reporter.objects.get_or_create(facility=temporary.facility, phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
+        reporter, created = Reporter.objects.get_or_create(facility=temporary.facility, phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
         temporary.delete()
+        send_sms_through_rapidpro({'urns': ["tel:"+reporter.supervisor_phone_number, ], 'text': "Mwandikishijwe kuzoja muronka raporo za rupture kuri {0}".format(reporter.facility)})
         return JsonResponse({'Ok': "True", 'info_to_contact': "Murahejeje kwandikisha inimero {0} izohora itanga raporo.".format(reporter.phone_number)}, safe=False)
     else:
-        return JsonResponse({'Ok': "False", 'info_to_contact': "Sivyo ivyo wanditse."}, safe=False)
+        return JsonResponse({'Ok': "False", 'info_to_contact': "Izo numero mwanditse ntizibaho"}, safe=False)
 
 
 @csrf_exempt

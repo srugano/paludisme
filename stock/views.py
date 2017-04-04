@@ -31,13 +31,13 @@ def show_reports_sr(request):
     return render(request, "stock/sr.html")
 
 
-def create_stockproduct(report=None, product=None):
+def create_stockproduct(report=None, product=None, *args, **kwargs):
     products = [m.code for m in Product.objects.all().distinct()]
     if product.code in products:
         values = report.text.split(" ")[3:]
         if report.text.split(" ")[0] in ["RP"]:
             st = StockOutReport.objects.create(product=product, report=report, remaining=values[0])
-            st.save()            
+            st.save()  
             return "Kuri {0}, handitswe ko hasigaye {1}, za {2} kw'itariki {3}. Murakoze".format(report.facility, values[0], product.designation, st.reporting_date)
         else:
             message = ""
@@ -46,16 +46,16 @@ def create_stockproduct(report=None, product=None):
                 sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
                 sp.save()
                 message += sp.quantity + " (" + dose.dosage + "), "
-                
             return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
 
 
-def update_stockproduct(report=None, product=None):
+def update_stockproduct(report=None, product=None, *args, **kwargs):
     values = report.text.split(" ")[3:]
     if report.text.split(" ")[0] in ["RP"]:
+            import ipdb; ipdb.set_trace()
             st, created = StockOutReport.objects.get_or_create(product=product, report=report)
-            st.remaining=values[0]
-            st.save()            
+            st.remaining = values[0]
+            st.save()
             return "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, values[0], product.designation, st.reporting_date)
     else:
         dosages = product.dosages.all()
