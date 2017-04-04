@@ -52,7 +52,6 @@ def create_stockproduct(report=None, product=None, *args, **kwargs):
 def update_stockproduct(report=None, product=None, *args, **kwargs):
     values = report.text.split(" ")[3:]
     if report.text.split(" ")[0] in ["RP"]:
-            import ipdb; ipdb.set_trace()
             st, created = StockOutReport.objects.get_or_create(product=product, report=report)
             st.remaining = values[0]
             st.save()
