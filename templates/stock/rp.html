@@ -1,6 +1,57 @@
 {% extends 'stock/stockproduct_list.html' %}
 {% load static %}
 
+{% block titles %}Stock en place{% endblock titles %}
+
 {% block stockproduct %}
-<script src="{% static "productreport-rp.js" %}"></script>
+        <script src="{% static "productreport-rp.js" %}"></script>
 {% endblock stockproduct %}
+
+{% block content %}
+    <div class="container" ng-app="RepportApp" ng-controller="RepportCtrl">
+        <h1 class="heading">Raports de rupture</h1>
+        <div >
+            <table datatable="ng" data-toggle='table' class="table row-border hover" dt-options="dtOptions">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Date</th>
+                    <th>Province</th>
+                    <th>District</th>
+                    <th>CDS</th>
+                    <th>Product</th>
+                    <th>Remaining Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% verbatim %}
+                    <tr ng-repeat="report in reports">
+                        <td>{{report.id}}</td>
+                        <td>{{report.reporting_date}}</td>
+                        <td>{{report.province}}</td>
+                        <td>{{report.district}}</td>
+                        <td>{{report.cds}}</td>
+                        <td>{{report.product}}</td>
+                        <td>{{report.remaining}}</td>
+                    </tr>
+                    {% endverbatim %} 
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="/export?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="/export?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+{% endblock content %}

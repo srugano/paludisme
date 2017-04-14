@@ -1,7 +1,7 @@
 from stock.models import StockProduct, Product, StockOutReport
 from rest_framework import viewsets
 import django_filters
-from stock.serializers import StockProductSerializer
+from stock.serializers import StockProductSerializer, StockOutProductSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -21,6 +21,11 @@ class StockProductViewsets(viewsets.ModelViewSet):
     filter_class = StockProductFilter
 
 
+class StockOutProductViewsets(viewsets.ModelViewSet):
+    queryset = StockOutReport.objects.all()
+    serializer_class = StockOutProductSerializer
+
+
 @login_required
 def show_reports_sf(request):
     return render(request, "stock/sf.html")
@@ -29,6 +34,11 @@ def show_reports_sf(request):
 @login_required
 def show_reports_sr(request):
     return render(request, "stock/sr.html")
+
+
+@login_required
+def show_reports_rp(request):
+    return render(request, "stock/rp.html")
 
 
 def create_stockproduct(report=None, product=None, *args, **kwargs):

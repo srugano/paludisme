@@ -92,4 +92,4 @@ class StockOutReport(models.Model):
     reporting_date = models.DateField(default=timezone.now)
 
     def __unicode__(self):
-        return "{0} => Remaining quantity: {1}".format(self.produit.designation, self.remaining)
+        return "{0} => Remaining quantity: {1}".format(self.product.designation, self.remaining)
