@@ -76,8 +76,7 @@ class Tests(models.Model):
     report = models.ForeignKey(Report)
     reporting_date = models.DateField(default=timezone.now)
     ge = models.FloatField(default=0.0)
-    product = models.ForeignKey(Product)
-    quantity = models.FloatField(default=0.0)
+    tdr = models.FloatField(default=0.0)
 
     def __unicode__(self):
         return "{0} - {1}".format(self.product, self.quantity)
