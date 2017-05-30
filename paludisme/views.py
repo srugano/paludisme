@@ -25,8 +25,6 @@ def add_report(request):
             message = response_data['text'].split(" ")
             if message[0] not in [y[0] for x, y in enumerate(conf_settings.KNOWN_PREFIXES)]:
                 return JsonResponse({'Ok': "False", 'info_to_contact': "Rapport mwarungitse ntibaho. Rungika iyitanguzwa na REG, SF, SR, RP, CA, TS, HBC, HBD canke X"}, safe=False)
-            if len(message) > 7:
-                return JsonResponse({'Ok': "False", 'info_to_contact': "Mwarungitse ibintu vyinshi. Subiramwo nkuko twabigishije."}, safe=False)
             date_updated = validate_date(message[1])
             if isinstance(date_updated, JsonResponse):
                 return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntiyandikwa uko.', 'error': message[1]}, safe=False)
