@@ -187,8 +187,12 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 KNOWN_PREFIXES = (
     ("REG", _("Registering")),
     ("SF", _("Final Stock")),
-    ("SR", _("Stoc Received")),
+    ("SR", _("Stock Received")),
     ("RP", _("Rupture")),
+    ("CA", _("Cases")),
+    ("TS", _("Test")),
+    ("HBC", _("Repports on cases")),
+    ("HBD", _("Reports on death")),
 )
 
 
