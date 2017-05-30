@@ -72,6 +72,61 @@ class StockProduct(models.Model):
         ordering = ('report',)
 
 
+class Tests(models.Model):
+    report = models.ForeignKey(Report)
+    reporting_date = models.DateField(default=timezone.now)
+    ge = models.FloatField(default=0.0)
+    product = models.ForeignKey(Product)
+    quantity = models.FloatField(default=0.0)
+
+    def __unicode__(self):
+        return "{0} - {1}".format(self.product, self.quantity)
+
+
+class CasesPalu(models.Model):
+    report = models.ForeignKey(Report)
+    reporting_date = models.DateField(default=timezone.now)
+    simple = models.FloatField(default=0.0)
+    acute = models.FloatField(default=0.0)
+    pregnant_women = models.FloatField(default=0.0)
+    decease = models.FloatField(default=0.0)
+
+    def __unicode__(self):
+        return "{0} - {1} - {2} - {3}".format(self.simple, self.acute, self.pregnant_women, self.decease)
+
+
+class PotentialCases(models.Model):
+    report = models.ForeignKey(Report)
+    reporting_date = models.DateField(default=timezone.now)
+    fpa = models.FloatField(default=0.0)
+    cholera = models.FloatField(default=0.0)
+    meningit = models.FloatField(default=0.0)
+    rougeole = models.FloatField(default=0.0)
+    tnn = models.FloatField(default=0.0)
+    fievre_hemoragique = models.FloatField(default=0.0)
+    paludisme = models.FloatField(default=0.0)
+    other = models.FloatField(default=0.0)
+
+    def __unicode__(self):
+        return "{0} - {1} - {2} - {3} - {4} - {5} - {6}".format(self.fpa, self.cholera, self.meningit, self.rougeole, self.tnn, self.fievre_hemoragique, self.paludisme, self.other)
+
+
+class PotentialDeceased(models.Model):
+    report = models.ForeignKey(Report)
+    reporting_date = models.DateField(default=timezone.now)
+    fpa = models.FloatField(default=0.0)
+    cholera = models.FloatField(default=0.0)
+    meningit = models.FloatField(default=0.0)
+    rougeole = models.FloatField(default=0.0)
+    tnn = models.FloatField(default=0.0)
+    fievre_hemoragique = models.FloatField(default=0.0)
+    paludisme = models.FloatField(default=0.0)
+    other = models.FloatField(default=0.0)
+
+    def __unicode__(self):
+        return "{0} - {1} - {2} - {3} - {4} - {5} - {6}".format(self.fpa, self.cholera, self.meningit, self.rougeole, self.tnn, self.fievre_hemoragique, self.paludisme, self.other)
+
+
 class Temporary(models.Model):
     '''
     This model will be used to temporary store a reporter who doesn't finish his self registration

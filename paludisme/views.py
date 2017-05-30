@@ -27,13 +27,13 @@ def add_report(request):
                 return JsonResponse({'Ok': "False", 'info_to_contact': "Rapport mwarungitse ntibaho. Rungika iyitanguzwa na REG, SF, SR, RP, CA, TS, HBC, HBD canke X"}, safe=False)
             if len(message) > 7:
                 return JsonResponse({'Ok': "False", 'info_to_contact': "Mwarungitse ibintu vyinshi. Subiramwo nkuko twabigishije."}, safe=False)
-            if message[2] in ["ACT", "QUI", "ART", "TDR", "SP"]:
-                date_updated = validate_date(message[1])
-                if isinstance(date_updated, JsonResponse):
-                    return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntiyandikwa uko.', 'error': message[1]}, safe=False)
-                if date_updated.date() > datetime.datetime.today().date():
-                    return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntishobora kuba muri kazoza. Subira urungike mesaje.', 'error': date_updated}, safe=False)
-                product = Product.objects.get(code=message[2])
+            date_updated = validate_date(message[1])
+            if isinstance(date_updated, JsonResponse):
+                return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntiyandikwa uko.', 'error': message[1]}, safe=False)
+            if date_updated.date() > datetime.datetime.today().date():
+                return JsonResponse({'Ok': "False", 'info_to_contact': 'Itariki ntishobora kuba muri kazoza. Subira urungike mesaje.', 'error': date_updated}, safe=False)
+            if message[2] in ["ACT", "QUI", "ART", "TDR", "SP"] or message[0] in ["CA", "TS", "HBD", "HBC"]:
+                product = get_or_none(Product, code=message[2])
                 report, created = Report.objects.get_or_create(facility=facility, reporting_date=date_updated, category=message[0].upper(), text__icontains=message[2])
                 if created:
                     report.text = response_data["text"]
