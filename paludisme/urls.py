@@ -6,6 +6,7 @@ from paludisme.views import home, settings, password, add_report, add_reporter, 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^explorer/', include('explorer.urls')),
     url(r'^$', home, name='home'),
     url(r'^stock/', include('stock.urls')),
     url(r'^add_report/', add_report, name="add-report"),

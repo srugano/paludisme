@@ -20,3 +20,5 @@ social-auth-app-django==1.1.0
 social-auth-core==1.2.0
 tablib==0.11.4
 whitenoise==3.2
+django-sql-explorer
+xlsxwriter

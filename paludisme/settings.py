@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'import_export',
+    'explorer',
     'social_django',
     'django_filters',
     'stock',
@@ -195,6 +196,19 @@ KNOWN_PREFIXES = (
     ("HBD", _("Reports on death")),
 )
 
+EXPLORER_SCHEMA_EXCLUDE_TABLE_PREFIXES = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.admin',
+    'auth.group'
+    )
+
+EXPLORER_SCHEMA_INCLUDE_TABLE_PREFIXES = (
+    'stock',
+    'bdiadmin')
+
+EXPLORER_PERMISSION_CHANGE = lambda u: u.is_superuser
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
