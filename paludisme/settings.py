@@ -210,6 +210,13 @@ EXPLORER_SCHEMA_INCLUDE_TABLE_PREFIXES = (
 
 EXPLORER_PERMISSION_CHANGE = lambda u: u.is_superuser
 
+EXPLORER_DATA_EXPORTERS = [
+    ('csv', 'explorer.exporters.CSVExporter'),
+    ('excel', 'explorer.exporters.ExcelExporter'),
+    ('json', 'explorer.exporters.JSONExporter'),
+    ('pdf', 'explorer.exporters.PdfExporter')
+    ]
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
