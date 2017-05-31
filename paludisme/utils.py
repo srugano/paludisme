@@ -36,8 +36,7 @@ def split_message(request):
     response_data = {}
     liste_data = request.body.split("&")
     for i in liste_data:
-        response_data[i.split("=")[0]] = urllib.unquote_plus(i.split("=")[1]).upper()
-
+        response_data[i.split("=")[0]] = re.sub(' +', ' ', urllib.unquote_plus(i.split("=")[1]).upper())
     return response_data
 
 
