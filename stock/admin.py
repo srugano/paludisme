@@ -5,17 +5,24 @@ from stock.models import Product, Report, Reporter, Dosage, StockProduct, Tempor
 
 @admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin):
-    pass
+    list_display = ("designation", "code",)
+    search_fields = ("designation", "dosages", "code",)
+    list_filter = ('designation',)
 
 
 @admin.register(Report)
 class ReportAdmin(ImportExportModelAdmin):
-    pass
+    list_display = ("facility", "reporting_date", "text", "category")
+    search_fields = ("facility", "text", "category")
+    list_filter = ("category",)
+    date_hierarchy = ("reporting_date")
 
 
 @admin.register(Reporter)
 class ReporterAdmin(ImportExportModelAdmin):
-    pass
+    list_display = ("facility", "phone_number", "supervisor_phone_number", )
+    search_fields = ("facility", "phone_number", "supervisor_phone_number", )
+    list_filter = ("facility", "phone_number", "supervisor_phone_number", )
 
 
 @admin.register(Dosage)

@@ -55,14 +55,22 @@ def add_reporter(request):
             return JsonResponse({'Ok': "False", 'info_to_contact': "Iryo vuriro ntiribaho."}, safe=False)
         if not (validate_phone(message[2]) and validate_phone(message[3])):
             return JsonResponse({'Ok': "False", 'info_to_contact': "Terefone ntizanditse neza."}, safe=False)
-        if Reporter.objects.filter(phone_number__icontains=message[2]).count() == 0:
+        present = get_or_none(Reporter, phone_number__icontains=message[2])
+        if not present:
             temporary, created = Temporary.objects.get_or_create(facility=CDS.objects.get(code=message[1]), phone_number=validate_phone(message[2]), supervisor_phone_number=validate_phone(message[3]))
             if created:
                 return JsonResponse({'Ok': "True", 'info_to_contact': "Subira wandike numero zawe n'izuwugutwara gusa."}, safe=False)
             else:
-                return JsonResponse({'Ok': "True", 'info_to_contact': "Rungika gusa izo nimero za terefone"}, safe=False)
+                return JsonResponse({'Ok': "True", 'info_to_contact': "Rungika gusa izo nimero za terefone."}, safe=False)
         else:
-            return JsonResponse({'Ok': "False", 'info_to_contact': "Inimero {0}, iranditse.".format(message[2])}, safe=False)
+            cds = get_or_none(CDS, code=message[1])
+            if not cds:
+                return JsonResponse({'Ok': "False", 'info_to_contact': "Iryo vuriro ntiribaho."}, safe=False)
+            else:
+                present.facility = cds
+            present.supervisor_phone_number = validate_phone(message[3])
+            present.save()
+            return JsonResponse({'Ok': "Ok", 'info_to_contact': "Muhejeje guhindura inimero {0} izohora itanga raporo kuri {1}.".format(present.phone_number, present.facility)}, safe=False)
     else:
         return JsonResponse({'Ok': "False", 'info_to_contact': "Ivyo mwanditse sivyo."}, safe=False)
 
@@ -73,7 +81,9 @@ def confirm_reporter(request):
     message = response_data['text'].split(" ")
     temporary = get_or_none(Temporary, phone_number__icontains=validate_phone(message[0]), supervisor_phone_number__icontains=validate_phone(message[1]))
     if temporary:
-        reporter, created = Reporter.objects.get_or_create(facility=temporary.facility, phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
+        reporter, created = Reporter.objects.get_or_create(phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
+        reporter.facility = temporary.facility
+        reporter.save()
         temporary.delete()
         send_sms_through_rapidpro({'urns': ["tel:"+reporter.supervisor_phone_number, ], 'text': "Mwandikishijwe kuzoja muronka raporo za rupture kuri {0}".format(reporter.facility)})
         return JsonResponse({'Ok': "True", 'info_to_contact': "Murahejeje kwandikisha inimero {0} izohora itanga raporo.".format(reporter.phone_number)}, safe=False)
