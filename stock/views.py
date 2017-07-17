@@ -14,6 +14,20 @@ class StockProductFilter(django_filters.rest_framework.FilterSet):
         fields = ['dosage', 'product', 'report', 'category']
 
 
+class StockProductSFViewsets(viewsets.ModelViewSet):
+    queryset = StockProduct.objects.filter(report__category="SF")
+    serializer_class = StockProductSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_class = StockProductFilter
+
+
+class StockProductSRViewsets(viewsets.ModelViewSet):
+    queryset = StockProduct.objects.filter(report__category="SR")
+    serializer_class = StockProductSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_class = StockProductFilter
+
+
 class StockProductViewsets(viewsets.ModelViewSet):
     queryset = StockProduct.objects.all()
     serializer_class = StockProductSerializer

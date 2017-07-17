@@ -39,8 +39,7 @@ class StockOutProductSerializer(serializers.ModelSerializer):
     district = serializers.SerializerMethodField()
     cds = serializers.SerializerMethodField()
     product = serializers.SerializerMethodField()
-    
-
+   
     class Meta:
         model = StockOutReport
         fields = ('id', 'province', 'district', 'cds', 'product', 'reporting_date', 'remaining')
