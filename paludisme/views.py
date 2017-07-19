@@ -51,6 +51,8 @@ def add_reporter(request):
     response_data = split_message(request)
     message = response_data['text'].split(" ")
     if message[0] == "REG":
+        if not len(message) == 4:
+            return JsonResponse({'Ok': "False", 'info_to_contact': "Ivyo wanditse sivyo. Andika ibitigiri bikwiye."}, safe=False)
         if not CDS.objects.filter(code=message[1]):
             return JsonResponse({'Ok': "False", 'info_to_contact': "Iryo vuriro ntiribaho."}, safe=False)
         if not (validate_phone(message[2]) and validate_phone(message[3])):
