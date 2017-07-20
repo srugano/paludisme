@@ -130,9 +130,9 @@ class Temporary(models.Model):
     '''
     This model will be used to temporary store a reporter who doesn't finish his self registration
     '''
-    facility = models.ForeignKey(CDS)
+    facility = models.ForeignKey(CDS, null=True, blank=True)
     phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact the sender.'), max_length=16)
-    supervisor_phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact your supervisor.'), max_length=16)
+    supervisor_phone_number = models.CharField(_('telephone'), validators=[phone_regex], help_text=_('The telephone to contact your supervisor.'), max_length=16, null=True, blank=True)
 
     def __unicode__(self):
         return self.phone_number

@@ -83,7 +83,8 @@ def confirm_reporter(request):
     message = response_data['text'].split(" ")
     temporary = get_or_none(Temporary, phone_number__icontains=validate_phone(message[0]), supervisor_phone_number__icontains=validate_phone(message[1]))
     if temporary:
-        reporter, created = Reporter.objects.get_or_create(phone_number=temporary.phone_number, supervisor_phone_number=temporary.supervisor_phone_number)
+        reporter, created = Reporter.objects.get_or_create(phone_number=temporary.phone_number)
+        reporter.supervisor_phone_number = temporary.supervisor_phone_number
         reporter.facility = temporary.facility
         reporter.save()
         temporary.delete()
