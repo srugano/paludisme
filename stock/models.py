@@ -33,7 +33,7 @@ class Product(models.Model):
 
 class Reporter(models.Model):
     '''In this model, we will store reporters'''
-    facility = models.ForeignKey(CDS)
+    facility = models.ForeignKey(CDS, null=True, blank=True)
     phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
     supervisor_phone_number = models.CharField(_('telephone'), validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)
 
@@ -46,7 +46,7 @@ class Reporter(models.Model):
 
 class Report(models.Model):
     ''' In this model, we will store all reports sent by reporters '''
-    facility = models.ForeignKey(CDS)
+    facility = models.ForeignKey(CDS, null=True, blank=True)
     reporting_date = models.DateField()
     text = models.CharField(max_length=200)
     category = models.CharField(max_length=3, choices=settings.KNOWN_PREFIXES)
