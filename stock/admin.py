@@ -21,7 +21,7 @@ class ReportAdmin(ImportExportModelAdmin):
 @admin.register(Reporter)
 class ReporterAdmin(ImportExportModelAdmin):
     list_display = ("facility", "phone_number", "supervisor_phone_number", )
-    search_fields = ("facility", "phone_number", "supervisor_phone_number", )
+    search_fields = ("facility__name", "phone_number", "supervisor_phone_number", )
     list_filter = ("facility", "phone_number", "supervisor_phone_number", )
 
 

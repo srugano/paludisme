@@ -49,8 +49,8 @@ def get_or_none(model, *args, **kwargs):
 
 def send_sms_through_rapidpro(args):
     ''' This function sends messages through rapidpro. Contact(s) and the message to send to them must be in args['data'] '''
-    #the_contact_phone_number = "tel:" + args['the_sender'].phone_number
-    #data = {"urns": [the_contact_phone_number],"text": args['info_to_contact']}
+    # the_contact_phone_number = "tel:" + args['the_sender'].phone_number
+    # data = {"urns": [the_contact_phone_number],"text": args['info_to_contact']}
     url = 'https://api.rapidpro.io/api/v2/broadcasts.json'
     token = getattr(settings, 'TOKEN', '')
 
