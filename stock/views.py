@@ -5,7 +5,10 @@ from stock.serializers import StockProductSerializer, StockOutProductSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
+from django.conf import settings
 from paludisme.utils import send_sms_through_rapidpro
+
+GROUPS = getattr(settings, 'RUPTURE_GROUPS', '')
 
 
 class StockProductFilter(django_filters.rest_framework.FilterSet):
@@ -72,7 +75,7 @@ def create_stockproduct(report=None, product=None, *args, **kwargs):
         st, created = StockOutReport.objects.get_or_create(product=product, report=report)
         st.remaining = values
         st.save()
-        send_sms_through_rapidpro({'urns': ["tel:"+reporter.supervisor_phone_number, ], 'text': "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))})
+        send_sms_through_rapidpro({'urns': ["tel:"+reporter.supervisor_phone_number, ], "groups": [GROUPS], 'text': "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))})
         return "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))
 
     if re.match(r'^(HBD|HBC)\s+(\d{6})(\s+\d+){8}$', report.text, re.I):
@@ -132,7 +135,7 @@ def update_stockproduct(report=None, product=None, *args, **kwargs):
         st, created = StockOutReport.objects.get_or_create(product=product, report=report)
         st.remaining = values[1]
         st.save()
-        send_sms_through_rapidpro({'urns': ["tel:"+reporter.supervisor_phone_number, ], 'text': "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))})
+        send_sms_through_rapidpro({'urns': ["tel:"+reporter.supervisor_phone_number, ], "groups": [GROUPS], 'text': "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))})
         return "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))
 
     elif re.match(r'^(SF)\s+(\d{6})\s+(qui|ACT|ART|TDR|SP)(\s+\d+){1,3}$', report.text, re.I):

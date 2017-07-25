@@ -220,6 +220,8 @@ EXPLORER_DATA_EXPORTERS = [
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
+
+RUPTURE_GROUPS = ''
 # try to load local_settings.py if it exists
 try:
     from local_settings import *
