@@ -4,6 +4,7 @@ import django_filters
 from stock.serializers import StockProductSerializer, StockOutProductSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+import re
 
 
 class StockProductFilter(django_filters.rest_framework.FilterSet):
@@ -73,7 +74,7 @@ def create_stockproduct(report=None, product=None, *args, **kwargs):
             ps = PotentialDeceased.objects.create(report=report, fpa=values[0], cholera=values[0], meningit=values[0], rougeole=values[0], tnn=values[0], fievre_hemoragique=values[0], paludisme=values[0], other=values[0])
         ps.save()
         return "Kuri {0}, handitswe hari abagwaye FPA {1}, Cholera {2}, Menengite {3}, Rougeole {4}, TNN {5}, Fievre Hemoragique {6}, Paludisme {7}, n'abandi {8}. Murakoze".format(report.facility, ps.fpa, ps.cholera, ps.meningit, ps.rougeole, ps.tnn, ps.fievre_hemoragique, ps.paludisme, ps.other)
-    else:
+    elif re.match(r'^(SF|CA|TS|RP)\s+\d{6}\s+(qui|ACT|ART|TDR|SP)(\s+\d+)+', report.text, re.I):
         values = report.text.split(" ")[3:]
         products = [m.code for m in Product.objects.all().distinct()]
         if product.code in products:
@@ -89,6 +90,8 @@ def create_stockproduct(report=None, product=None, *args, **kwargs):
                     sp.save()
                     message += sp.quantity + " (" + dose.dosage + "), "
                 return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
+    else:
+        return "Ivyo mwanditse sivyo. Andika uko bakwigishije."
 
 
 def update_stockproduct(report=None, product=None, *args, **kwargs):
@@ -120,7 +123,8 @@ def update_stockproduct(report=None, product=None, *args, **kwargs):
             st.remaining = values
             st.save()
             return "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))
-    else:
+
+    elif re.match(r'^(SF|CA|TS|RP)\s+\d{6}\s+(qui|ACT|ART|TDR|SP)(\s+\d+)+', report.text, re.I):
         values = report.text.split(" ")[3:]
         dosages = product.dosages.all()
         message = ""
@@ -131,3 +135,6 @@ def update_stockproduct(report=None, product=None, *args, **kwargs):
             message += sp.quantity + " (" + dose.dosage + "), "
 
         return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
+
+    else:
+        return "Ivyo mwanditse sivyo. Andika uko bakwigishije."
