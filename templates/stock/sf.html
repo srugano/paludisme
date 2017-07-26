@@ -1,6 +1,15 @@
-{% extends 'stock/stockproduct_list.html' %}
+{% extends 'home.html' %}
 {% load static %}
+
+{% block additional_filter %}
+    Additional filters
+{% endblock additional_filter %}
+
 
 {% block stockproduct %}
 <script src="{% static "productreport-sf.js" %}"></script>
 {% endblock stockproduct %}
+
+{% block content %}
+    <div class="row">Content</div>
+{% endblock content %}
