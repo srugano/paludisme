@@ -1,75 +1,230 @@
-{% extends 'home.html' %}
-{% load static %}
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-{% block titles %}Stock Debut de journnee{% endblock titles %}
-{% block extra_scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/angular-datatables.min.js"></script>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/css/angular-datatables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/plugins/buttons/angular-datatables.buttons.min.js"></script>
-    {% block stockproduct %}
-        
-    {% endblock stockproduct %}
-{% endblock extra_scripts %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-{% block content %}
-    <div class="container" ng-app="RepportApp" ng-controller="RepportCtrl">
-        <h1 class="heading">Raports de fin de Semaine</h1>
-        <div >
-            <table datatable="ng" data-toggle='table' class="table row-border hover" dt-options="dtOptions">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Date</th>
-                    <th>Province</th>
-                    <th>District</th>
-                    <th>CDS</th>
-                    <th>Produits</th>
-                    <th>Category</th>
-                    <th>Dosage</th>
-                    <th>Quantity</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% verbatim %}
-                    <tr ng-repeat="report in reports">
-                        <td>{{report.id}}</td>
-                        <td>{{report.reporting_date}}</td>
-                        <td>{{report.province}}</td>
-                        <td>{{report.district}}</td>
-                        <td>{{report.cds}}</td>
-                        <td>{{report.product}}</td>
-                        <td>{{report.category}}</td>
-                        <td>{{report.dosage}}</td>
-                        <td>{{report.quantity}}</td>
-                    </tr>
-                    {% endverbatim %} 
-                </tbody>
-            </table>
-            {% if is_paginated %}
-            <div class="pagination">
-                <span class="page-links">
-                    {% if page_obj.has_previous %}
-                        <a href="/export?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-                    <span class="page-current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-                    {% if page_obj.has_next %}
-                        <a href="/export?page={{ page_obj.next_page_number }}">next</a>
-                    {% endif %}
-                </span>
+    <title>{% block titles %}{% endblock titles %}</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- jQuery Version 3.1.1 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Include Bootstrap Datepicker -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+    <style type="text/css">
+    /**
+     * Override feedback icon position
+     * See http://formvalidation.io/examples/adjusting-feedback-icon-position/
+     */
+    #eventForm .form-control-feedback {
+        top: 0;
+        right: -15px;
+    }
+    </style>
+    {% block extra_scripts %}{% endblock extra_scripts %}
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static "css/ie10-viewport-bug-workaround.css" %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/justified-nav.css" %}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{% static "js/ie-emulation-modes-warning.js" %}"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- The justified navigation menu is meant for single line per list item.
+           Multiple lines will require custom code not provided by Bootstrap. -->
+      <div class="masthead">
+        <h3 class="text-muted">Paludisme</h3>
+        <nav>
+          <ul class="nav nav-justified">
+            <li >
+                <a href="{% url 'home' %}">Home</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'show_reports_sf' %}">Cas Palu</a>
+            </li>
+            <li>
+                <a href="{% url 'show_reports_sr' %}">Stock</a>
+            </li>
+            <li>
+                <a href="{% url 'show_reports_rp' %}">Map</a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% else %}
+                <li>
+                <a href="{% url 'login' %}">Login</a>
+            </li>  
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+
+        {% if user.is_authenticated %}
+          {% block filter_form %}
+        <div class="col-sm-offset col-md-offset ">
+          <h3 class="page-header">Filtering</h3>
+          <div class="form-inline" style="padding-left :5px; padding-right :5px;">
+          <div class="row">
+            <div class="form-group">
+              <label for="province">{% trans "Province:" %}</label>
+              <select id="province" class="form-control" style="width:140px"  ng-model="province" ng-options="x.name for x in provinces track by x.code" ng-change="update_province()"><option name="optradio">[ {% trans "Select Province" %} ]</option></select>
             </div>
-        {% endif %}
+            <div class="form-group">
+              <label for="district">{% trans "District:" %}</label>
+              <select id="district" class="form-control" style="width:140px" ng-model="district" ng-options="x.name for x in districts track by x.code" ng-change="update_district()"><option name="optradio" selected="selected">[ {% trans "Select District" %} ]</option>'
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cds">{% trans "CDS:" %}</label>
+              <select id="cds" class="form-control" style="width:140px" ng-model="cds" ng-options="x.name for x in cdss track by x.code" ng-change="update_cds()">
+                <option name="optradio" selected="selected">[ {% trans "Select CDS" %} ]</option>'
+              </select>
+            </div>
+            <div class="form-group">
+            <label for="dstartdate">{% trans "Start Date" %}:</label>
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" id="startdate" class="form-control datepicker" readonly="readonly" style="width:130px" ng-model="startdate" ng-change="get_bydate()">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+            </div>
+            <div class="form-group">
+            <label for="dendtdate">{% trans "End Date" %}:</label>
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" id="endtdate" class="form-control datepicker" readonly="readonly" style="width:130px" ng-model="enddate" ng-change="get_bydate()">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+            </div>
+          </div>
+          <hr style="margin-top:20px; margin-bottom:20px">
+          <div class="row">
+            <div class="col-md-2"><h4>Selection des cas</h4></div>
+            <div class="col-md-10">
+            <div class="col-md-3">
+              <div class="form-group" >
+                <label class="radio-inline"><input type="radio" name="optradio">Palu confirme Simple</label>
+              </div>
+              </div>
+              <div class="col-md-3">
+              <div class="form-group" >
+                <label class="radio-inline"><input type="radio" name="optradio">Palu confirme Grave</label>
+              </div>
+              </div>
+              <div class="col-md-3">
+              <div class="form-group" >
+                <label class="radio-inline"><input type="radio" name="optradio">Palu confirme FE</label>
+              </div>
+              </div>
+              <div class="col-md-3">
+              <div class="form-group" >
+                <label class="radio-inline"><input type="radio" name="optradio">Deces</label>
+              </div>
+            </div>
+            </div>
+          </div>
+          </div>
         </div>
-    </div>
-{% endblock content %}
+        {% endblock filter_form %}
+        {% block content %}
+            <!-- Jumbotron -->
+            <div class="jumbotron">
+                <h1>Paludisme!</h1>
+                <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
+                <p><a class="btn btn-lg btn-success" href="#" role="button">Voir</a></p>
+            </div>
 
+        {% endblock content %}
+            
+        {% else %}
+        {% block loggins %}
+            <!-- Jumbotron -->
+        <div class="jumbotron">
+        <h1>Marketing stuff!</h1>
+        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+      </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-lg-4">
+          <h2>Safari bug warning!</h2>
+          <p class="text-danger">As of v9.1.2, Safari exhibits a bug in which resizing your browser horizontally causes rendering errors in the justified nav that are cleared upon refreshing.</p>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+       </div>
+        <div class="col-lg-4">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
+          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+      </div>
+        <!-- /.row -->
+        {% endblock loggins %}
+{% endif %}
+
+      <!-- Site footer -->
+      <footer class="footer">
+        <p>&copy; 2017 UNICEF Burundi</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#datePicker')
+            .datepicker({
+                format: 'mm/dd/yyyy'
+            })
+            .on('changeDate', function(e) {
+                // Revalidate the date field
+                $('#eventForm').formValidation('revalidateField', 'date');
+            });
+        });
+    </script>
+
+</body>
+
+</html>
