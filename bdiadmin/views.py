@@ -4,6 +4,7 @@ from django.shortcuts import HttpResponseRedirect
 from rest_framework import viewsets
 from bdiadmin.forms import *
 from django.views.generic import ListView, CreateView
+import django_filters.rest_framework
 
 
 class ProvinceViewSet(viewsets.ModelViewSet):
@@ -12,9 +13,8 @@ class ProvinceViewSet(viewsets.ModelViewSet):
     """
     queryset = Province.objects.all()
     serializer_class = ProvinceSerializer
-
-    # def get_queryset(self):
-    #     return get_adminqueryset(self.request, self.queryset)
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('code', 'name')
 
 
 class DistrictViewSet(viewsets.ModelViewSet):
@@ -23,9 +23,8 @@ class DistrictViewSet(viewsets.ModelViewSet):
     """
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
-
-    # def get_queryset(self):
-    #     return get_adminqueryset(self.request, self.queryset)
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('code', 'name', 'province')
 
 
 class CDSViewSet(viewsets.ModelViewSet):
@@ -34,9 +33,8 @@ class CDSViewSet(viewsets.ModelViewSet):
     """
     queryset = CDS.objects.all()
     serializer_class = CDSSerializer
-
-    # def get_queryset(self):
-    #     return get_adminqueryset(self.request, self.queryset)
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('code', 'name', 'district')
 
 
 # @login_required

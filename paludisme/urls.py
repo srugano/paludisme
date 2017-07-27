@@ -1,14 +1,14 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from paludisme.views import home, settings, password, add_report, add_reporter, confirm_reporter, add_stockout
+from paludisme.views import settings, password, add_report, add_reporter, confirm_reporter, add_stockout, HomeView
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^explorer/', include('explorer.urls')),
     url(r'^bdiadmin/', include('bdiadmin.urls')),
-    url(r'^$', home, name='home'),
+    url(r'^$', HomeView.as_view(), name='home'),
     url(r'^stock/', include('stock.urls')),
     url(r'^add_report/', add_report, name="add-report"),
     url(r'^add_reporter/', add_reporter, name="add-reporter"),
