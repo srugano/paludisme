@@ -86,7 +86,7 @@
 
 <body>
     <!-- Page Content -->
-    <div class="container">
+    <div class="container" ng-app="PaludismeApp">
 
       <!-- The justified navigation menu is meant for single line per list item.
            Multiple lines will require custom code not provided by Bootstrap. -->
@@ -118,7 +118,7 @@
           </ul>
         </nav>
       </div>
-
+      <div ng-controller="FilterCtrl">
         {% if user.is_authenticated %}
           {% block filter_form %}
         <div class="col-sm-offset col-md-offset ">
@@ -195,7 +195,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="cds">{% trans "Product:" %}</label>
-                <select id="cds" class="form-control" style="width:140px" ng-model="product" ng-options="x.code for x in products track by x.id" ng-change="update_product()">
+                <select id="cds" class="form-control" style="width:200px" ng-model="product" ng-options="x.code for x in products track by x.id" ng-change="update_product()">
                   <option name="optradio" selected="selected">[ {% trans "Select Product" %} ]</option>'
                 </select>
               </div>
@@ -204,6 +204,7 @@
           </div>
         </div>
         {% endblock additional_filter %}
+      </div>
         {% block content %}
          <div class="row">
           <div class="col-lg-6">
@@ -340,6 +341,7 @@
     </script>
     <!-- Custom Theme JavaScript -->
     <script src="{% static "js/sb-admin-2.min.js" %}"></script>
+    <script src="{% static "js/paludisme.js" %}"></script>
 
 </body>
 

@@ -1,6 +1,6 @@
-var app = angular.module('StockApp', ['ngSanitize', 'datatables', 'datatables.buttons']);
+var app = angular.module('PaludismeApp', ['ngSanitize', 'datatables', 'datatables.buttons']);
 
-app.controller('Filter', ['$scope', '$http', function($scope, $http) {
+app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
 
         // province
         $http.get("/bdiadmin/province/")
@@ -59,11 +59,11 @@ app.controller('Filter', ['$scope', '$http', function($scope, $http) {
     };
     // CDS
         $scope.update_product = function () {
-            var cds = $scope.product;
-            if (cds) {
-              $http.get("/bdiadmin/product/" + product.id + "/" )
+            var product = $scope.product;
+            if (product) {
+              $http.get("/stock/products/?id=" + product.id)
               .then(function (response) {
-                  $scope.products = response.data;
+                  $scope.etablissements = response.data;
               });
       }
     };

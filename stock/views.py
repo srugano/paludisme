@@ -49,6 +49,7 @@ class ProductViewsets(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('code', 'id')
 
 
 @login_required
