@@ -5,7 +5,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'province', ProvinceViewSet)
 router.register(r'district', DistrictViewSet)
-router.register(r'cdss', CDSViewSet)
+router.register(r'cds', CDSViewSet)
 
 
 urlpatterns = [

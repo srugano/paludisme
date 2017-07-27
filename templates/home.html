@@ -307,7 +307,34 @@
     <script src="{% static "js/raphael.min.js" %}"></script>
     <script src="{% static "js/morris.min.js" %}"></script>
     <script src="{% static "js/morris-data.js" %}"></script>
+    <script>
+      $(function() {
 
+    Morris.Area({
+        element: 'morris-area-chart',
+        data: [
+                {% for item in count %}
+                    { 
+                        dates: '{{ item.reporting_date|date:"Y-m-d"}}', 
+                        simple: '{{ item.simple }}',
+                        acute: '{{ item.acute }}',
+                        pregnant_women: '{{ item.pregnant_women }}',
+                        decease: '{{ item.decease }}',
+                    }
+                    {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ],
+        xkey: 'dates',
+        ykeys: ['simple', 'acute', 'pregnant_women', 'decease'],
+        labels: ['Cas Simples', 'Cas severes', 'Femmes enceintes', 'Deces'],
+        xLabels : "week",
+        pointSize: 2,
+        ymax : 3000,
+        hideHover: 'auto',
+        resize: true
+      });
+    });
+    </script>
     <!-- Custom Theme JavaScript -->
     <script src="{% static "js/sb-admin-2.min.js" %}"></script>
 
