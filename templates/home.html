@@ -195,7 +195,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="cds">{% trans "Product:" %}</label>
-                <select id="cds" class="form-control" style="width:140px" ng-model="product" ng-options="x.name for x in products track by x.code" ng-change="update_product()">
+                <select id="cds" class="form-control" style="width:140px" ng-model="product" ng-options="x.code for x in products track by x.id" ng-change="update_product()">
                   <option name="optradio" selected="selected">[ {% trans "Select Product" %} ]</option>'
                 </select>
               </div>
@@ -310,12 +310,12 @@
     <script>
       $(function() {
 
-    Morris.Area({
+    Morris.Line({
         element: 'morris-area-chart',
         data: [
                 {% for item in count %}
                     { 
-                        dates: '{{ item.reporting_date|date:"Y-m-d"}}', 
+                        week: '{{ item.week}}', 
                         simple: '{{ item.simple }}',
                         acute: '{{ item.acute }}',
                         pregnant_women: '{{ item.pregnant_women }}',
@@ -324,12 +324,15 @@
                     {% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
-        xkey: 'dates',
+        xkey: 'week',
         ykeys: ['simple', 'acute', 'pregnant_women', 'decease'],
         labels: ['Cas Simples', 'Cas severes', 'Femmes enceintes', 'Deces'],
-        xLabels : "week",
         pointSize: 2,
-        ymax : 3000,
+        ymax : 'auto',
+        parseTime: false,
+        xLabelFormat:  function (x) { 
+                                      return x.label + ' week';
+                                    },
         hideHover: 'auto',
         resize: true
       });

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport
+from stock.models import StockProduct, StockOutReport, Product
 
 
 class StockProductSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class StockOutProductSerializer(serializers.ModelSerializer):
     district = serializers.SerializerMethodField()
     cds = serializers.SerializerMethodField()
     product = serializers.SerializerMethodField()
-   
+
     class Meta:
         model = StockOutReport
         fields = ('id', 'province', 'district', 'cds', 'product', 'reporting_date', 'remaining')
@@ -55,3 +55,9 @@ class StockOutProductSerializer(serializers.ModelSerializer):
 
     def get_product(self, obj):
         return obj.product.designation
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ('id', 'designation', 'code')

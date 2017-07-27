@@ -15,6 +15,19 @@ app.controller('Filter', ['$scope', '$http', function($scope, $http) {
                 });
             }
         });
+        // province
+        $http.get("/stock/products/")
+        .then(function (response) {
+            if (response.data.length > 0) {
+                $scope.products = response.data;
+            } else {
+                $("#province-group").hide();
+                $http.get("/bdiadmin/district/")
+                .then(function (response) {
+                    $scope.districts = response.data;
+                });
+            }
+        });
         $scope.update_province = function () {
             var province = $scope.province;
             if (province) {
@@ -27,7 +40,6 @@ app.controller('Filter', ['$scope', '$http', function($scope, $http) {
           // district
           $scope.update_district = function () {
             var district = $scope.district;
-            console.log(district);
             if (district) {
               $http.get("/bdiadmin/cds/?district=" + district.id)
               .then(function (response) {
@@ -42,6 +54,16 @@ app.controller('Filter', ['$scope', '$http', function($scope, $http) {
               $http.get("/bdiadmin/cds/" + cds.id + "/" )
               .then(function (response) {
                   $scope.etablissements = response.data;
+              });
+      }
+    };
+    // CDS
+        $scope.update_product = function () {
+            var cds = $scope.product;
+            if (cds) {
+              $http.get("/bdiadmin/product/" + product.id + "/" )
+              .then(function (response) {
+                  $scope.products = response.data;
               });
       }
     };

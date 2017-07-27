@@ -10,6 +10,8 @@ from stock.models import Report, Reporter, Product, Temporary, CasesPalu
 from stock.views import create_stockproduct, update_stockproduct
 from django.views.decorators.csrf import csrf_exempt
 import datetime
+from django.db.models.functions import Extract
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.conf import settings as conf_settings
 from bdiadmin.models import CDS
@@ -105,7 +107,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['count'] = CasesPalu.objects.all()
+        context['count'] = CasesPalu.objects.annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease'))
         return context
 
 

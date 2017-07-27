@@ -1,7 +1,7 @@
 from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter
 from rest_framework import viewsets
 import django_filters
-from stock.serializers import StockProductSerializer, StockOutProductSerializer
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
@@ -43,6 +43,12 @@ class StockProductViewsets(viewsets.ModelViewSet):
 class StockOutProductViewsets(viewsets.ModelViewSet):
     queryset = StockOutReport.objects.all()
     serializer_class = StockOutProductSerializer
+
+
+class ProductViewsets(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
 
 
 @login_required
