@@ -3,6 +3,7 @@ from bdiadmin.serializers import ProvinceSerializer, DistrictSerializer, CDSSeri
 from django.shortcuts import HttpResponseRedirect
 from rest_framework import viewsets
 from bdiadmin.forms import *
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, CreateView
 import django_filters.rest_framework
 
@@ -37,35 +38,35 @@ class CDSViewSet(viewsets.ModelViewSet):
     filter_fields = ('code', 'name', 'district')
 
 
-# @login_required
-# def edit_user(request, pk):
-#     user = User.objects.get(pk=pk)
-#     user_form = ProfileUserForm(instance=user)
+@login_required
+def edit_user(request, pk):
+    user = User.objects.get(pk=pk)
+    user_form = ProfileUserForm(instance=user)
 
-#     ProfileInlineFormset = inlineformset_factory(User, ProfileUser, fields=('telephone', 'level'))
-#     formset = ProfileInlineFormset(instance=user)
+    ProfileInlineFormset = inlineformset_factory(User, ProfileUser, fields=('telephone', 'level'))
+    formset = ProfileInlineFormset(instance=user)
 
-#     if request.user.is_authenticated() and request.user.id == user.id:
-#         if request.method == "POST":
-#             user_form = ProfileUserForm(request.POST, instance=user)
-#             formset = ProfileInlineFormset(request.POST, instance=user)
+    if request.user.is_authenticated() and request.user.id == user.id:
+        if request.method == "POST":
+            user_form = ProfileUserForm(request.POST, instance=user)
+            formset = ProfileInlineFormset(request.POST, instance=user)
 
-#             if user_form.is_valid():
-#                 created_user = user_form.save(commit=False)
-#                 formset = ProfileInlineFormset(request.POST, request.FILES, instance=created_user)
+            if user_form.is_valid():
+                created_user = user_form.save(commit=False)
+                formset = ProfileInlineFormset(request.POST, request.FILES, instance=created_user)
 
-#                 if formset.is_valid():
-#                     created_user.save()
-#                     formset.save()
-#                     return HttpResponseRedirect('/bdiadmin/profile/')
+                if formset.is_valid():
+                    created_user.save()
+                    formset.save()
+                    return HttpResponseRedirect('/bdiadmin/profile/')
 
-#         return render(request, "bdiadmin/account_update.html", {
-#             "noodle": pk,
-#             "noodle_form": user_form,
-#             "formset": formset,
-#         })
-#     else:
-#         return HttpResponseRedirect('/bdiadmin/profile/')
+        return render(request, "bdiadmin/account_update.html", {
+            "noodle": pk,
+            "noodle_form": user_form,
+            "formset": formset,
+        })
+    else:
+        return HttpResponseRedirect('/bdiadmin/profile/')
 
 
 class ProfileUserListView(ListView):
