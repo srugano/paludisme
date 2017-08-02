@@ -1,7 +1,7 @@
 from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter
 from rest_framework import viewsets
 import django_filters
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
@@ -50,6 +50,13 @@ class ProductViewsets(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('code', 'id')
+
+
+class CasesPaluViewsets(viewsets.ModelViewSet):
+    queryset = CasesPalu.objects.all().order_by('reporting_date')
+    serializer_class = CasesPaluSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('report__facility__district__province',)
 
 
 @login_required

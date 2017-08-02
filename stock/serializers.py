@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport, Product
+from stock.models import StockProduct, StockOutReport, Product, CasesPalu
 
 
 class StockProductSerializer(serializers.ModelSerializer):
@@ -61,3 +61,14 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'designation', 'code')
+
+
+class CasesPaluSerializer(serializers.ModelSerializer):
+    week = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CasesPalu
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'week')
+
+    def get_week(self, obj):
+        return obj.reporting_date

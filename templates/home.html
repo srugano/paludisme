@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{% block titles %}{% endblock titles %}</title>
+    <title>{% block titles %}Home{% endblock titles %}</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +18,6 @@
     <!-- jQuery Version 3.1.1 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- Include Bootstrap Datepicker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.14/highcharts.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
 
@@ -43,7 +42,7 @@
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/plugins/buttons/angular-datatables.buttons.min.js"></script>
-
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <style type="text/css">
     /**
      * Override feedback icon position
@@ -176,7 +175,7 @@
                   </div>
                   <!-- /.panel-heading -->
                   <div class="panel-body">
-                      <div id="morris-area-chart"></div>
+                      <div id="situation_cas_palu"></div>
                   </div>
                   <!-- /.panel-body -->
               </div>
@@ -188,7 +187,7 @@
                   </div>
                   <!-- /.panel-heading -->
                   <div class="panel-body">
-                      <div id="morris-bar-chart"></div>
+                      <div id="situation_stock"></div>
                   </div>
                   <!-- /.panel-body -->
               </div>
@@ -200,7 +199,7 @@
                   <i class="fa fa-bar-chart-o fa-fw"></i> Taux de raportage
                 </div>
                 <div class="panel-body">
-                    <div id="morris-donut-chart"></div>
+                    <div id="situation_taux_raportage"></div>
                     <a href="#" class="btn btn-default btn-block">Plus de Details</a>
                 </div>
                 <!-- /.panel-body -->
@@ -266,59 +265,9 @@
             });
         });
     </script>
-    <script src="{% static "js/metisMenu.min.js" %}"></script>
-    <script src="{% static "js/raphael.min.js" %}"></script>
-    <script src="{% static "js/morris.min.js" %}"></script>
-    <script src="{% static "js/morris-data.js" %}"></script>
-    <script>
-      $(function() {
-
-    Morris.Line({
-        element: 'morris-area-chart',
-        data: [
-                {% for item in count %}
-                    { 
-                        week: '{{ item.week}}', 
-                        simple: '{{ item.simple }}',
-                        acute: '{{ item.acute }}',
-                        pregnant_women: '{{ item.pregnant_women }}',
-                        decease: '{{ item.decease }}',
-                    }
-                    {% if not forloop.last %},{% endif %}
-                {% endfor %}
-            ],
-        xkey: 'week',
-        ykeys: ['simple', 'acute', 'pregnant_women', 'decease'],
-        labels: ['Cas Simples', 'Cas severes', 'Femmes enceintes', 'Deces'],
-        pointSize: 2,
-        ymax : 'auto',
-        parseTime: false,
-        xLabelFormat:  function (x) { 
-                                      return x.label + ' week';
-                                    },
-        hideHover: 'auto',
-        resize: true
-      });
-
-    Morris.Donut({
-        element: 'morris-bar-chart',
-        data: [{% for item in stocks %}
-                    { 
-                        label: '{{ item.product}}', 
-                        value: '{{ item.total }}',
-                    }
-                    {% if not forloop.last %},{% endif %}
-                {% endfor %}],
-        // xkey: 'product',
-        // ykeys: ['total'],
-        // labels: ['ACT 14 ans et plus', 'ACT 1-5 ans', 'ACT 2-11 mois', 'ACT 6-13 ans', 'ART Arthesunate injectable', 'QUI 100 mg', 'QUI 300 mg', 'QUI 500 mg', 'SP SP', 'TDR TDR'],
-        // hideHover: 'auto',
-        resize: true
-    });
-    });
-    </script>
     <!-- Custom Theme JavaScript -->
-    <script src="{% static "js/sb-admin-2.min.js" %}"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
     <script src="{% static "js/paludisme.js" %}"></script>
 
 </body>
