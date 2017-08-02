@@ -18,6 +18,7 @@
     <!-- jQuery Version 3.1.1 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- Include Bootstrap Datepicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.14/highcharts.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
 
@@ -164,45 +165,6 @@
         </div>
         {% endblock filter_form %}
         {% block additional_filter %}
-        <div class="col-sm-offset col-md-offset ">
-          <div class="form-inline" style="padding-left :5px; padding-right :5px;">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="col-md-2"><h5>Selection de Palu</h5></div>
-            <div class="col-md-10">
-            <div class="col-md-3">
-              <div class="form-group" >
-                <label class="radio-inline"><input type="radio" name="optradio"> Simple</label>
-              </div>
-              </div>
-              <div class="col-md-3">
-              <div class="form-group" >
-                <label class="radio-inline"><input type="radio" name="optradio"> Grave</label>
-              </div>
-              </div>
-              <div class="col-md-3">
-              <div class="form-group" >
-                <label class="radio-inline"><input type="radio" name="optradio"> FE</label>
-              </div>
-              </div>
-              <div class="col-md-3">
-              <div class="form-group" >
-                <label class="radio-inline"><input type="radio" name="optradio">Deces</label>
-              </div>
-            </div>
-            </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="cds">{% trans "Product:" %}</label>
-                <select id="cds" class="form-control" style="width:200px" ng-model="product" ng-options="x.code for x in products track by x.id" ng-change="update_product()">
-                  <option name="optradio" selected="selected">[ {% trans "Select Product" %} ]</option>'
-                </select>
-              </div>
-            </div>
-          </div>
-          </div>
-        </div>
         {% endblock additional_filter %}
       </div>
         {% block content %}
@@ -210,7 +172,7 @@
           <div class="col-lg-6">
               <div class="panel panel-default">
                   <div class="panel-heading">
-                      <i class="fa fa-bar-chart-o fa-fw"></i> Cas Palu
+                      <i class="fa fa-bar-chart-o fa-fw"></i> Cas de Palu au {% now "jS F Y "%}
                   </div>
                   <!-- /.panel-heading -->
                   <div class="panel-body">
@@ -222,7 +184,7 @@
             <div class="col-lg-6">
               <div class="panel panel-default">
                   <div class="panel-heading">
-                      <i class="fa fa-bar-chart-o fa-fw"></i> Situation de stock de .. en date du ...
+                      <i class="fa fa-bar-chart-o fa-fw"></i> Situation de stock en date du {% now "jS F Y "%}
                   </div>
                   <!-- /.panel-heading -->
                   <div class="panel-body">
@@ -337,6 +299,22 @@
         hideHover: 'auto',
         resize: true
       });
+
+    Morris.Donut({
+        element: 'morris-bar-chart',
+        data: [{% for item in stocks %}
+                    { 
+                        label: '{{ item.product}}', 
+                        value: '{{ item.total }}',
+                    }
+                    {% if not forloop.last %},{% endif %}
+                {% endfor %}],
+        // xkey: 'product',
+        // ykeys: ['total'],
+        // labels: ['ACT 14 ans et plus', 'ACT 1-5 ans', 'ACT 2-11 mois', 'ACT 6-13 ans', 'ART Arthesunate injectable', 'QUI 100 mg', 'QUI 300 mg', 'QUI 500 mg', 'SP SP', 'TDR TDR'],
+        // hideHover: 'auto',
+        resize: true
+    });
     });
     </script>
     <!-- Custom Theme JavaScript -->

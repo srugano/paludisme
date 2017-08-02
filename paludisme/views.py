@@ -6,7 +6,7 @@ from social_django.models import UserSocialAuth
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from paludisme.utils import validate_date, split_message, validate_phone, get_or_none, send_sms_through_rapidpro
-from stock.models import Report, Reporter, Product, Temporary, CasesPalu
+from stock.models import Report, Reporter, Product, Temporary, CasesPalu, StockProduct
 from stock.views import create_stockproduct, update_stockproduct
 from django.views.decorators.csrf import csrf_exempt
 import datetime
@@ -108,6 +108,15 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['count'] = CasesPalu.objects.annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease'))
+        situation = []
+        for i in Product.objects.all():
+            product = None
+            for f in i.dosages.all():
+                totals = StockProduct.objects.filter(product=i, product__dosages=f).aggregate(total=Sum('quantity'))
+                product = {"product": str(i.code) + " " + str(f.dosage), "total": totals['total']}
+                situation.append(product)
+        context['stocks'] = situation
+        print context['stocks']
         return context
 
 
