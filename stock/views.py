@@ -1,15 +1,16 @@
-from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter
+from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report
 from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
-from django.db.models import Sum, Case, When
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, StockProductSerializer2
+from django.db.models import Sum
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
 from django.conf import settings
 from paludisme.utils import send_sms_through_rapidpro
-from rest_framework.response import Response
+from bdiadmin.models import CDS
+
 
 GROUPS = getattr(settings, 'RUPTURE_GROUPS', '')
 
@@ -22,30 +23,26 @@ class StockProductFilter(django_filters.rest_framework.FilterSet):
         fields = ['dosage', 'product', 'report', 'category']
 
 
-class StockProductSFViewsets(viewsets.ModelViewSet):
-    queryset = StockProduct.objects.filter(report__category="SF")
-    serializer_class = StockProductSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_class = StockProductFilter
-
-
-class StockProductSRViewsets(viewsets.ModelViewSet):
-    queryset = StockProduct.objects.filter(report__category="SR")
-    serializer_class = StockProductSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_class = StockProductFilter
-
-
 class StockProductViewsets(viewsets.ModelViewSet):
-    queryset = StockProduct.objects.all()
+    queryset = StockProduct.objects.filter(report__category='SF')
     serializer_class = StockProductSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_class = StockProductFilter
+    filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
+
+    def get_queryset(self):
+        list_of_ids = []
+        for i in CDS.objects.all():
+            raba = Report.objects.filter(category='SF', facility=i)
+            if raba:
+                list_of_ids.append(raba.latest('reporting_date').id)
+        return self.queryset.filter(report__id__in=list_of_ids)
 
 
 class StockOutProductViewsets(viewsets.ModelViewSet):
     queryset = StockOutReport.objects.all()
     serializer_class = StockOutProductSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
 
 
 class ProductViewsets(viewsets.ModelViewSet):
@@ -60,19 +57,6 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
     serializer_class = CasesPaluSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
-
-
-class StockProduct2Viewsets(viewsets.ViewSet):
-    serializer_class = StockProductSerializer2
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
-
-    def list(self, request):
-        serializer = StockProductSerializer2(StockProduct.objects.aggregate(qui_100mg=Sum(Case(When(dosage__dosage='100 mg', then='quantity'))), qui_500mg=Sum(Case(When(dosage__dosage='500 mg', then='quantity'))), qui_300mg=Sum(Case(When(dosage__dosage='300 mg', then='quantity'))), act_2_11_mois=Sum(Case(When(dosage__dosage='2-11 mois', then='quantity'))), act_1_5ans=Sum(Case(When(dosage__dosage='1-5 ans', then='quantity'))), act_6_13ans=Sum(Case(When(dosage__dosage='6-13 ans', then='quantity'))), act_14ans_et_plus=Sum(Case(When(dosage__dosage='14 ans et plus', then='quantity'))), art=Sum(Case(When(dosage__dosage='Arthesunate injectable', then='quantity'))), sp=Sum(Case(When(dosage__dosage='SP', then='quantity'))), tdr=Sum(Case(When(dosage__dosage='TDR', then='quantity')))), many=True)
-        return Response(serializer.data)
-        
-
-
 
 
 @login_required

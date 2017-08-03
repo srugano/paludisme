@@ -28,8 +28,9 @@ Highcharts.setOptions({
 });
 
 var chart1;
+var chart2;
 
-var align_data = function(data){
+var align_data1 = function(data){
   var lookup = {};
   var items = data;
   var simples = [];
@@ -57,10 +58,23 @@ var align_data = function(data){
   return [{name: 'Simple', data:simples}, {name: 'Acute', data: acutes }, {name:"Pregnant women", data: pregnant_womens}, {name: "Decease", data:deceases}];
 };
 
+var align_data2 = function(data){
+  var ingredients = Object.create(null);
+
+  data.forEach(function (a) {
+    ingredients[a.dosage] = (ingredients[a.dosage] || 0) + a.quantity;
+  });
+  var all_data = Object.keys(ingredients).map(function (key) {  
+      return { name: key, data: [ ingredients[key]]};
+    });
+  return all_data;
+};
+
 $(document).ready(function() {
 
-    var url =  "/stock/casespalus/?";
-    $.getJSON(url, function(data) {
+    var url1 =  "/stock/casespalus/";
+    var url2 =  "/stock/productreportss/";
+    $.getJSON(url1, function(data) {
         
         chart1 = new Highcharts.chart(
           'situation_cas_palu', 
@@ -92,7 +106,64 @@ $(document).ready(function() {
                 },
                 min: 0
             }, 
-            series: align_data(data)
+            credits: {
+                enabled: false
+            },
+            series: align_data1(data)
+          }
+        );
+      });
+
+    $.getJSON(url2, function(data) {
+        var new_data = align_data2(data);
+        chart2 = new Highcharts.chart(
+          'situation_stock', 
+          {
+             chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Situation de Stock'
+            },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br>',
+                valueSuffix: ' paquest'
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 15           ,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories : ['Stock']
+                // crosshair: true
+            },
+            rangeSelector: {
+                selected: 1
+            },
+            yAxis: {
+                title: {
+                    text: 'Cas de paludisme'
+                },
+                min: 0
+            }, 
+            series: new_data
           }
         );
       });
@@ -124,11 +195,24 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
             });
             $http.get("/stock/casespalus/?report__facility__district__province=" + province.id)
               .then(function (response) {
-                var series = align_data(response.data);
+                var series = align_data1(response.data);
                 chart1.series[0].setData(series[0].data);
                 chart1.series[1].setData(series[1].data);
                 chart1.series[2].setData(series[2].data);
                 chart1.series[3].setData(series[3].data);
+            });
+            $http.get("/stock/productreportss/?report__facility__district__province=" + province.id)
+              .then(function (response) {
+                var series = align_data2(response.data);
+                chart2.series[0].setData(series[0].data);
+                chart2.series[1].setData(series[1].data);
+                chart2.series[2].setData(series[2].data);
+                chart2.series[3].setData(series[3].data);
+                chart2.series[4].setData(series[4].data);
+                chart2.series[5].setData(series[5].data);
+                chart2.series[6].setData(series[6].data);
+                chart2.series[7].setData(series[7].data);
+                chart2.series[8].setData(series[8].data);
             });
           }
       };
@@ -142,11 +226,24 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               });
               $http.get("/stock/casespalus/?report__facility__district=" + district.id)
               .then(function (response) {
-                var series = align_data(response.data);
+                var series = align_data1(response.data);
                 chart1.series[0].setData(series[0].data);
                 chart1.series[1].setData(series[1].data);
                 chart1.series[2].setData(series[2].data);
                 chart1.series[3].setData(series[3].data);
+            });
+              $http.get("/stock/productreportss/?report__facility__district=" + district.id)
+              .then(function (response) {
+                var series = align_data2(response.data);
+                chart2.series[0].setData(series[0].data);
+                chart2.series[1].setData(series[1].data);
+                chart2.series[2].setData(series[2].data);
+                chart2.series[3].setData(series[3].data);
+                chart2.series[4].setData(series[4].data);
+                chart2.series[5].setData(series[5].data);
+                chart2.series[6].setData(series[6].data);
+                chart2.series[7].setData(series[7].data);
+                chart2.series[8].setData(series[8].data);
             });
           }
       };
@@ -160,11 +257,24 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               });
               $http.get("/stock/casespalus/?report__facility=" + cds.id)
               .then(function (response) {
-                var series = align_data(response.data);
+                var series = align_data1(response.data);
                 chart1.series[0].setData(series[0].data);
                 chart1.series[1].setData(series[1].data);
                 chart1.series[2].setData(series[2].data);
                 chart1.series[3].setData(series[3].data);
+            });
+              $http.get("/stock/productreportss/?report__facility=" + cds.id)
+              .then(function (response) {
+                var series = align_data2(response.data);
+                chart2.series[0].setData(series[0].data, false);
+                chart2.series[1].setData(series[1].data, false);
+                chart2.series[2].setData(series[2].data, false);
+                chart2.series[3].setData(series[3].data, false);
+                chart2.series[4].setData(series[4].data, false);
+                chart2.series[5].setData(series[5].data, false);
+                chart2.series[6].setData(series[6].data, false);
+                chart2.series[7].setData(series[7].data, false);
+                chart2.series[8].setData(series[8].data, false);
             });
       }
     };

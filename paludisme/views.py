@@ -107,14 +107,6 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        situation = []
-        for i in Product.objects.all():
-            product = None
-            for f in i.dosages.all():
-                totals = StockProduct.objects.filter(product=i, product__dosages=f).aggregate(total=Sum('quantity'))
-                product = {"product": str(i.code) + " " + str(f.dosage), "total": totals['total']}
-                situation.append(product)
-        context['stocks'] = situation
         return context
 
 
