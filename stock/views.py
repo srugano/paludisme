@@ -2,8 +2,8 @@ from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests
 from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
-from django.db.models import Sum
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer
+from django.db.models import Sum, Count
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
@@ -57,6 +57,16 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
     serializer_class = CasesPaluSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
+
+
+class RateViewsets(viewsets.ModelViewSet):
+    queryset = Report.objects.annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(nombre=Count('pk'))
+    serializer_class = RateSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('facility__district__province', 'facility__district', 'facility')
+
+    def get_serializer_context(self):
+        return {'nombre_cds': self.queryset.values('facility').distinct().count()}
 
 
 @login_required

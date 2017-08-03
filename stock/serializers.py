@@ -61,3 +61,13 @@ class CasesPaluSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('simple', 'acute', 'pregnant_women', 'decease', 'week', 'year')
+
+
+class RateSerializer(serializers.Serializer):
+    year = serializers.IntegerField()
+    week = serializers.IntegerField()
+    nombre = serializers.IntegerField()
+    expected = serializers.SerializerMethodField()
+
+    def get_expected(self, obj):
+        return self.context['nombre_cds']

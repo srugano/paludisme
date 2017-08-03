@@ -27,6 +27,7 @@ Highcharts.setOptions({
     }
 });
 
+
 var chart1;
 var chart2;
 
@@ -159,7 +160,7 @@ $(document).ready(function() {
             },
             yAxis: {
                 title: {
-                    text: 'Cas de paludisme'
+                    text: 'Ce qui reste en stock'
                 },
                 min: 0
             }, 
@@ -186,6 +187,21 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 });
             }
         });
+        // rates
+        $http.get("/stock/rates/")
+        .then(function (response) {
+            if (response.data.length > 0) {
+                var rates = {nombre: 0, expected: 0};
+                response.data.forEach(function (a) {
+                  rates.nombre = (rates.nombre || 0) + a.nombre ;
+                  rates.expected = (rates.expected || 0) + a.expected ;
+                });
+                console.log(rates);
+                document.getElementById("nombres").innerHTML = rates.nombre;
+                document.getElementById("expected").innerHTML = rates.expected;
+                document.getElementById("taux").innerHTML = (rates.nombre / rates.expected * 100).toFixed(2);
+              }
+          });
         $scope.update_province = function () {
             var province = $scope.province;
             if (province) {
@@ -289,9 +305,3 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
       }
     };
   }]);
-
-app.controller('ExportCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($scope, $http, DTOptionsBuilder) {$scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(10);
-  }]);
-
-
-

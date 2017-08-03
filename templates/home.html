@@ -202,8 +202,24 @@
                   <i class="fa fa-bar-chart-o fa-fw"></i> Taux de raportage
                 </div>
                 <div class="panel-body">
-                    <div id="situation_taux_raportage"></div>
-                    <a href="#" class="btn btn-default btn-block">Plus de Details</a>
+                    <div id="situation_taux_raportage">
+                      <table class="table" data-toggle="table" >
+                        <thead>
+                          <tr>
+                            <th>Rapports attendu</th>
+                            <th>Rapports recus</th>
+                            <th>Taux de rapportage (en %)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td id="nombres"></td>
+                            <td id="expected"></td>
+                            <td id="taux"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                 </div>
                 <!-- /.panel-body -->
             </div> 
@@ -270,6 +286,9 @@
     </script>
     <!-- Custom Theme JavaScript -->
     <script src="{% static "js/paludisme.js" %}"></script>
+    <script>
+      var nombre_cds = "{{ nombre_cds|safe}}";
+    </script>
 
 </body>
 

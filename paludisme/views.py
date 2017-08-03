@@ -6,12 +6,10 @@ from social_django.models import UserSocialAuth
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from paludisme.utils import validate_date, split_message, validate_phone, get_or_none, send_sms_through_rapidpro
-from stock.models import Report, Reporter, Product, Temporary, CasesPalu, StockProduct
+from stock.models import Report, Reporter, Product, Temporary
 from stock.views import create_stockproduct, update_stockproduct
 from django.views.decorators.csrf import csrf_exempt
 import datetime
-from django.db.models.functions import Extract
-from django.db.models import Sum
 from django.http import JsonResponse
 from django.conf import settings as conf_settings
 from bdiadmin.models import CDS
