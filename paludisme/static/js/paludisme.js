@@ -71,6 +71,17 @@ var align_data2 = function(data){
   return all_data;
 };
 
+var update_rates = function (data){
+  var rates = {nombre: 0, expected: 0};
+  data.forEach(function (a) {
+    rates.nombre = (rates.nombre || 0) + a.nombre ;
+    rates.expected = (rates.expected || 0) + a.expected ;
+  });
+  document.getElementById("nombres").innerHTML = rates.nombre;
+  document.getElementById("expected").innerHTML = rates.expected;
+  document.getElementById("taux").innerHTML = (rates.nombre / rates.expected * 100).toFixed(2);
+};
+
 $(document).ready(function() {
 
     var url1 =  "/stock/casespalus/";
@@ -191,15 +202,7 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
         $http.get("/stock/rates/")
         .then(function (response) {
             if (response.data.length > 0) {
-                var rates = {nombre: 0, expected: 0};
-                response.data.forEach(function (a) {
-                  rates.nombre = (rates.nombre || 0) + a.nombre ;
-                  rates.expected = (rates.expected || 0) + a.expected ;
-                });
-                console.log(rates);
-                document.getElementById("nombres").innerHTML = rates.nombre;
-                document.getElementById("expected").innerHTML = rates.expected;
-                document.getElementById("taux").innerHTML = (rates.nombre / rates.expected * 100).toFixed(2);
+                update_rates(response.data);
               }
           });
         $scope.update_province = function () {
@@ -230,6 +233,13 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 chart2.series[7].setData(series[7].data);
                 chart2.series[8].setData(series[8].data);
             });
+            // rates
+            $http.get("/stock/rates/?facility__district__province=" + province.id)
+            .then(function (response) {
+                if (response.data.length > 0) {
+                    update_rates(response.data);
+                  }
+              });
           }
       };
           // district
@@ -261,6 +271,13 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 chart2.series[7].setData(series[7].data);
                 chart2.series[8].setData(series[8].data);
             });
+            // rates
+            $http.get("/stock/rates/?facility__district=" + district.id)
+            .then(function (response) {
+                if (response.data.length > 0) {
+                    update_rates(response.data);
+                  }
+              });
           }
       };
         // CDS
@@ -292,6 +309,13 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 chart2.series[7].setData(series[7].data, false);
                 chart2.series[8].setData(series[8].data, false);
             });
+            // rates
+            $http.get("/stock/rates/?facility=" + cds.id)
+            .then(function (response) {
+                if (response.data.length > 0) {
+                    update_rates(response.data);
+                  }
+              });
       }
     };
     // CDS
