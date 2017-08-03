@@ -63,12 +63,29 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('id', 'designation', 'code')
 
 
-class CasesPaluSerializer(serializers.ModelSerializer):
-    week = serializers.SerializerMethodField()
+class CasesPaluSerializer(serializers.Serializer):
+    week = serializers.IntegerField()
+    simple = serializers.IntegerField()
+    acute = serializers.IntegerField()
+    pregnant_women = serializers.IntegerField()
+    decease = serializers.IntegerField()
+    year = serializers.IntegerField()
 
     class Meta:
-        model = CasesPalu
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'week')
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'week', 'year')
 
-    def get_week(self, obj):
-        return obj.reporting_date
+
+class StockProductSerializer2(serializers.Serializer):
+    act_14ans_et_plus = serializers.IntegerField()
+    act_1_5ans = serializers.IntegerField()
+    act_2_11_mois = serializers.IntegerField()
+    act_6_13ans = serializers.IntegerField()
+    art = serializers.IntegerField()
+    qui_100mg = serializers.IntegerField()
+    qui_300mg = serializers.IntegerField()
+    qui_500mg = serializers.IntegerField()
+    sp = serializers.IntegerField()
+    tdr = serializers.IntegerField()
+
+    class Meta:
+        fields = ('act_14ans_et_plus', 'act_1_5ans', 'act_2_11_mois', 'act_6_13ans', 'art', 'qui_100mg', 'qui_300mg', 'qui_500mg', 'sp', 'tdr', )

@@ -107,7 +107,6 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['count'] = CasesPalu.objects.annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease'))
         situation = []
         for i in Product.objects.all():
             product = None
@@ -116,7 +115,6 @@ class HomeView(TemplateView):
                 product = {"product": str(i.code) + " " + str(f.dosage), "total": totals['total']}
                 situation.append(product)
         context['stocks'] = situation
-        print context['stocks']
         return context
 
 

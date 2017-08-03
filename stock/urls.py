@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from stock.views import StockProductViewsets, show_reports_sf, show_reports_sr, StockOutProductViewsets, show_reports_rp, StockProductSFViewsets, StockProductSRViewsets, ProductViewsets, CasesPaluViewsets
+from stock.views import StockProductViewsets, show_reports_sf, show_reports_sr, StockOutProductViewsets, show_reports_rp, StockProductSFViewsets, StockProductSRViewsets, ProductViewsets, CasesPaluViewsets, StockProduct2Viewsets
 from rest_framework import routers
 
 
@@ -10,6 +10,7 @@ router.register(r'productreportssr', StockProductSRViewsets)
 router.register(r'productoutreports', StockOutProductViewsets)
 router.register(r'products', ProductViewsets)
 router.register(r'casespalus', CasesPaluViewsets)
+router.register(r'stockproductreports', StockProduct2Viewsets, base_name='stockproduct2')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

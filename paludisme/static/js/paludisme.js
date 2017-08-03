@@ -1,115 +1,98 @@
 'use strict';
 
-/**
- * Add custom date formats 
- */
-Highcharts.dateFormats = {
-    W: function (timestamp) {
-        var date = new Date(timestamp),
-      day = date.getUTCDay() == 0 ? 7 : date.getUTCDay(),
-      dayNumber;
-    date.setDate(date.getUTCDate() + 4 - day);
-    dayNumber = Math.floor((date.getTime() - new Date(date.getUTCFullYear(), 0, 1, -6)) / 86400000);
-    return 1 + Math.floor(dayNumber / 7);
-        
-    }
+
+// Copy & Paste this
+Date.prototype.getUnixTime = function() { return this.getTime()/1000|0 };
+if(!Date.now) Date.now = function() { return new Date(); }
+Date.time = function() { return Date.now().getUnixTime(); }
+
+function getDateOfWeek(w, y) {
+    var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
+    return new Date(y, 0, d).getUnixTime();
 }
+
+
+Highcharts.setOptions({
+    global: {
+        /**
+         * Use moment-timezone.js to return the timezone offset for individual
+         * timestamps, used in the X axis labels and the tooltip header.
+         */
+        getTimezoneOffset: function (timestamp) {
+            var zone = 'Africa/Bujumbura',
+                timezoneOffset = -moment.tz(timestamp, zone).utcOffset();
+
+            return timezoneOffset;
+        }
+    }
+});
+
+var chart1;
+
+var align_data = function(data){
+  var lookup = {};
+  var items = data;
+  var simples = [];
+  var acutes = [];
+  var pregnant_womens = [];
+  var deceases = [];
+
+  for (var item, i = 0; item = items[i++];) {
+    var simple = item.simple;
+    var acute = item.acute;
+    var pregnant_women = item.pregnant_women;
+    var decease = item.decease;
+
+    if (!(simple in lookup)) {
+      lookup[simple] = 1;
+      simples.push([getDateOfWeek(item.week,item.year),simple]);
+      lookup[acute] = 1;
+      acutes.push([getDateOfWeek(item.week,item.year), acute]);
+      lookup[pregnant_women] = 1;
+      pregnant_womens.push([getDateOfWeek(item.week,item.year),pregnant_women]);
+      lookup[decease] = 1;
+      deceases.push([getDateOfWeek(item.week,item.year),decease]);
+    }
+  }
+  return [{name: 'Simple', data:simples}, {name: 'Acute', data: acutes }, {name:"Pregnant women", data: pregnant_womens}, {name: "Decease", data:deceases}];
+};
 
 $(document).ready(function() {
 
     var url =  "/stock/casespalus/?";
     $.getJSON(url, function(data) {
-        // var raba = data;
-        // var seriesData = [];
-        // var xCategories = [];
-        // var i, cat;
-        // for(i = 0; i < data.length; i++){
-        //      cat = data[i].unique();
-        //      if(xCategories.indexOf(cat) === -1){
-        //         xCategories[xCategories.length] = cat;
-        //      }
-        //      console.log(cat);
-        // }
-        // for(i = 0; i < data.length; i++){
-        //     if(seriesData){
-        //       var currSeries = seriesData.filter(function(seriesObject){ return seriesObject.name == data[i].status;});
-        //       if(currSeries.length === 0){
-        //           currSeries = seriesData[seriesData.length] = {name: data[i].status, data: []};
-        //       } else {
-        //           currSeries = currSeries[0];
-        //       }
-        //       var index = currSeries.data.length;
-        //       currSeries.data[index] = data[i].val;
-        //     } else {
-        //        seriesData[0] = {name: data[i].status, data: [data[i].val]}
-        //     }
-        // }
-        var lookup = {};
-        var items = data;
-        var simples = [];
-        var acutes = [];
-        var pregnant_womens = [];
-        var deceases = [];
-
-        for (var item, i = 0; item = items[i++];) {
-          var simple = item.simple;
-          var acute = item.acute;
-          var pregnant_women = item.pregnant_women;
-          var decease = item.decease;
-
-          if (!(simple in lookup)) {
-            lookup[simple] = 1;
-            simples.push([Date.parse(item.week),simple]);
-            lookup[acute] = 1;
-            acutes.push([Date.parse(item.week), acute]);
-            lookup[pregnant_women] = 1;
-            pregnant_womens.push([Date.parse(item.week),pregnant_women]);
-            lookup[decease] = 1;
-            deceases.push([Date.parse(item.week),decease]);
-          }
-        }
-        var seriesData = [{name: 'Simple', data:simples}, {name: 'Acute', data: acutes }, {name:"Pregnant women", data: pregnant_womens}, {name: "Decease", data:deceases}];
-        var chart = new Highcharts.chart(
+        
+        chart1 = new Highcharts.chart(
           'situation_cas_palu', 
           {
              chart: {
-                type: 'spline'
+                type: 'spline',
+                 zoomType: 'x'
             },
             title: {
                 text: 'Nombres de cas de paludisme'
             },
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br>',
-                pointFormat: '{point.x:%e. %b}: {point.y:.2f} cas'
+                pointFormat: '{point.x:%e. %b}: {point.y:.0f} cas'
             },
             xAxis:
               { 
                 type: 'datetime',
-                tickInterval: 7 * 24 * 36e5, // one week
                 title: {
                     text: 'Date'
                 },
-                labels: {
-                    format: '{value:Week %W/%Y}',
-                    align: 'right',
-                    rotation: -30
-                }
               },
+            rangeSelector: {
+                selected: 1
+            },
             yAxis: {
                 title: {
                     text: 'Cas de paludisme'
                 },
                 min: 0
-            },
-            plotOptions: {
-              spline: {
-                  marker: {
-                      enabled: true
-                  }
-              }
             }, 
-            dateFormat: "YYYY-mm-dd",
-            series: seriesData
+            series: align_data(data)
           }
         );
       });
@@ -132,19 +115,6 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 });
             }
         });
-        // province
-        $http.get("/stock/products/")
-        .then(function (response) {
-            if (response.data.length > 0) {
-                $scope.products = response.data;
-            } else {
-                $("#province-group").hide();
-                $http.get("/bdiadmin/district/")
-                .then(function (response) {
-                    $scope.districts = response.data;
-                });
-            }
-        });
         $scope.update_province = function () {
             var province = $scope.province;
             if (province) {
@@ -154,7 +124,11 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
             });
             $http.get("/stock/casespalus/?report__facility__district__province=" + province.id)
               .then(function (response) {
-                console.log(response.data);
+                var series = align_data(response.data);
+                chart1.series[0].setData(series[0].data);
+                chart1.series[1].setData(series[1].data);
+                chart1.series[2].setData(series[2].data);
+                chart1.series[3].setData(series[3].data);
             });
           }
       };
@@ -166,6 +140,14 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               .then(function (response) {
                   $scope.cdss = response.data;
               });
+              $http.get("/stock/casespalus/?report__facility__district=" + district.id)
+              .then(function (response) {
+                var series = align_data(response.data);
+                chart1.series[0].setData(series[0].data);
+                chart1.series[1].setData(series[1].data);
+                chart1.series[2].setData(series[2].data);
+                chart1.series[3].setData(series[3].data);
+            });
           }
       };
         // CDS
@@ -176,6 +158,14 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               .then(function (response) {
                   $scope.etablissements = response.data;
               });
+              $http.get("/stock/casespalus/?report__facility=" + cds.id)
+              .then(function (response) {
+                var series = align_data(response.data);
+                chart1.series[0].setData(series[0].data);
+                chart1.series[1].setData(series[1].data);
+                chart1.series[2].setData(series[2].data);
+                chart1.series[3].setData(series[3].data);
+            });
       }
     };
     // CDS

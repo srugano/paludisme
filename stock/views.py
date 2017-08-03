@@ -1,12 +1,15 @@
 from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter
 from rest_framework import viewsets
 import django_filters
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer
+from django.db.models.functions import Extract
+from django.db.models import Sum, Case, When
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, StockProductSerializer2
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
 from django.conf import settings
 from paludisme.utils import send_sms_through_rapidpro
+from rest_framework.response import Response
 
 GROUPS = getattr(settings, 'RUPTURE_GROUPS', '')
 
@@ -53,10 +56,23 @@ class ProductViewsets(viewsets.ModelViewSet):
 
 
 class CasesPaluViewsets(viewsets.ModelViewSet):
-    queryset = CasesPalu.objects.all().order_by('reporting_date')
+    queryset = CasesPalu.objects.annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('year', 'week')
     serializer_class = CasesPaluSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('report__facility__district__province',)
+    filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
+
+
+class StockProduct2Viewsets(viewsets.ViewSet):
+    serializer_class = StockProductSerializer2
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
+
+    def list(self, request):
+        serializer = StockProductSerializer2(StockProduct.objects.aggregate(qui_100mg=Sum(Case(When(dosage__dosage='100 mg', then='quantity'))), qui_500mg=Sum(Case(When(dosage__dosage='500 mg', then='quantity'))), qui_300mg=Sum(Case(When(dosage__dosage='300 mg', then='quantity'))), act_2_11_mois=Sum(Case(When(dosage__dosage='2-11 mois', then='quantity'))), act_1_5ans=Sum(Case(When(dosage__dosage='1-5 ans', then='quantity'))), act_6_13ans=Sum(Case(When(dosage__dosage='6-13 ans', then='quantity'))), act_14ans_et_plus=Sum(Case(When(dosage__dosage='14 ans et plus', then='quantity'))), art=Sum(Case(When(dosage__dosage='Arthesunate injectable', then='quantity'))), sp=Sum(Case(When(dosage__dosage='SP', then='quantity'))), tdr=Sum(Case(When(dosage__dosage='TDR', then='quantity')))), many=True)
+        return Response(serializer.data)
+        
+
+
 
 
 @login_required
