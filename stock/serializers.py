@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport, Product
+from stock.models import StockProduct, StockOutReport, Product, CasesPalu, Tests
+from django.db.models import Sum
 
 
 class StockProductSerializer(serializers.ModelSerializer):
@@ -61,6 +62,21 @@ class CasesPaluSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('simple', 'acute', 'pregnant_women', 'decease', 'week', 'year')
+
+
+class CasesPalu2Serializer(serializers.ModelSerializer):
+    ge = serializers.SerializerMethodField()
+    tdr = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CasesPalu
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr')
+
+    def get_ge(self, obj):
+        return Tests.objects.filter(reporting_date=obj.reporting_date).aggregate(ge=Sum('ge'))['ge']
+
+    def get_tdr(self, obj):
+        return Tests.objects.filter(reporting_date=obj.reporting_date).aggregate(tdr=Sum('tdr'))['tdr'] 
 
 
 class RateSerializer(serializers.Serializer):

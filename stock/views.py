@@ -3,7 +3,7 @@ from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
 from django.db.models import Sum, Count
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPalu2Serializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
@@ -55,6 +55,13 @@ class ProductViewsets(viewsets.ModelViewSet):
 class CasesPaluViewsets(viewsets.ModelViewSet):
     queryset = CasesPalu.objects.annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('year', 'week')
     serializer_class = CasesPaluSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
+
+
+class CasesPalu2Viewsets(viewsets.ModelViewSet):
+    queryset = CasesPalu.objects.all()
+    serializer_class = CasesPalu2Serializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
 
