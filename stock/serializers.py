@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from stock.models import StockProduct, StockOutReport, Product, CasesPalu, Tests
 from django.db.models import Sum
+from bdiadmin.models import CDS
 
 
 class StockProductSerializer(serializers.ModelSerializer):
@@ -67,16 +68,20 @@ class CasesPaluSerializer(serializers.Serializer):
 class CasesPalu2Serializer(serializers.ModelSerializer):
     ge = serializers.SerializerMethodField()
     tdr = serializers.SerializerMethodField()
+    province = serializers.SerializerMethodField()
 
     class Meta:
         model = CasesPalu
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr')
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province')
 
     def get_ge(self, obj):
-        return Tests.objects.filter(reporting_date=obj.reporting_date).aggregate(ge=Sum('ge'))['ge']
+        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district__province=obj['report__facility__district__province']).aggregate(ges=Sum('ge'))['ges']
 
     def get_tdr(self, obj):
-        return Tests.objects.filter(reporting_date=obj.reporting_date).aggregate(tdr=Sum('tdr'))['tdr'] 
+        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district__province=obj['report__facility__district__province']).aggregate(tdrs=Sum('tdr'))['tdrs']
+
+    def get_province(self, obj):
+        return CDS.objects.filter(district__province=obj['report__facility__district__province']).first().district.province.name
 
 
 class RateSerializer(serializers.Serializer):

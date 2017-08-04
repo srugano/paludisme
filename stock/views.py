@@ -60,7 +60,7 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
 
 
 class CasesPalu2Viewsets(viewsets.ModelViewSet):
-    queryset = CasesPalu.objects.all()
+    queryset = CasesPalu.objects.values('reporting_date', 'report__facility__district__province').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('reporting_date')
     serializer_class = CasesPalu2Serializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')

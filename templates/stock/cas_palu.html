@@ -4,7 +4,6 @@
 
 
 {% block additional_filter %}
-    Additional filters
 {% endblock additional_filter %}
 
 
@@ -15,7 +14,6 @@
 {% block content %}
     <div class="container-fluid">
         <div class="col-lg-12" ng-controller="ExportCtrl">
-          <h1 class="page-header">{% trans "Situation de cas de palu" %}</h1>
         <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
             <thead>
                 <tr>
@@ -39,16 +37,16 @@
             </thead>
             <tbody>
                 {% verbatim %}
-                <tr ng-repeat="(x, y) in etablissements" ng-if="y.code.length != 7">
-                    <td>{{y.name}}</td>
-                    <td>{{y.code}}</td>
-                    <td >{{ y.AMX.reception  }}</td>
-                    <td >{{ y.AMX.sortie  }}</td>
-                    <td ng-if="(y.AMX.reception - y.AMX.sortie) != y.AMX.balance" class="bg-danger">{{ y.AMX.balance }}</td>
-                    <td ng-if="(y.AMX.reception - y.AMX.sortie) == y.AMX.balance">{{ y.AMX.balance }}</td>
-                    <td >{{ y.ATPE.reception }}</td>
-                    <td >{{ y.ATPE.sortie }}</td>
-                    <td ng-if="(y.ATPE.reception - y.ATPE.sortie) != y.ATPE.balance" class="bg-danger">{{ y.ATPE.balance }}</td>
+                <tr ng-repeat="(x, y) in provincesss" >
+                    <td >{{y.province}}</td>
+                    <td >{{y.code}}</td>
+                    <td >{{ y.simple }}</td>
+                    <td >{{ y.acute }}</td>
+                    <td >{{ y.pregnant_women }}</td>
+                    <td >{{ y.decease }}</td>
+                    <td >{{ y.ge }}</td>
+                    <td >{{ y.tdr }}</td>
+                    <td >{{ y.ge + y.tdr }}</td>
                 </tr>
               {% endverbatim %}
           </tbody>
