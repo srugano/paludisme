@@ -166,8 +166,8 @@
           </div>
         </div>
         {% endblock filter_form %}
-        {% block additional_filter %}
-        {% endblock additional_filter %}
+    {% block additional_filter %}
+    {% endblock additional_filter %}
       </div>
         {% block content %}
          <div class="row">
@@ -284,12 +284,10 @@
             });
         });
     </script>
+    {% block custom_js %}
     <!-- Custom Theme JavaScript -->
     <script src="{% static "js/paludisme.js" %}"></script>
-    <script>
-      var nombre_cds = "{{ nombre_cds|safe}}";
-    </script>
-
+    {% endblock custom_js %}
 </body>
 
 </html>

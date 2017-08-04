@@ -1,0 +1,58 @@
+{% extends 'home.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block additional_filter %}
+    Additional filters
+{% endblock additional_filter %}
+
+
+{% block custom_js %}
+<script src="{% static "js/cas-palu.js" %}"></script>
+{% endblock custom_js %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="col-lg-12" ng-controller="ExportCtrl">
+          <h1 class="page-header">{% trans "Situation de cas de palu" %}</h1>
+        <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
+            <thead>
+                <tr>
+                    <th rowspan="3">Structures</th>
+                    <th rowspan="3">Semaines</th>
+                    <th colspan="4">Paludisme</th>
+                    <th colspan="2">Tests réalisés</th>
+                    <th rowspan="3">Total Tests positifs</th>
+                </tr>
+                <tr>
+                    <th colspan="3">Cas confirmés</th>
+                    <th rowspan="2">Décès</th>
+                    <th rowspan="2">GE</th>
+                    <th rowspan="2">TDR</th>
+                </tr>
+                <tr>
+                    <th >Simple</th>
+                    <th >Grave</th>
+                    <th >Femme enceinte</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% verbatim %}
+                <tr ng-repeat="(x, y) in etablissements" ng-if="y.code.length != 7">
+                    <td>{{y.name}}</td>
+                    <td>{{y.code}}</td>
+                    <td >{{ y.AMX.reception  }}</td>
+                    <td >{{ y.AMX.sortie  }}</td>
+                    <td ng-if="(y.AMX.reception - y.AMX.sortie) != y.AMX.balance" class="bg-danger">{{ y.AMX.balance }}</td>
+                    <td ng-if="(y.AMX.reception - y.AMX.sortie) == y.AMX.balance">{{ y.AMX.balance }}</td>
+                    <td >{{ y.ATPE.reception }}</td>
+                    <td >{{ y.ATPE.sortie }}</td>
+                    <td ng-if="(y.ATPE.reception - y.ATPE.sortie) != y.ATPE.balance" class="bg-danger">{{ y.ATPE.balance }}</td>
+                </tr>
+              {% endverbatim %}
+          </tbody>
+      </table>
+    </div>
+</div>
+{% endblock content %}

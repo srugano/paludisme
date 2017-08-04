@@ -1,0 +1,16 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block titles %}Stock en place{% endblock titles %}
+
+{% block additional_filter %}
+    Additional filters
+{% endblock additional_filter %}
+
+{% block custom_js %}
+        <script src="{% static "js/sistuation-stock.js" %}"></script>
+{% endblock custom_js %}
+
+{% block content %}
+    <div class="row">Content</div>
+{% endblock content %}
