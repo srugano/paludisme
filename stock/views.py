@@ -70,18 +70,18 @@ class RateViewsets(viewsets.ModelViewSet):
 
 
 @login_required
-def show_reports_sf(request):
-    return render(request, "stock/sf.html")
+def cas_palu(request):
+    return render(request, "stock/cas_palu.html")
 
 
 @login_required
-def show_reports_sr(request):
-    return render(request, "stock/sr.html")
+def situation_stock(request):
+    return render(request, "stock/situation_stock.html")
 
 
 @login_required
 def show_reports_rp(request):
-    return render(request, "stock/rp.html")
+    return render(request, "stock/situation_stock.html")
 
 
 def create_stockproduct(report=None, product=None, *args, **kwargs):

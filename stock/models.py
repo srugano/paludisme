@@ -79,7 +79,7 @@ class Tests(models.Model):
     tdr = models.FloatField(default=0.0)
 
     def __unicode__(self):
-        return "{0} - {1}".format(self.product, self.quantity)
+        return "{0} - {1}".format(self.tdr, self.report)
 
 
 class CasesPalu(models.Model):
