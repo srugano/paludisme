@@ -1,16 +1,46 @@
 {% extends 'home.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block titles %}Stock en place{% endblock titles %}
 
 {% block additional_filter %}
-    Additional filters
 {% endblock additional_filter %}
 
+
 {% block custom_js %}
-        <script src="{% static "js/sistuation-stock.js" %}"></script>
+<script src="{% static "js/situation-stock.js" %}"></script>
 {% endblock custom_js %}
 
 {% block content %}
-    <div class="row">Content</div>
+    <div class="container-fluid">
+        <div class="col-lg-12" ng-controller="ExportCtrl">
+        <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
+            <thead>
+                <tr>
+                    <th >Structures</th>
+                    <th >Semaines</th>
+                    <th >Qté au début de la semaine</th>
+                    <th >Quantités reçues</th>
+                    <th >Quantités distribuées</th>
+                    <th >Stock Final à la fin de la semaine</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% verbatim %}
+                <tr ng-repeat="(x, y) in provincesss" >
+                    <td >{{y.province}}</td>
+                    <td >{{y.code}}</td>
+                    <td >{{ y.simple }}</td>
+                    <td >{{ y.acute }}</td>
+                    <td >{{ y.pregnant_women }}</td>
+                    <td >{{ y.decease }}</td>
+                    <td >{{ y.ge }}</td>
+                    <td >{{ y.tdr }}</td>
+                    <td >{{ y.ge + y.tdr }}</td>
+                </tr>
+              {% endverbatim %}
+          </tbody>
+      </table>
+    </div>
+</div>
 {% endblock content %}
