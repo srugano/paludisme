@@ -71,22 +71,3 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
     };
   }]);
 
-var align_data = function(data){
-  var ingredients = Object.create(null);
-  var simples= 0;
-  var accutes= 0;
-  var pregnant_womens= 0;
-  var deceases= 0;
-  var ges= 0;
-  var tdrs= 0;
-
-  data.forEach(function (a) {
-    ingredients[a.province] = [(ingredients[a.province] || 0) + a.simple];
-    console.log(ingredients);
-  });
-  var all_data = Object.keys(ingredients).map(function (key) {  
-      return { province: key, data: [ ingredients[key]]};
-    });
-  return all_data;
-};
-

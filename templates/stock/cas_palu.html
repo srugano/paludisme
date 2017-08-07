@@ -18,8 +18,10 @@
             <thead>
                 <tr>
                     <th rowspan="3">Province</th>
+                    {% verbatim %}
                     <th ng-if="districtss != null" rowspan="3">District</th>
                     <th ng-if="cdsss != null" rowspan="3">Cds</th>
+                    {% endverbatim %}
                     <th rowspan="3">Date </th>
                     <th colspan="4">Paludisme</th>
                     <th colspan="2">Tests réalisés</th>
