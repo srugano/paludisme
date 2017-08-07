@@ -13,12 +13,11 @@
 
 {% block content %}
     <div class="container-fluid">
-        <div class="col-lg-12" ng-controller="ExportCtrl">
+        <div class="col-lg-12" >
         <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
             <thead>
                 <tr>
                     <th rowspan="3">Structures</th>
-                    <th rowspan="3">Semaines</th>
                     <th colspan="4">Paludisme</th>
                     <th colspan="2">Tests réalisés</th>
                     <th rowspan="3">Total Tests positifs</th>
@@ -39,7 +38,6 @@
                 {% verbatim %}
                 <tr ng-repeat="(x, y) in provincesss" >
                     <td >{{y.province}}</td>
-                    <td >{{y.code}}</td>
                     <td >{{ y.simple }}</td>
                     <td >{{ y.acute }}</td>
                     <td >{{ y.pregnant_women }}</td>

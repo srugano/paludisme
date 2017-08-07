@@ -18,7 +18,6 @@
             <thead>
                 <tr>
                     <th >Structures</th>
-                    <th >Semaines</th>
                     <th >Qté au début de la semaine</th>
                     <th >Quantités reçues</th>
                     <th >Quantités distribuées</th>
@@ -29,7 +28,6 @@
                 {% verbatim %}
                 <tr ng-repeat="(x, y) in provincesss" >
                     <td >{{y.province}}</td>
-                    <td >{{y.code}}</td>
                     <td >{{ y.simple }}</td>
                     <td >{{ y.acute }}</td>
                     <td >{{ y.pregnant_women }}</td>
