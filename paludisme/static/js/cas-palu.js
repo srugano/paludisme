@@ -26,12 +26,13 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
               $http.get("/bdiadmin/district/?province=" + province.id)
                 .then(function (response) {
                   $scope.districts = response.data;
-                  shared_province = province;
               });
               $http.get("/stock/casespalusProv/?report__facility__district__province=" + province.id)
               .then(function (response) {
                   if (response.data.length > 0) {
                   $scope.structures = response.data;
+                  $scope.districtss = null;
+                  $scope.cdsss = null;
                   }
               });
           }
@@ -43,7 +44,8 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
               $http.get("/bdiadmin/cds/?district=" + district.id)
               .then(function (response) {
                   $scope.cdss = response.data;
-                  shared_district = district;
+                  $scope.districtss = 1;
+                  $scope.cdsss = null;
               });
               $http.get("/stock/casespalusDis/?report__facility__district=" + district.id)
               .then(function (response) {
@@ -56,26 +58,14 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
         // CDS
         $scope.update_cds = function () {
             var cds = $scope.cds;
+            $scope.districtss = 1;
             if (cds) {
-              $http.get("/bdiadmin/cds/" + cds.id + "/" )
-              .then(function (response) {
-                  $scope.etablissements = response.data;
-              });
               $http.get("/stock/casespalusCds/?report__facility=" + cds.id)
               .then(function (response) {
                   if (response.data.length > 0) {
+                  $scope.cdsss = 1;
                   $scope.structures = response.data;
-                  }
-              });
-      }
-    };
-    // CDS
-        $scope.update_product = function () {
-            var product = $scope.product;
-            if (product) {
-              $http.get("/stock/products/?id=" + product.id)
-              .then(function (response) {
-                  $scope.etablissements = response.data;
+                  } else  $scope.structures = {};
               });
       }
     };
