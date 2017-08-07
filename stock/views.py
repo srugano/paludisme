@@ -3,7 +3,7 @@ from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
 from django.db.models import Sum, Count
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPalu2Serializer
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPaluProvSerializer, CasesPaluDisSerializer, CasesPaluCdsSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
@@ -59,11 +59,25 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
 
 
-class CasesPalu2Viewsets(viewsets.ModelViewSet):
+class CasesPaluProvViewsets(viewsets.ModelViewSet):
     queryset = CasesPalu.objects.values('reporting_date', 'report__facility__district__province').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('reporting_date')
-    serializer_class = CasesPalu2Serializer
+    serializer_class = CasesPaluProvSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
+
+
+class CasesPaluDisViewsets(viewsets.ModelViewSet):
+    queryset = CasesPalu.objects.values('reporting_date', 'report__facility__district').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('reporting_date')
+    serializer_class = CasesPaluDisSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('report__facility__district', 'report__facility')
+
+
+class CasesPaluCdsViewsets(viewsets.ModelViewSet):
+    queryset = CasesPalu.objects.values('reporting_date', 'report__facility').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('reporting_date')
+    serializer_class = CasesPaluCdsSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('report__facility',)
 
 
 class RateViewsets(viewsets.ModelViewSet):

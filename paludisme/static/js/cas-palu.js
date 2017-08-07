@@ -12,10 +12,10 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
             }
         });
           // province
-          $http.get("/stock/casespalus2/")
+          $http.get("/stock/casespalusProv/")
           .then(function (response) {
               if (response.data.length > 0) {
-              $scope.provincesss = response.data;
+              $scope.structures = response.data;
                   // console.log(align_data(response.data));
               }
           });
@@ -28,10 +28,10 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
                   $scope.districts = response.data;
                   shared_province = province;
               });
-              $http.get("/stock/casespalus2/?report__facility__district__province=" + province.id)
+              $http.get("/stock/casespalusProv/?report__facility__district__province=" + province.id)
               .then(function (response) {
                   if (response.data.length > 0) {
-                  $scope.provincesss = response.data;
+                  $scope.structures = response.data;
                   }
               });
           }
@@ -45,10 +45,10 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
                   $scope.cdss = response.data;
                   shared_district = district;
               });
-              $http.get("/stock/casespalus2/?report__facility__district=" + district.id)
+              $http.get("/stock/casespalusDis/?report__facility__district=" + district.id)
               .then(function (response) {
                   if (response.data.length > 0) {
-                  $scope.provincesss = response.data;
+                  $scope.structures = response.data;
                   }
               });
           }
@@ -61,10 +61,10 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
               .then(function (response) {
                   $scope.etablissements = response.data;
               });
-              $http.get("/stock/casespalus2/?report__facility=" + cds.id)
+              $http.get("/stock/casespalusCds/?report__facility=" + cds.id)
               .then(function (response) {
                   if (response.data.length > 0) {
-                  $scope.provincesss = response.data;
+                  $scope.structures = response.data;
                   }
               });
       }

@@ -17,7 +17,10 @@
         <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
             <thead>
                 <tr>
-                    <th rowspan="3">Structures</th>
+                    <th rowspan="3">Province</th>
+                    <th ng-if="district != null" rowspan="3">District</th>
+                    <th ng-if="cds != null" rowspan="3">Cds</th>
+                    <th rowspan="3">Date </th>
                     <th colspan="4">Paludisme</th>
                     <th colspan="2">Tests réalisés</th>
                     <th rowspan="3">Total Tests positifs</th>
@@ -36,8 +39,11 @@
             </thead>
             <tbody>
                 {% verbatim %}
-                <tr ng-repeat="(x, y) in provincesss" >
-                    <td >{{y.province}}</td>
+                <tr ng-repeat="(x, y) in structures" >
+                    <td >{{ y.province}}</td>
+                    <td ng-if="district != null">{{y.district}}</td>
+                    <td ng-if="cds != null">{{y.cds}}</td>
+                    <td >{{ y.reporting_date}}</td>
                     <td >{{ y.simple }}</td>
                     <td >{{ y.acute }}</td>
                     <td >{{ y.pregnant_women }}</td>

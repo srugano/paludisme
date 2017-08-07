@@ -65,14 +65,14 @@ class CasesPaluSerializer(serializers.Serializer):
         fields = ('simple', 'acute', 'pregnant_women', 'decease', 'week', 'year')
 
 
-class CasesPalu2Serializer(serializers.ModelSerializer):
+class CasesPaluProvSerializer(serializers.ModelSerializer):
     ge = serializers.SerializerMethodField()
     tdr = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
 
     class Meta:
         model = CasesPalu
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province')
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'reporting_date')
 
     def get_ge(self, obj):
         return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district__province=obj['report__facility__district__province']).aggregate(ges=Sum('ge'))['ges']
@@ -82,6 +82,49 @@ class CasesPalu2Serializer(serializers.ModelSerializer):
 
     def get_province(self, obj):
         return CDS.objects.filter(district__province=obj['report__facility__district__province']).first().district.province.name
+
+
+class CasesPaluDisSerializer(CasesPaluProvSerializer):
+    district = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CasesPalu
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'reporting_date', 'district')
+
+    def get_ge(self, obj):
+        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district=obj['report__facility__district']).aggregate(ges=Sum('ge'))['ges']
+
+    def get_tdr(self, obj):
+        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district=obj['report__facility__district']).aggregate(tdrs=Sum('tdr'))['tdrs']
+
+    def get_province(self, obj):
+        return CDS.objects.filter(district=obj['report__facility__district']).first().district.province.name
+
+    def get_district(self, obj):
+        return CDS.objects.filter(district=obj['report__facility__district']).first().district.name
+
+
+class CasesPaluCdsSerializer(CasesPaluDisSerializer):
+    cds = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CasesPalu
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'reporting_date', 'district', 'cds')
+
+    def get_ge(self, obj):
+        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility=obj['report__facility']).aggregate(ges=Sum('ge'))['ges']
+
+    def get_tdr(self, obj):
+        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility=obj['report__facility']).aggregate(tdrs=Sum('tdr'))['tdrs']
+
+    def get_province(self, obj):
+        return CDS.objects.get(id=obj['report__facility']).district.province.name
+
+    def get_district(self, obj):
+        return CDS.objects.get(id=obj['report__facility']).district.name
+
+    def get_cds(self, obj):
+        return CDS.objects.get(id=obj['report__facility']).name
 
 
 class RateSerializer(serializers.Serializer):
