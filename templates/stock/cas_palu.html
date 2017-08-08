@@ -19,8 +19,8 @@
                 <tr>
                     <th rowspan="3">Province</th>
                     {% verbatim %}
-                    <th ng-if="districtss != null" rowspan="3">District</th>
-                    <th ng-if="cdsss != null" rowspan="3">Cds</th>
+                    <th ng-if="districtss" rowspan="3">District</th>
+                    <th ng-if="cdsss" rowspan="3">Cds</th>
                     {% endverbatim %}
                     <th rowspan="3">Date </th>
                     <th colspan="4">Paludisme</th>
@@ -43,8 +43,8 @@
                 {% verbatim %}
                 <tr ng-repeat="(x, y) in structures" >
                     <td >{{ y.province}}</td>
-                    <td ng-if="districtss != null">{{y.district}}</td>
-                    <td ng-if="cdsss != null">{{y.cds}}</td>
+                    <td ng-if="districtss">{{y.district}}</td>
+                    <td ng-if="cdsss">{{y.cds}}</td>
                     <td >{{ y.reporting_date}}</td>
                     <td >{{ y.simple }}</td>
                     <td >{{ y.acute }}</td>
