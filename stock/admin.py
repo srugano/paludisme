@@ -32,7 +32,11 @@ class DosageAdmin(ImportExportModelAdmin):
 
 @admin.register(StockProduct)
 class StockProductAdmin(ImportExportModelAdmin):
-    pass
+    list_display = ("report", "product", "dosage", "quantity", "reporting_date" )
+    search_fields = ("report__text",)
+    list_filter = ("report__category", "product", )
+    date_hierarchy = ("reporting_date")
+
 
 
 @admin.register(Temporary)

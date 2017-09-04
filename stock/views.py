@@ -23,7 +23,7 @@ class StockProductFilter(django_filters.rest_framework.FilterSet):
         fields = ['dosage', 'product', 'report', 'category']
 
 
-class StockProductViewsets(viewsets.ModelViewSet):
+class StockProductSFViewsets(viewsets.ModelViewSet):
     queryset = StockProduct.objects.filter(report__category='SF')
     serializer_class = StockProductSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
@@ -36,6 +36,10 @@ class StockProductViewsets(viewsets.ModelViewSet):
             if raba:
                 list_of_ids.append(raba.latest('reporting_date').id)
         return self.queryset.filter(report__id__in=list_of_ids)
+
+
+class StockProductSRViewsets(StockProductSFViewsets):
+    queryset = StockProduct.objects.filter(report__category='SR')
 
 
 class StockOutProductViewsets(viewsets.ModelViewSet):
@@ -133,20 +137,15 @@ def create_stockproduct(report=None, product=None, *args, **kwargs):
         return "Kuri {0}, handitswe hari abagwaye FPA {1}, Cholera {2}, Menengite {3}, Rougeole {4}, TNN {5}, Fievre Hemoragique {6}, Paludisme {7}, n'abandi {8}. Murakoze".format(report.facility, ps.fpa, ps.cholera, ps.meningit, ps.rougeole, ps.tnn, ps.fievre_hemoragique, ps.paludisme, ps.other)
     elif re.match(r'^(SF|SR)\s+(\d{6})\s+(qui|ACT|ART|TDR|SP)(\s+\d+){1,4}$', report.text, re.I):
         values = report.text.split(" ")[3:]
-        products = [m.code for m in Product.objects.all().distinct()]
-        if product.code in products:
-            if report.text.split(" ")[0] in ["RP"]:
-                st = StockOutReport.objects.create(product=product, report=report, remaining=values[0])
-                st.save()
-                return "Kuri {0}, handitswe ko hasigaye {1}, za {2} kw'itariki {3}. Murakoze".format(report.facility, values[0], product.designation, st.reporting_date.strftime('%Y-%m-%d'))
-            else:
-                message = ""
-                dosages = product.dosages.all()
-                for dose in dosages:
-                    sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
-                    sp.save()
-                    message += sp.quantity + " (" + dose.dosage + "), "
-                return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
+        if report.text.split(" ")[0] in ["SF"] and report.reporting_date.weekday() != 0:
+            return "Itariki mwandiste siyo, kuko itariki bandika ari iyo ku wambere. Bibwire uwubatwara."
+        message = ""
+        dosages = product.dosages.all()
+        for dose in dosages:
+            sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
+            sp.save()
+            message += sp.quantity + " (" + dose.dosage + "), "
+        return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
     else:
         return "Ivyo mwanditse sivyo. Andika uko bakwigishije."
 
@@ -184,6 +183,8 @@ def update_stockproduct(report=None, product=None, *args, **kwargs):
         return "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))
 
     elif re.match(r'^(SF|SR)\s+(\d{6})\s+(qui|ACT|ART|TDR|SP)(\s+\d+){1,4}$', report.text, re.I):
+        if report.text.split(" ")[0] in ["SF"] and report.reporting_date.weekday() != 0:
+            return "Itariki mwandiste siyo, kuko itariki bandika ari iyo ku wambere. Bibwire uwubatwara."
         values = report.text.split(" ")[3:]
         dosages = product.dosages.all()
         message = ""

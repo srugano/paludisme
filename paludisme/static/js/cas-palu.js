@@ -15,7 +15,6 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
           .then(function (response) {
               if (response.data.length > 0) {
               $scope.structures = response.data;
-                  // console.log(align_data(response.data));
               }
           });
 
