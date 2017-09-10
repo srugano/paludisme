@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from stock.models import Product, Report, Reporter, Dosage, StockProduct, Temporary, StockOutReport, PotentialCases, PotentialDeceased, Tests, CasesPalu, CasesPaluProv
+from stock.models import Product, Report, Reporter, Dosage, StockProduct, Temporary, StockOutReport, PotentialCases, PotentialDeceased, Tests, CasesPalu, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
 
 
 @admin.register(Product)
@@ -32,11 +32,25 @@ class DosageAdmin(ImportExportModelAdmin):
 
 @admin.register(StockProduct)
 class StockProductAdmin(ImportExportModelAdmin):
-    list_display = ("report", "product", "dosage", "quantity", "reporting_date" )
+    list_display = ("report", "product", "dosage", "quantity", "reporting_date", )
     search_fields = ("report__text",)
     list_filter = ("report__category", "product", )
     date_hierarchy = ("reporting_date")
 
+
+@admin.register(StockProductProv)
+class StockProductProvAdmin(ImportExportModelAdmin):
+    pass
+
+
+@admin.register(StockProductDis)
+class StockProductDisAdmin(ImportExportModelAdmin):
+    pass
+
+
+@admin.register(StockProductCDS)
+class StockProductCDSAdmin(ImportExportModelAdmin):
+    pass
 
 
 @admin.register(Temporary)
@@ -61,6 +75,16 @@ class CasesPaluAdmin(ImportExportModelAdmin):
 
 @admin.register(CasesPaluProv)
 class CasesPaluProvAdmin(ImportExportModelAdmin):
+    pass
+
+
+@admin.register(CasesPaluDis)
+class CasesPaluDisAdmin(ImportExportModelAdmin):
+    pass
+
+
+@admin.register(CasesPaluCDS)
+class CasesPaluCDSACDS(ImportExportModelAdmin):
     pass
 
 
