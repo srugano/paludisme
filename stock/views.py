@@ -1,4 +1,4 @@
-from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report
+from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report, CasesPaluProv, CasesPaluDis, CasesPaluCDS
 from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
@@ -64,24 +64,24 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
 
 
 class CasesPaluProvViewsets(viewsets.ModelViewSet):
-    queryset = CasesPalu.objects.values('reporting_date', 'report__facility__district__province').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('reporting_date')
+    queryset = CasesPaluProv.objects.all()
     serializer_class = CasesPaluProvSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
+    filter_fields = ('province', )
 
 
-class CasesPaluDisViewsets(viewsets.ModelViewSet):
-    queryset = CasesPalu.objects.values('reporting_date', 'report__facility__district').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('reporting_date')
+class CasesPaluDisViewsets(CasesPaluProvViewsets):
+    queryset = CasesPaluDis.objects.all()
     serializer_class = CasesPaluDisSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('report__facility__district', 'report__facility')
+    filter_fields = ('district', 'district__province')
 
 
 class CasesPaluCdsViewsets(viewsets.ModelViewSet):
-    queryset = CasesPalu.objects.values('reporting_date', 'report__facility').annotate(simple=Sum('simple')).annotate(acute=Sum('acute')).annotate(pregnant_women=Sum('pregnant_women')).annotate(decease=Sum('decease')).order_by('reporting_date')
+    queryset = CasesPaluCDS.objects.all()
     serializer_class = CasesPaluCdsSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('report__facility',)
+    filter_fields = ('cds', 'cds__district', 'cds__district__province')
 
 
 class RateViewsets(viewsets.ModelViewSet):

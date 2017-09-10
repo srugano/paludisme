@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport, Product, CasesPalu, Tests
+from stock.models import StockProduct, StockOutReport, Product, CasesPalu, Tests, CasesPaluProv, CasesPaluDis, CasesPaluCDS
 from django.db.models import Sum
 from bdiadmin.models import CDS
 
@@ -66,65 +66,48 @@ class CasesPaluSerializer(serializers.Serializer):
 
 
 class CasesPaluProvSerializer(serializers.ModelSerializer):
-    ge = serializers.SerializerMethodField()
-    tdr = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
 
     class Meta:
-        model = CasesPalu
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'reporting_date')
-
-    def get_ge(self, obj):
-        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district__province=obj['report__facility__district__province']).aggregate(ges=Sum('ge'))['ges']
-
-    def get_tdr(self, obj):
-        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district__province=obj['report__facility__district__province']).aggregate(tdrs=Sum('tdr'))['tdrs']
+        model = CasesPaluProv
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'year', 'week')
 
     def get_province(self, obj):
-        return CDS.objects.filter(district__province=obj['report__facility__district__province']).first().district.province.name
+        return obj.province.name
 
 
 class CasesPaluDisSerializer(CasesPaluProvSerializer):
     district = serializers.SerializerMethodField()
+    province = serializers.SerializerMethodField()
 
     class Meta:
-        model = CasesPalu
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'reporting_date', 'district')
-
-    def get_ge(self, obj):
-        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district=obj['report__facility__district']).aggregate(ges=Sum('ge'))['ges']
-
-    def get_tdr(self, obj):
-        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility__district=obj['report__facility__district']).aggregate(tdrs=Sum('tdr'))['tdrs']
-
-    def get_province(self, obj):
-        return CDS.objects.filter(district=obj['report__facility__district']).first().district.province.name
+        model = CasesPaluDis
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'district', 'week', 'year', 'province')
 
     def get_district(self, obj):
-        return CDS.objects.filter(district=obj['report__facility__district']).first().district.name
+        return obj.district.name
+
+    def get_province(self, obj):
+        return obj.district.province.name
 
 
 class CasesPaluCdsSerializer(CasesPaluDisSerializer):
     cds = serializers.SerializerMethodField()
+    district = serializers.SerializerMethodField()
+    province = serializers.SerializerMethodField()
 
     class Meta:
-        model = CasesPalu
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'reporting_date', 'district', 'cds')
-
-    def get_ge(self, obj):
-        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility=obj['report__facility']).aggregate(ges=Sum('ge'))['ges']
-
-    def get_tdr(self, obj):
-        return Tests.objects.filter(reporting_date=obj['reporting_date'], report__facility=obj['report__facility']).aggregate(tdrs=Sum('tdr'))['tdrs']
+        model = CasesPaluCDS
+        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'week', 'district', 'cds', 'year')
 
     def get_province(self, obj):
-        return CDS.objects.get(id=obj['report__facility']).district.province.name
+        return obj.cds.district.province.name
 
     def get_district(self, obj):
-        return CDS.objects.get(id=obj['report__facility']).district.name
+        return obj.cds.district.name
 
     def get_cds(self, obj):
-        return CDS.objects.get(id=obj['report__facility']).name
+        return obj.cds.name
 
 
 class RateSerializer(serializers.Serializer):

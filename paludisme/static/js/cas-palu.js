@@ -26,7 +26,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
                   $scope.districts = response.data;
                   $scope.cdss = "";
               });
-              $http.get("/stock/casespalusProv/?report__facility__district__province=" + province.id)
+              $http.get("/stock/casespalusProv/?province=" + province.id)
               .then(function (response) {
                   $scope.districtss = false;
                   $scope.cdsss = false;
@@ -46,7 +46,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
               .then(function (response) {
                   $scope.cdss = response.data;
               });
-              $http.get("/stock/casespalusDis/?report__facility__district=" + district.id)
+              $http.get("/stock/casespalusDis/?district=" + district.id)
               .then(function (response) {
                   $scope.cdsss = false;
                   if (response.data.length > 0) {
@@ -61,7 +61,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
             $scope.districtss = true;
             $scope.cdsss = true;
             if (cds) {
-              $http.get("/stock/casespalusCds/?report__facility=" + cds.id)
+              $http.get("/stock/casespalusCds/?cds=" + cds.id)
               .then(function (response) {
                   if (response.data.length > 0) {
                   $scope.structures = response.data;
