@@ -85,7 +85,7 @@ var update_rates = function (data){
 $(document).ready(function() {
 
     var url1 =  "/stock/casespalus/";
-    var url2 =  "/stock/productreportss/";
+    var url2 =  "/stock/stockfinal/";
     $.getJSON(url1, function(data) {
         
         chart1 = new Highcharts.chart(
@@ -220,7 +220,7 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 chart1.series[2].setData(series[2].data);
                 chart1.series[3].setData(series[3].data);
             });
-            $http.get("/stock/productreportss/?report__facility__district__province=" + province.id)
+            $http.get("/stock/stockfinal/?report__facility__district__province=" + province.id)
               .then(function (response) {
                 var series = align_data2(response.data);
                 chart2.series[0].setData(series[0].data);
@@ -258,7 +258,7 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 chart1.series[2].setData(series[2].data);
                 chart1.series[3].setData(series[3].data);
             });
-              $http.get("/stock/productreportss/?report__facility__district=" + district.id)
+              $http.get("/stock/stockfinal/?report__facility__district=" + district.id)
               .then(function (response) {
                 var series = align_data2(response.data);
                 chart2.series[0].setData(series[0].data);
@@ -296,7 +296,7 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 chart1.series[2].setData(series[2].data);
                 chart1.series[3].setData(series[3].data);
             });
-              $http.get("/stock/productreportss/?report__facility=" + cds.id)
+              $http.get("/stock/stockfinal/?report__facility=" + cds.id)
               .then(function (response) {
                 var series = align_data2(response.data);
                 chart2.series[0].setData(series[0].data, false);
