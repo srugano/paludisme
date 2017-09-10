@@ -17,7 +17,12 @@
         <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
             <thead>
                 <tr>
-                    <th >Structures</th>
+                    <th >Province</th>
+                    {% verbatim %}
+                    <th ng-if="districtss" >District</th>
+                    <th ng-if="cdsss" >Cds</th>
+                    {% endverbatim %}
+                    <th >Week</th>
                     <th >Qté au début de la semaine</th>
                     <th >Quantités reçues</th>
                     <th >Quantités distribuées</th>
@@ -26,15 +31,15 @@
             </thead>
             <tbody>
                 {% verbatim %}
-                <tr ng-repeat="(x, y) in provincesss" >
-                    <td >{{y.province}}</td>
-                    <td >{{ y.simple }}</td>
-                    <td >{{ y.acute }}</td>
-                    <td >{{ y.pregnant_women }}</td>
-                    <td >{{ y.decease }}</td>
-                    <td >{{ y.ge }}</td>
-                    <td >{{ y.tdr }}</td>
-                    <td >{{ y.ge + y.tdr }}</td>
+                <tr ng-repeat="(x, y) in structures" >
+                    <td >{{ y.province}}</td>
+                    <td ng-if="districtss">{{y.district}}</td>
+                    <td ng-if="cdsss">{{y.cds}}</td>
+                    <td >{{ y.week}}</td>
+                    <td >{{ y.quantity_sd }}</td>
+                    <td >{{ y.quantity_sr }}</td>
+                    <td >{{ y.quantity_sf - y.quantity_sr - y.quantity_sd }}</td>
+                    <td >{{ y.quantity_sf }}</td>
                 </tr>
               {% endverbatim %}
           </tbody>

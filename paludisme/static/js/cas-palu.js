@@ -31,7 +31,6 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
                   $scope.districtss = false;
                   $scope.cdsss = false;
                   if (response.data.length > 0) {
-                  console.log($scope.cdsss, $scope.districtss);
                   $scope.structures = response.data;
                   }
               });

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport, Product, CasesPalu, Tests, CasesPaluProv, CasesPaluDis, CasesPaluCDS
-from django.db.models import Sum
-from bdiadmin.models import CDS
+from stock.models import StockProduct, StockOutReport, Product, CasesPalu, Tests, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
 
 
 class StockProductSerializer(serializers.ModelSerializer):
@@ -22,6 +20,51 @@ class StockProductSerializer(serializers.ModelSerializer):
 
     def get_category(self, obj):
         return obj.report.category
+
+
+class StockProductProvSerializer(serializers.ModelSerializer):
+    province = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StockProductProv
+        fields = ('product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province')
+
+    def get_province(self, obj):
+        return obj.province.name
+
+
+class StockProductDisSerializer(serializers.ModelSerializer):
+    province = serializers.SerializerMethodField()
+    district = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StockProductDis
+        fields = ('product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district')
+
+    def get_district(self, obj):
+        return obj.district.name
+
+    def get_province(self, obj):
+        return obj.district.province.name
+
+
+class StockProductCDSSerializer(serializers.ModelSerializer):
+    cds = serializers.SerializerMethodField()
+    district = serializers.SerializerMethodField()
+    province = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StockProductCDS
+        fields = ('product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district', 'cds')
+
+    def get_cds(self, obj):
+        return obj.cds.name
+
+    def get_district(self, obj):
+        return obj.cds.district.name
+
+    def get_province(self, obj):
+        return obj.cds.district.province.name
 
 
 class StockOutProductSerializer(serializers.ModelSerializer):

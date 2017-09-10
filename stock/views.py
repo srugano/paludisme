@@ -1,9 +1,9 @@
-from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report, CasesPaluProv, CasesPaluDis, CasesPaluCDS
+from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
 from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
 from django.db.models import Sum, Count
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPaluProvSerializer, CasesPaluDisSerializer, CasesPaluCdsSerializer
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPaluProvSerializer, CasesPaluDisSerializer, CasesPaluCdsSerializer, StockProductCDSSerializer, StockProductDisSerializer, StockProductProvSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
@@ -36,6 +36,27 @@ class StockProductSFViewsets(viewsets.ModelViewSet):
             if raba:
                 list_of_ids.append(raba.latest('reporting_date').id)
         return self.queryset.filter(report__id__in=list_of_ids)
+
+
+class StockProductProvViewsets(viewsets.ModelViewSet):
+    queryset = StockProductProv.objects.all()
+    serializer_class = StockProductProvSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('province',)
+
+
+class StockProductDisViewsets(viewsets.ModelViewSet):
+    queryset = StockProductDis.objects.all()
+    serializer_class = StockProductDisSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('district', 'district__province',)
+
+
+class StockProductCDSViewsets(viewsets.ModelViewSet):
+    queryset = StockProductCDS.objects.all()
+    serializer_class = StockProductCDSSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('cds', 'cds__district', 'cds__district__province',)
 
 
 class StockProductSRViewsets(StockProductSFViewsets):

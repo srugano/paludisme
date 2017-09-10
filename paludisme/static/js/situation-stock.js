@@ -7,12 +7,13 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
         .then(function (response) {
             if (response.data.length > 0) {
                 $scope.provinces = response.data;
-            } else {
-                $("#province-group").hide();
-                $http.get("/bdiadmin/district/")
-                .then(function (response) {
-                    $scope.districts = response.data;
-                });
+            } 
+        });
+        // province
+        $http.get("/stock/stockfinalprov/")
+        .then(function (response) {
+            if (response.data.length > 0) {
+            $scope.structures = response.data;
             }
         });
         $scope.update_province = function () {
@@ -21,26 +22,51 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               $http.get("/bdiadmin/district/?province=" + province.id)
               .then(function (response) {
                 $scope.districts = response.data;
+                $scope.cdss = "";
             });
+            $http.get("/stock/stockfinalprov/?province=" + province.id)
+              .then(function (response) {
+                  $scope.districtss = false;
+                  $scope.cdsss = false;
+                  if (response.data.length > 0) {
+                  $scope.structures = response.data;
+                  }
+              });
           }
       };
           // district
           $scope.update_district = function () {
             var district = $scope.district;
+            $scope.districtss = true;
             if (district) {
               $http.get("/bdiadmin/cds/?district=" + district.id)
               .then(function (response) {
                   $scope.cdss = response.data;
+              });
+              $http.get("/stock/stockfinaldis/?district=" + district.id)
+              .then(function (response) {
+                  $scope.cdsss = false;
+                  if (response.data.length > 0) {
+                  $scope.structures = response.data;
+                  }
               });
           }
       };
         // CDS
         $scope.update_cds = function () {
             var cds = $scope.cds;
+            $scope.districtss = true;
+            $scope.cdsss = true;
             if (cds) {
               $http.get("/bdiadmin/cds/" + cds.id + "/" )
               .then(function (response) {
                   $scope.etablissements = response.data;
+              });
+              $http.get("/stock/stockfinalcds/?cds=" + cds.id)
+              .then(function (response) {
+                  if (response.data.length > 0) {
+                  $scope.structures = response.data;
+                  } else  $scope.structures = {};
               });
       }
     };
