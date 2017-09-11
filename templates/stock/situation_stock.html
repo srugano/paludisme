@@ -4,6 +4,16 @@
 
 
 {% block additional_filter %}
+    <form name="report_form" method="POST" action="{% url 'export_to_excel' %}">
+        {% verbatim %}
+        <input type='hidden' name='province' value={{province}} />
+        <input type='hidden' name='district' value={{district}} />
+        <input type='hidden' name='cds' value={{cds}} />
+        <input type='hidden' name='startdate' value={{startdate}} />
+        <input type='hidden' name='enddate' value={{enddate}} />
+        {% endverbatim %}
+        <input type="submit" value="Download">
+    </form>
 {% endblock additional_filter %}
 
 
@@ -23,6 +33,7 @@
                     <th ng-if="cdsss" >Cds</th>
                     {% endverbatim %}
                     <th >Week</th>
+                    <th >Product</th>
                     <th >Qté au début de la semaine</th>
                     <th >Quantités reçues</th>
                     <th >Quantités distribuées</th>
@@ -36,6 +47,7 @@
                     <td ng-if="districtss">{{y.district}}</td>
                     <td ng-if="cdsss">{{y.cds}}</td>
                     <td >{{ y.week}}</td>
+                    <td >{{ y.product}}</td>
                     <td >{{ y.quantity_sd }}</td>
                     <td >{{ y.quantity_sr }}</td>
                     <td >{{ y.quantity_sf - y.quantity_sr - y.quantity_sd }}</td>

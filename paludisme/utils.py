@@ -8,9 +8,7 @@ import requests
 from django.conf import settings
 import json
 
-
-phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message=
-    _("Phone number in the format: '+25799999999'. Up to 15 digits allowed."))
+phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message=_("Phone number in the format: '+25799999999'. Up to 15 digits allowed."))
 
 
 def validate_phone(phone=None):

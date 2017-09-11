@@ -9,13 +9,20 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
                 $scope.provinces = response.data;
             } 
         });
-        // province
         $http.get("/stock/stockfinalprov/")
         .then(function (response) {
             if (response.data.length > 0) {
             $scope.structures = response.data;
             }
         });
+        // product
+        $http.get("/stock/products/")
+        .then(function (response) {
+            if (response.data.length > 0) {
+            $scope.products = response.data;
+            }
+        });
+
         $scope.update_province = function () {
             var province = $scope.province;
             if (province) {

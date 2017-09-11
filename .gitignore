@@ -22,6 +22,6 @@ staticfiles/img/
 *.json
 *.sql
 *.gz
-celerybeat-schedule
+celerybeat*
 *.rdb
 	

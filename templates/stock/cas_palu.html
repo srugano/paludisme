@@ -4,6 +4,16 @@
 
 
 {% block additional_filter %}
+    <form name="report_form" method="POST" action="{% url 'export_to_excel' %}">
+        {% verbatim %}
+        <input type='hidden' name='province' value={{province}} />
+        <input type='hidden' name='district' value={{district}} />
+        <input type='hidden' name='cds' value={{cds}} />
+        <input type='hidden' name='startdate' value={{startdate}} />
+        <input type='hidden' name='enddate' value={{enddate}} />
+        {% endverbatim %}
+        <input type="submit" value="Download">
+    </form>
 {% endblock additional_filter %}
 
 

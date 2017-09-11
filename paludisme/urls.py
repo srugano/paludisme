@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from paludisme.views import settings, password, add_report, add_reporter, confirm_reporter, add_stockout, HomeView
+from stock.utils import export_to_excel
 
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^settings/$', settings, name='settings'),
     url(r'^settings/password/$', password, name='password'),
+    url(r'^export/xlsx/$', export_to_excel, name='export_to_excel'),
 ]
