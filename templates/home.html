@@ -274,9 +274,10 @@
     </script>
     <script>
     $(document).ready(function() {
+        $.fn.datepicker.defaults.format = 'yyyy-mm-dd';
         $('#datePicker')
             .datepicker({
-                format: 'mm/dd/yyyy'
+                format: 'yyyy-mm-dd'
             })
             .on('changeDate', function(e) {
                 // Revalidate the date field

@@ -73,5 +73,6 @@ def update_cds_task():
                     obj.quantity_sr = StockProduct.objects.filter(report__facility=c, reporting_date__week=r, reporting_date__year=datetime.datetime.today().year, report__category='SR', product__designation=i['product__designation'], dosage__dosage=i['dosage__dosage']).aggregate(quantities=Coalesce(Sum('quantity'), 0))['quantities']
                     obj.quantity_sd = StockProduct.objects.filter(report__facility=c, reporting_date__week=r-1, reporting_date__year=datetime.datetime.today().year, report__category='SF', product__designation=i['product__designation'], dosage__dosage=i['dosage__dosage']).aggregate(quantities=Coalesce(Sum('quantity'), 0))['quantities']
                     obj.save()
+                    print obj
 
     logger.info("Finished updating Cds")
