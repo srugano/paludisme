@@ -1,6 +1,8 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
+from import_export import resources
 from stock.models import Product, Report, Reporter, Dosage, StockProduct, Temporary, StockOutReport, PotentialCases, PotentialDeceased, Tests, CasesPalu, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
+from import_export import fields
 
 
 @admin.register(Product)
@@ -10,8 +12,27 @@ class ProductAdmin(ImportExportModelAdmin):
     list_filter = ('designation',)
 
 
-@admin.register(Report)
+class ReportAdminResource(resources.ModelResource):
+    province = fields.Field()
+    district = fields.Field()
+    cds = fields.Field()
+
+    class Meta:
+        model = Report
+        fields = ('cds', 'district', 'province', 'reporting_date', 'text', 'category', )
+
+    def dehydrate_cds(self, report):
+        return report.facility.name
+
+    def dehydrate_district(self, report):
+        return report.facility.district.name
+
+    def dehydrate_province(self, report):
+        return report.facility.district.province.name
+
+
 class ReportAdmin(ImportExportModelAdmin):
+    resource_class = ReportAdminResource
     list_display = ("facility", "reporting_date", "text", "category")
     search_fields = ("facility", "text", "category")
     list_filter = ("category",)
@@ -96,3 +117,5 @@ class PotentialDeceasedAdmin(ImportExportModelAdmin):
 @admin.register(PotentialCases)
 class PotentialCasesAdmin(ImportExportModelAdmin):
     pass
+
+admin.site.register(Report, ReportAdmin)
