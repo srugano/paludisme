@@ -1,10 +1,11 @@
 from django.conf.urls import url, include
-from stock.views import StockProductSFViewsets, cas_palu, situation_stock, StockOutProductViewsets, show_reports_rp, ProductViewsets, CasesPaluViewsets, RateViewsets, CasesPaluProvViewsets, CasesPaluDisViewsets, CasesPaluCdsViewsets, StockProductProvViewsets, StockProductDisViewsets, StockProductCDSViewsets, ReportViewsets
+from stock.views import StockProductSFViewsets, cas_palu, situation_stock, StockOutProductViewsets, show_reports_rp, ProductViewsets, CasesPaluViewsets, RateViewsets, CasesPaluProvViewsets, CasesPaluDisViewsets, CasesPaluCdsViewsets, StockProductProvViewsets, StockProductDisViewsets, StockProductCDSViewsets, ReportCAViewsets, ReportSTViewsets
 from rest_framework import routers
 
 
 router = routers.DefaultRouter()
-router.register(r'reports', ReportViewsets)
+router.register(r'reportsCA', ReportCAViewsets)
+router.register(r'reportsST', ReportSTViewsets)
 router.register(r'stockfinal', StockProductSFViewsets)
 router.register(r'stockfinalprov', StockProductProvViewsets)
 router.register(r'stockfinaldis', StockProductDisViewsets)

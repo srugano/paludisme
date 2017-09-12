@@ -4,21 +4,12 @@
 {% block titles %}Situation Stock{% endblock titles %}
 
 {% block additional_filter %}
-    <form name="report_form" method="POST" action="{% url 'export_to_excel' %}">
-        {% verbatim %}
-        <input type='hidden' name='province' value={{province}} />
-        <input type='hidden' name='district' value={{district}} />
-        <input type='hidden' name='cds' value={{cds}} />
-        <input type='hidden' name='startdate' value={{startdate}} />
-        <input type='hidden' name='enddate' value={{enddate}} />
-        {% endverbatim %}
-        <input type="submit" value="Download">
-    </form>
 {% endblock additional_filter %}
 
 
 {% block custom_js %}
 <script src="{% static "js/situation-stock.js" %}"></script>
+<script src="{% static "js/angular-ui-bootstrap-modal.js" %}"></script>
 {% endblock custom_js %}
 
 {% block content %}
@@ -43,10 +34,10 @@
             <tbody>
                 {% verbatim %}
                 <tr ng-repeat="(x, y) in structures" >
-                    <td ><a href="#">{{ y.province}}</a></td>
-                    <td ng-if="districtss"><a href="#">{{y.district}}</a></td>
-                    <td ng-if="cdsss"><a href="#">{{y.cds}}</a></td>
-                    <td >{{ y.week}}</td>
+                    <td >{{ y.province}}</td>
+                    <td ng-if="districtss">{{y.district}}</td>
+                    <td ng-if="cdsss">{{y.cds}}</td>
+                    <td ><a href="#" ng-click="open()">{{ y.week}}</a></td>
                     <td >{{ y.product}}</td>
                     <td >{{ y.quantity_sd }}</td>
                     <td >{{ y.quantity_sr }}</td>
@@ -56,6 +47,45 @@
               {% endverbatim %}
           </tbody>
       </table>
+    </div>
+</div>
+<div modal="showModal" close="ok()" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" ng-click="ok()" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Reports {% verbatim %}{{cds.name || district.name || province.name}}{% endverbatim %}</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" data-toggle="table" datatable="ng" dt-options="dtOptions" >
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Province</th>
+                            <th>District</th>
+                            <th>CDS</th>
+                            <th>Text</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% verbatim %}
+                        <tr ng-repeat="report in reports">
+                            <td>{{ report.reporting_date }}</td>
+                            <td>{{ report.province }}</td>   
+                            <td>{{ report.district }}</td>
+                            <td>{{ report.cds }}</td>
+                            <td>{{ report.text }}</td>
+                            <td>{{ report.category }}</td>
+                        </tr>
+                        {% endverbatim %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+              <a class="btn btn-success" ng-click="ok()">Okay</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}

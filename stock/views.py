@@ -115,11 +115,15 @@ class RateViewsets(viewsets.ModelViewSet):
         return {'nombre_cds': self.queryset.values('facility').distinct().count()}
 
 
-class ReportViewsets(viewsets.ModelViewSet):
-    queryset = Report.objects.all()
+class ReportCAViewsets(viewsets.ModelViewSet):
+    queryset = Report.objects.filter(category__in=['CA', 'TS'])
     serializer_class = ReportSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('facility__district__province', 'facility__district', 'facility')
+
+
+class ReportSTViewsets(ReportCAViewsets):
+    queryset = Report.objects.filter(category__in=['SR', 'SF'])
 
 
 @login_required

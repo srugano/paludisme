@@ -24,41 +24,53 @@ class StockProductSerializer(serializers.ModelSerializer):
 
 class StockProductProvSerializer(serializers.ModelSerializer):
     province = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
 
     class Meta:
         model = StockProductProv
-        fields = ('product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province')
+        fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province')
 
     def get_province(self, obj):
         return obj.province.name
 
+    def get_id(self, obj):
+        return obj.province.id
+
 
 class StockProductDisSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
     district = serializers.SerializerMethodField()
 
     class Meta:
         model = StockProductDis
-        fields = ('product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district')
+        fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district')
 
     def get_district(self, obj):
         return obj.district.name
+
+    def get_id(self, obj):
+        return obj.district.id
 
     def get_province(self, obj):
         return obj.district.province.name
 
 
 class StockProductCDSSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField()
     cds = serializers.SerializerMethodField()
     district = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
 
     class Meta:
         model = StockProductCDS
-        fields = ('product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district', 'cds')
+        fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district', 'cds')
 
     def get_cds(self, obj):
         return obj.cds.name
+
+    def get_id(self, obj):
+        return obj.cds.id
 
     def get_district(self, obj):
         return obj.cds.district.name
