@@ -3,7 +3,7 @@ from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
 from django.db.models import Sum, Count
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPaluProvSerializer, CasesPaluDisSerializer, CasesPaluCdsSerializer, StockProductCDSSerializer, StockProductDisSerializer, StockProductProvSerializer
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPaluProvSerializer, CasesPaluDisSerializer, CasesPaluCdsSerializer, StockProductCDSSerializer, StockProductDisSerializer, StockProductProvSerializer, ReportSerializer
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import re
@@ -113,6 +113,13 @@ class RateViewsets(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         return {'nombre_cds': self.queryset.values('facility').distinct().count()}
+
+
+class ReportViewsets(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('facility__district__province', 'facility__district', 'facility')
 
 
 @login_required

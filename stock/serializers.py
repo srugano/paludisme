@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport, Product, CasesPalu, Tests, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
+from stock.models import StockProduct, StockOutReport, Product, Report, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
 
 
 class StockProductSerializer(serializers.ModelSerializer):
@@ -110,22 +110,27 @@ class CasesPaluSerializer(serializers.Serializer):
 
 class CasesPaluProvSerializer(serializers.ModelSerializer):
     province = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
 
     class Meta:
         model = CasesPaluProv
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'year', 'week')
+        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'year', 'week')
 
     def get_province(self, obj):
         return obj.province.name
+
+    def get_id(self, obj):
+        return obj.province.id
 
 
 class CasesPaluDisSerializer(CasesPaluProvSerializer):
     district = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
 
     class Meta:
         model = CasesPaluDis
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'district', 'week', 'year', 'province')
+        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'district', 'week', 'year', 'province')
 
     def get_district(self, obj):
         return obj.district.name
@@ -133,15 +138,19 @@ class CasesPaluDisSerializer(CasesPaluProvSerializer):
     def get_province(self, obj):
         return obj.district.province.name
 
+    def get_id(self, obj):
+        return obj.district.id
+
 
 class CasesPaluCdsSerializer(CasesPaluDisSerializer):
     cds = serializers.SerializerMethodField()
     district = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
 
     class Meta:
         model = CasesPaluCDS
-        fields = ('simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'week', 'district', 'cds', 'year')
+        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'week', 'district', 'cds', 'year')
 
     def get_province(self, obj):
         return obj.cds.district.province.name
@@ -152,6 +161,9 @@ class CasesPaluCdsSerializer(CasesPaluDisSerializer):
     def get_cds(self, obj):
         return obj.cds.name
 
+    def get_id(self, obj):
+        return obj.cds.id
+
 
 class RateSerializer(serializers.Serializer):
     year = serializers.IntegerField()
@@ -161,3 +173,22 @@ class RateSerializer(serializers.Serializer):
 
     def get_expected(self, obj):
         return self.context['nombre_cds']
+
+
+class ReportSerializer(serializers.ModelSerializer):
+    cds = serializers.SerializerMethodField()
+    district = serializers.SerializerMethodField()
+    province = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Report
+        fields = ('id', 'reporting_date', 'province', 'district', 'cds', 'text', 'category')
+
+    def get_province(self, obj):
+        return obj.facility.district.province.name
+
+    def get_district(self, obj):
+        return obj.facility.district.name
+
+    def get_cds(self, obj):
+        return obj.facility.name

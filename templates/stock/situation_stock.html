@@ -1,7 +1,7 @@
 {% extends 'home.html' %}
 {% load static %}
 {% load i18n %}
-
+{% block titles %}Situation Stock{% endblock titles %}
 
 {% block additional_filter %}
     <form name="report_form" method="POST" action="{% url 'export_to_excel' %}">
@@ -43,9 +43,9 @@
             <tbody>
                 {% verbatim %}
                 <tr ng-repeat="(x, y) in structures" >
-                    <td >{{ y.province}}</td>
-                    <td ng-if="districtss">{{y.district}}</td>
-                    <td ng-if="cdsss">{{y.cds}}</td>
+                    <td ><a href="#">{{ y.province}}</a></td>
+                    <td ng-if="districtss"><a href="#">{{y.district}}</a></td>
+                    <td ng-if="cdsss"><a href="#">{{y.cds}}</a></td>
                     <td >{{ y.week}}</td>
                     <td >{{ y.product}}</td>
                     <td >{{ y.quantity_sd }}</td>
