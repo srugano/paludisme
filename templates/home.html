@@ -147,7 +147,7 @@
             <div class="form-group">
             <label for="dstartdate">{% trans "Start Date" %}:</label>
             <div class="input-group date" data-provide="datepicker">
-                <input type="text" id="startdate" class="form-control datepicker" readonly="readonly" style="width:130px" ng-model="startdate" ng-change="get_startdate()">
+                <input type="text" id="startdate" class="form-control datepicker" readonly="readonly" style="width:130px" ng-model="startdate" ng-change="get_by_date()">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>
                 </div>
@@ -156,7 +156,7 @@
             <div class="form-group">
             <label for="dendtdate">{% trans "End Date" %}:</label>
             <div class="input-group date" data-provide="datepicker">
-                <input type="text" id="endtdate" class="form-control datepicker" readonly="readonly" style="width:130px" ng-model="enddate" ng-change="get_enddate()">
+                <input type="text" id="endtdate" class="form-control datepicker" readonly="readonly" style="width:130px" ng-model="enddate" ng-change="get_by_date()">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>
                 </div>

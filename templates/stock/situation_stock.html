@@ -41,7 +41,7 @@
                     <td >{{ y.product}}</td>
                     <td >{{ y.quantity_sd }}</td>
                     <td >{{ y.quantity_sr }}</td>
-                    <td >{{ y.quantity_sf - y.quantity_sr - y.quantity_sd }}</td>
+                    <td >{{ y.quantity_sr + y.quantity_sd - y.quantity_sf }}</td>
                     <td >{{ y.quantity_sf }}</td>
                 </tr>
               {% endverbatim %}

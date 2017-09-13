@@ -27,6 +27,28 @@ Highcharts.setOptions({
     }
 });
 
+var update_chart1 = function (series) {
+  chart1.series[0].setData(series[0].data);
+  chart1.series[1].setData(series[1].data);
+  chart1.series[2].setData(series[2].data);
+  chart1.series[3].setData(series[3].data);
+  console.log("Updated chart 1");
+};
+
+var update_chart2 = function (series) {
+  chart2.series[0].setData(series[0].data);
+  chart2.series[1].setData(series[1].data);
+  chart2.series[2].setData(series[2].data);
+  chart2.series[3].setData(series[3].data);
+  chart2.series[4].setData(series[4].data);
+  chart2.series[5].setData(series[5].data);
+  chart2.series[6].setData(series[6].data);
+  chart2.series[7].setData(series[7].data);
+  chart2.series[8].setData(series[8].data);
+  console.log("Updated chart 2");
+};
+
+
 
 var chart1;
 var chart2;
@@ -82,11 +104,8 @@ var update_rates = function (data){
   document.getElementById("taux").innerHTML = (rates.nombre / rates.expected * 100).toFixed(2);
 };
 
-$(document).ready(function() {
-
-    var url1 =  "/stock/casespalus/";
-    var url2 =  "/stock/stockfinal/";
-    $.getJSON(url1, function(data) {
+var draw_chart1 = function (url1) {
+  $.getJSON(url1, function(data) {
         
         chart1 = new Highcharts.chart(
           'situation_cas_palu', 
@@ -125,8 +144,10 @@ $(document).ready(function() {
           }
         );
       });
+};
 
-    $.getJSON(url2, function(data) {
+var draw_chart2 = function (url2) {
+  $.getJSON(url2, function(data) {
         var new_data = align_data2(data);
         chart2 = new Highcharts.chart(
           'situation_stock', 
@@ -179,6 +200,19 @@ $(document).ready(function() {
           }
         );
       });
+};
+
+var startdates = '';
+var enddates = '';
+
+$(document).ready(function() {
+
+    var url1 =  "/stock/casespalus/?startdate=" + startdates + "&enddate=" + enddates;
+    var url2 =  "/stock/stockfinal/?startdate=" + startdates + "&enddate=" + enddates;
+    draw_chart1(url1);
+    draw_chart2(url2);
+
+    
 });
 
 var app = angular.module('PaludismeApp', ['ngSanitize', 'datatables', 'datatables.buttons']);
@@ -193,12 +227,13 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
             }
         });
         // rates
-        $http.get("/stock/rates/")
+        $http.get("/stock/rates/?startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
         .then(function (response) {
             if (response.data.length > 0) {
                 update_rates(response.data);
               }
           });
+        // update province
         $scope.update_province = function () {
             var province = $scope.province;
             if (province) {
@@ -206,29 +241,18 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               .then(function (response) {
                 $scope.districts = response.data;
             });
-            $http.get("/stock/casespalus/?report__facility__district__province=" + province.id)
+            $http.get("/stock/casespalus/?report__facility__district__province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                 var series = align_data1(response.data);
-                chart1.series[0].setData(series[0].data);
-                chart1.series[1].setData(series[1].data);
-                chart1.series[2].setData(series[2].data);
-                chart1.series[3].setData(series[3].data);
+                update_chart1(series);
             });
-            $http.get("/stock/stockfinal/?report__facility__district__province=" + province.id)
+            $http.get("/stock/stockfinal/?report__facility__district__province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                 var series = align_data2(response.data);
-                chart2.series[0].setData(series[0].data);
-                chart2.series[1].setData(series[1].data);
-                chart2.series[2].setData(series[2].data);
-                chart2.series[3].setData(series[3].data);
-                chart2.series[4].setData(series[4].data);
-                chart2.series[5].setData(series[5].data);
-                chart2.series[6].setData(series[6].data);
-                chart2.series[7].setData(series[7].data);
-                chart2.series[8].setData(series[8].data);
+                update_chart2(series);
             });
             // rates
-            $http.get("/stock/rates/?facility__district__province=" + province.id)
+            $http.get("/stock/rates/?facility__district__province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
             .then(function (response) {
                 if (response.data.length > 0) {
                     update_rates(response.data);
@@ -244,29 +268,19 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               .then(function (response) {
                   $scope.cdss = response.data;
               });
-              $http.get("/stock/casespalus/?report__facility__district=" + district.id)
+              $http.get("/stock/casespalus/?report__facility__district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                 var series = align_data1(response.data);
-                chart1.series[0].setData(series[0].data);
-                chart1.series[1].setData(series[1].data);
-                chart1.series[2].setData(series[2].data);
-                chart1.series[3].setData(series[3].data);
+                update_chart1(series);
             });
-              $http.get("/stock/stockfinal/?report__facility__district=" + district.id)
+              $http.get("/stock/stockfinal/?report__facility__district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                 var series = align_data2(response.data);
-                chart2.series[0].setData(series[0].data);
-                chart2.series[1].setData(series[1].data);
-                chart2.series[2].setData(series[2].data);
-                chart2.series[3].setData(series[3].data);
-                chart2.series[4].setData(series[4].data);
-                chart2.series[5].setData(series[5].data);
-                chart2.series[6].setData(series[6].data);
-                chart2.series[7].setData(series[7].data);
-                chart2.series[8].setData(series[8].data);
+                update_chart2(series);
+
             });
             // rates
-            $http.get("/stock/rates/?facility__district=" + district.id)
+            $http.get("/stock/rates/?facility__district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
             .then(function (response) {
                 if (response.data.length > 0) {
                     update_rates(response.data);
@@ -282,34 +296,101 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               .then(function (response) {
                   $scope.etablissements = response.data;
               });
-              $http.get("/stock/casespalus/?report__facility=" + cds.id)
+              $http.get("/stock/casespalus/?report__facility=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                 var series = align_data1(response.data);
-                chart1.series[0].setData(series[0].data);
-                chart1.series[1].setData(series[1].data);
-                chart1.series[2].setData(series[2].data);
-                chart1.series[3].setData(series[3].data);
+                update_chart1(series);
+
             });
-              $http.get("/stock/stockfinal/?report__facility=" + cds.id)
+              $http.get("/stock/stockfinal/?report__facility=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                 var series = align_data2(response.data);
-                chart2.series[0].setData(series[0].data, false);
-                chart2.series[1].setData(series[1].data, false);
-                chart2.series[2].setData(series[2].data, false);
-                chart2.series[3].setData(series[3].data, false);
-                chart2.series[4].setData(series[4].data, false);
-                chart2.series[5].setData(series[5].data, false);
-                chart2.series[6].setData(series[6].data, false);
-                chart2.series[7].setData(series[7].data, false);
-                chart2.series[8].setData(series[8].data, false);
+                update_chart2(series);
             });
             // rates
-            $http.get("/stock/rates/?facility=" + cds.id)
+            $http.get("/stock/rates/?facility=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
             .then(function (response) {
                 if (response.data.length > 0) {
                     update_rates(response.data);
                   }
               });
+      }
+    };
+
+    // startdate
+    $scope.get_by_date = function () {
+      var province = $scope.province;
+      var district = $scope.district;
+      var cds = $scope.cds;
+      var enddate = $scope.enddate;
+      var startdate = $scope.startdate;
+      if(cds){
+        $http.get("/stock/casespalus/?report__facility=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              .then(function (response) {
+                var series = align_data1(response.data);
+                update_chart1(series);
+
+            });
+        $http.get("/stock/stockfinal/?report__facility=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+        .then(function (response) {
+          var series = align_data2(response.data);
+          update_chart2(series);
+      });
+      // rates
+      $http.get("/stock/rates/?facility=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+      .then(function (response) {
+          if (response.data.length > 0) {
+              update_rates(response.data);
+            }
+        });
+      } else if (district){
+        $http.get("/stock/casespalus/?report__facility__district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              .then(function (response) {
+                var series = align_data1(response.data);
+                update_chart1(series);
+            });
+        $http.get("/stock/stockfinal/?report__facility__district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+        .then(function (response) {
+          var series = align_data2(response.data);
+          update_chart2(series);
+
+      });
+      // rates
+      $http.get("/stock/rates/?facility__district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+      .then(function (response) {
+          if (response.data.length > 0) {
+              update_rates(response.data);
+            }
+        });
+      } else if (province) {
+        $http.get("/stock/casespalus/?report__facility__district__province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              .then(function (response) {
+                var series = align_data1(response.data);
+                update_chart1(series);
+            });
+        $http.get("/stock/stockfinal/?report__facility__district__province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+          .then(function (response) {
+            var series = align_data2(response.data);
+            update_chart2(series);
+        });
+        // rates
+        $http.get("/stock/rates/?facility__district__province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+        .then(function (response) {
+            if (response.data.length > 0) {
+                update_rates(response.data);
+              }
+          });
+      } else {
+        var url1 =  "/stock/casespalus/?startdate=" + $scope.startdate + "&enddate=" + $scope.enddate;
+        var url2 =  "/stock/stockfinal/?startdate=" + $scope.startdate + "&enddate=" + $scope.enddate;
+        draw_chart1(url1);
+        draw_chart2(url2);
+        $http.get("/stock/rates/?startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+        .then(function (response) {
+            if (response.data.length > 0) {
+                update_rates(response.data);
+              }
+          });
       }
     };
 }]);

@@ -31,7 +31,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
                 $scope.districts = response.data;
                 $scope.cdss = "";
             });
-            $http.get("/stock/stockfinalprov/?province=" + province.id)
+            $http.get("/stock/stockfinalprov/?province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   $scope.districtss = false;
                   $scope.cdsss = false;
@@ -50,7 +50,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               .then(function (response) {
                   $scope.cdss = response.data;
               });
-              $http.get("/stock/stockfinaldis/?district=" + district.id)
+              $http.get("/stock/stockfinaldis/?district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   $scope.cdsss = false;
                   if (response.data.length > 0) {
@@ -69,7 +69,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               .then(function (response) {
                   $scope.etablissements = response.data;
               });
-              $http.get("/stock/stockfinalcds/?cds=" + cds.id)
+              $http.get("/stock/stockfinalcds/?cds=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   if (response.data.length > 0) {
                   $scope.structures = response.data;
@@ -107,6 +107,42 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
 
       $scope.ok = function() {
       $scope.showModal = false;
+    };
+
+    // startdate
+    $scope.get_by_date = function () {
+      var province = $scope.province;
+      var district = $scope.district;
+      var cds = $scope.cds;
+      var enddate = $scope.enddate;
+      var startdate = $scope.startdate;
+      $scope.reports = {};
+      if(cds){
+        $http.get("/stock/stockfinalcds/?cds=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+              if (response.data.length > 0) {
+                $scope.structures = response.data;
+                  }
+          });
+      } else if (district){
+        $http.get("/stock/stockfinaldis/?district=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+              if (response.data.length > 0) {
+                $scope.structures = response.data;
+                  }
+          });
+      } else if (province) {
+        $http.get("/stock/casespalusProv/?province=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+              if (response.data.length > 0) {
+                $scope.structures = response.data;
+                  }
+          });
+      } else {
+        $http.get("/stock/stockfinalprov/?startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+              if (response.data.length > 0) {
+                $scope.structures = response.data;
+                  }
+          });
+
+      }
     };
 }]);
 

@@ -31,6 +31,12 @@ class StockProductSFViewsets(viewsets.ModelViewSet):
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
 
     def get_queryset(self):
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(reporting_date__week__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(reporting_date__week__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         list_of_ids = []
         for i in CDS.objects.all():
             raba = Report.objects.filter(category='SF', facility=i)
@@ -46,10 +52,12 @@ class StockProductProvViewsets(viewsets.ModelViewSet):
     filter_fields = ('province',)
 
     def get_queryset(self):
-        if self.request.GET.get('startdate', ''):
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
-        if self.request.GET.get('enddate', ''):
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         return self.queryset
 
 
@@ -60,10 +68,12 @@ class StockProductDisViewsets(viewsets.ModelViewSet):
     filter_fields = ('district', 'district__province',)
 
     def get_queryset(self):
-        if self.request.GET.get('startdate', ''):
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
-        if self.request.GET.get('enddate', ''):
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         return self.queryset
 
 
@@ -74,10 +84,12 @@ class StockProductCDSViewsets(viewsets.ModelViewSet):
     filter_fields = ('cds', 'cds__district', 'cds__district__province',)
 
     def get_queryset(self):
-        if self.request.GET.get('startdate', ''):
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
-        if self.request.GET.get('enddate', ''):
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         return self.queryset
 
 
@@ -106,10 +118,12 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
 
     def get_queryset(self):
-        if self.request.GET.get('startdate', ''):
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
-        if self.request.GET.get('enddate', ''):
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(reporting_date__week__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(reporting_date__week__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         return self.queryset
 
 
@@ -120,10 +134,12 @@ class CasesPaluProvViewsets(viewsets.ModelViewSet):
     filter_fields = ('province', )
 
     def get_queryset(self):
-        if self.request.GET.get('startdate', ''):
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
-        if self.request.GET.get('enddate', ''):
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         return self.queryset
 
 
@@ -134,10 +150,12 @@ class CasesPaluDisViewsets(CasesPaluProvViewsets):
     filter_fields = ('district', 'district__province')
 
     def get_queryset(self):
-        if self.request.GET.get('startdate', ''):
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
-        if self.request.GET.get('enddate', ''):
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         return self.queryset
 
 
@@ -148,10 +166,12 @@ class CasesPaluCdsViewsets(viewsets.ModelViewSet):
     filter_fields = ('cds', 'cds__district', 'cds__district__province')
 
     def get_queryset(self):
-        if self.request.GET.get('startdate', ''):
-            self.queryset = self.queryset.filter(week_number__gte=self.request.GET.get('startdate', ''))
-        if self.request.GET.get('enddate', ''):
-            self.queryset = self.queryset.filter(week_number__lte=self.request.GET.get('enddate', ''))
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
         return self.queryset
 
 
@@ -163,6 +183,15 @@ class RateViewsets(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         return {'nombre_cds': self.queryset.values('facility').distinct().count()}
+
+    def get_queryset(self):
+        startdate = self.request.GET.get('startdate', '')
+        enddate = self.request.GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            self.queryset = self.queryset.filter(reporting_date__week__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+        if enddate and enddate != 'undefined':
+            self.queryset = self.queryset.filter(reporting_date__week__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
+        return self.queryset
 
 
 class ReportCAViewsets(viewsets.ModelViewSet):
