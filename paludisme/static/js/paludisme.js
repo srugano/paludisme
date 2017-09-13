@@ -190,12 +190,6 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
         .then(function (response) {
             if (response.data.length > 0) {
                 $scope.provinces = response.data;
-            } else {
-                $("#province-group").hide();
-                $http.get("/bdiadmin/district/")
-                .then(function (response) {
-                    $scope.districts = response.data;
-                });
             }
         });
         // rates
@@ -318,14 +312,4 @@ app.controller('FilterCtrl', ['$scope', '$http', function($scope, $http) {
               });
       }
     };
-    // CDS
-        $scope.update_product = function () {
-            var product = $scope.product;
-            if (product) {
-              $http.get("/stock/products/?id=" + product.id)
-              .then(function (response) {
-                  $scope.etablissements = response.data;
-              });
-      }
-    };
-  }]);
+}]);

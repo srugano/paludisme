@@ -77,35 +77,26 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               });
       }
     };
-    // CDS
-        $scope.update_product = function () {
-            var product = $scope.product;
-            if (product) {
-              $http.get("/stock/products/?id=" + product.id)
-              .then(function (response) {
-                  $scope.etablissements = response.data;
-              });
-      }
-    };
-    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(10);
+    // Export
+    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(25);
 
     // modal export
     $scope.open = function() {
         $scope.reports = {};
         if($(this)[0].y.cds){
-          $http.get("/stock/reportsST/?facility="+$(this)[0].y.id).then(function (response) {
+          $http.get("/stock/reportsST/?facility=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
                 if (response.data.length > 0) {
                   $scope.reports = response.data;
                     }
             });
         } else if ($(this)[0].y.district){
-          $http.get("/stock/reportsST/?facility__district="+$(this)[0].y.id).then(function (response) {
+          $http.get("/stock/reportsST/?facility__district=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
                 if (response.data.length > 0) {
                   $scope.reports = response.data;
                     }
             });
         } else if ($(this)[0].y.province) {
-          $http.get("/stock/reportsST/?facility__district__province="+$(this)[0].y.id).then(function (response) {
+          $http.get("/stock/reportsST/?facility__district__province=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
                 if (response.data.length > 0) {
                   $scope.reports = response.data;
                     }
@@ -120,4 +111,4 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
 }]);
 
 
-app.controller('ExportCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($scope, $http, DTOptionsBuilder) {$scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(10);}]);
+app.controller('ExportCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($scope, $http, DTOptionsBuilder) {$scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(25);}]);

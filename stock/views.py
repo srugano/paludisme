@@ -10,6 +10,7 @@ import re
 from django.conf import settings
 from paludisme.utils import send_sms_through_rapidpro
 from bdiadmin.models import CDS
+import datetime
 
 
 GROUPS = getattr(settings, 'RUPTURE_GROUPS', '')
@@ -44,6 +45,13 @@ class StockProductProvViewsets(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('province',)
 
+    def get_queryset(self):
+        if self.request.GET.get('startdate', ''):
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        if self.request.GET.get('enddate', ''):
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        return self.queryset
+
 
 class StockProductDisViewsets(viewsets.ModelViewSet):
     queryset = StockProductDis.objects.all()
@@ -51,12 +59,26 @@ class StockProductDisViewsets(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('district', 'district__province',)
 
+    def get_queryset(self):
+        if self.request.GET.get('startdate', ''):
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        if self.request.GET.get('enddate', ''):
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        return self.queryset
+
 
 class StockProductCDSViewsets(viewsets.ModelViewSet):
     queryset = StockProductCDS.objects.all()
     serializer_class = StockProductCDSSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('cds', 'cds__district', 'cds__district__province',)
+
+    def get_queryset(self):
+        if self.request.GET.get('startdate', ''):
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        if self.request.GET.get('enddate', ''):
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        return self.queryset
 
 
 class StockProductSRViewsets(StockProductSFViewsets):
@@ -83,12 +105,26 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('report__facility__district__province', 'report__facility__district', 'report__facility')
 
+    def get_queryset(self):
+        if self.request.GET.get('startdate', ''):
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        if self.request.GET.get('enddate', ''):
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        return self.queryset
+
 
 class CasesPaluProvViewsets(viewsets.ModelViewSet):
     queryset = CasesPaluProv.objects.all()
     serializer_class = CasesPaluProvSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('province', )
+
+    def get_queryset(self):
+        if self.request.GET.get('startdate', ''):
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        if self.request.GET.get('enddate', ''):
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        return self.queryset
 
 
 class CasesPaluDisViewsets(CasesPaluProvViewsets):
@@ -97,12 +133,26 @@ class CasesPaluDisViewsets(CasesPaluProvViewsets):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('district', 'district__province')
 
+    def get_queryset(self):
+        if self.request.GET.get('startdate', ''):
+            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(self.request.GET.get('startdate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        if self.request.GET.get('enddate', ''):
+            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(self.request.GET.get('enddate', ''), "%Y-%m-%d").isocalendar()[1]+1)
+        return self.queryset
+
 
 class CasesPaluCdsViewsets(viewsets.ModelViewSet):
     queryset = CasesPaluCDS.objects.all()
     serializer_class = CasesPaluCdsSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('cds', 'cds__district', 'cds__district__province')
+
+    def get_queryset(self):
+        if self.request.GET.get('startdate', ''):
+            self.queryset = self.queryset.filter(week_number__gte=self.request.GET.get('startdate', ''))
+        if self.request.GET.get('enddate', ''):
+            self.queryset = self.queryset.filter(week_number__lte=self.request.GET.get('enddate', ''))
+        return self.queryset
 
 
 class RateViewsets(viewsets.ModelViewSet):
@@ -120,6 +170,11 @@ class ReportCAViewsets(viewsets.ModelViewSet):
     serializer_class = ReportSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('facility__district__province', 'facility__district', 'facility')
+
+    def get_queryset(self):
+        if self.request.GET.get('week', ''):
+            week = self.request.GET.get('week', '')[1:]
+            return self.queryset.filter(reporting_date__week=int(week))
 
 
 class ReportSTViewsets(ReportCAViewsets):
