@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
-from stock.models import Product, Report, Reporter, Dosage, StockProduct, Temporary, StockOutReport, PotentialCases, PotentialDeceased, Tests, CasesPalu, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
+from stock.models import Product, Report, Reporter, Dosage, StockProduct, Temporary, StockOutReport, PotentialCases, PotentialDeceased, Tests, CasesPalu
 from import_export import fields
 
 
@@ -59,21 +59,6 @@ class StockProductAdmin(ImportExportModelAdmin):
     date_hierarchy = ("reporting_date")
 
 
-@admin.register(StockProductProv)
-class StockProductProvAdmin(ImportExportModelAdmin):
-    pass
-
-
-@admin.register(StockProductDis)
-class StockProductDisAdmin(ImportExportModelAdmin):
-    pass
-
-
-@admin.register(StockProductCDS)
-class StockProductCDSAdmin(ImportExportModelAdmin):
-    pass
-
-
 @admin.register(Temporary)
 class TemporaryAdmin(ImportExportModelAdmin):
     pass
@@ -91,21 +76,6 @@ class StockOutReportAdmin(ImportExportModelAdmin):
 
 @admin.register(CasesPalu)
 class CasesPaluAdmin(ImportExportModelAdmin):
-    pass
-
-
-@admin.register(CasesPaluProv)
-class CasesPaluProvAdmin(ImportExportModelAdmin):
-    pass
-
-
-@admin.register(CasesPaluDis)
-class CasesPaluDisAdmin(ImportExportModelAdmin):
-    pass
-
-
-@admin.register(CasesPaluCDS)
-class CasesPaluCDSACDS(ImportExportModelAdmin):
     pass
 
 

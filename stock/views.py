@@ -1,4 +1,4 @@
-from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
+from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report
 from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 import re
 from django.conf import settings
 from paludisme.utils import send_sms_through_rapidpro
-from bdiadmin.models import CDS
+from bdiadmin.models import CDS, District, Province
 import datetime
 
 
@@ -46,23 +46,23 @@ class StockProductSFViewsets(viewsets.ModelViewSet):
 
 
 class StockProductProvViewsets(viewsets.ModelViewSet):
-    queryset = StockProductProv.objects.all()
+    queryset = Province.objects.all()
     serializer_class = StockProductProvSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('province',)
+    # filter_fields = ('id',)
 
-    def get_queryset(self):
-        startdate = self.request.GET.get('startdate', '')
-        enddate = self.request.GET.get('enddate', '')
-        if startdate and startdate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
-        if enddate and enddate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
-        return self.queryset
+    # def get_queryset(self):
+    #     startdate = self.request.GET.get('startdate', '')
+    #     enddate = self.request.GET.get('enddate', '')
+    #     if startdate and startdate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+    #     if enddate and enddate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
+    #     return self.queryset
 
 
 class StockProductDisViewsets(viewsets.ModelViewSet):
-    queryset = StockProductDis.objects.all()
+    queryset = StockProduct.objects.filter(report__category='SF')
     serializer_class = StockProductDisSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('district', 'district__province',)
@@ -78,7 +78,7 @@ class StockProductDisViewsets(viewsets.ModelViewSet):
 
 
 class StockProductCDSViewsets(viewsets.ModelViewSet):
-    queryset = StockProductCDS.objects.all()
+    queryset = StockProduct.objects.filter(report__category='SF')
     serializer_class = StockProductCDSSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('cds', 'cds__district', 'cds__district__province',)
@@ -128,51 +128,51 @@ class CasesPaluViewsets(viewsets.ModelViewSet):
 
 
 class CasesPaluProvViewsets(viewsets.ModelViewSet):
-    queryset = CasesPaluProv.objects.all()
+    queryset = Province.objects.all()
     serializer_class = CasesPaluProvSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('province', )
+    filter_fields = ('id', 'code', )
 
-    def get_queryset(self):
-        startdate = self.request.GET.get('startdate', '')
-        enddate = self.request.GET.get('enddate', '')
-        if startdate and startdate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
-        if enddate and enddate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
-        return self.queryset
+    # def get_queryset(self):
+    #     startdate = self.request.GET.get('startdate', '')
+    #     enddate = self.request.GET.get('enddate', '')
+    #     if startdate and startdate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+    #     if enddate and enddate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
+    #     return self.queryset
 
 
 class CasesPaluDisViewsets(CasesPaluProvViewsets):
-    queryset = CasesPaluDis.objects.all()
+    queryset = District.objects.all()
     serializer_class = CasesPaluDisSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('district', 'district__province')
+    filter_fields = ('id', 'code')
 
-    def get_queryset(self):
-        startdate = self.request.GET.get('startdate', '')
-        enddate = self.request.GET.get('enddate', '')
-        if startdate and startdate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
-        if enddate and enddate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
-        return self.queryset
+    # def get_queryset(self):
+    #     startdate = self.request.GET.get('startdate', '')
+    #     enddate = self.request.GET.get('enddate', '')
+    #     if startdate and startdate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+    #     if enddate and enddate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
+    #     return self.queryset
 
 
 class CasesPaluCdsViewsets(viewsets.ModelViewSet):
-    queryset = CasesPaluCDS.objects.all()
+    queryset = CDS.objects.all()
     serializer_class = CasesPaluCdsSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('cds', 'cds__district', 'cds__district__province')
+    filter_fields = ('id', 'code', )
 
-    def get_queryset(self):
-        startdate = self.request.GET.get('startdate', '')
-        enddate = self.request.GET.get('enddate', '')
-        if startdate and startdate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
-        if enddate and enddate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
-        return self.queryset
+    # def get_queryset(self):
+    #     startdate = self.request.GET.get('startdate', '')
+    #     enddate = self.request.GET.get('enddate', '')
+    #     if startdate and startdate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
+    #     if enddate and enddate != 'undefined':
+    #         self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
+    #     return self.queryset
 
 
 class RateViewsets(viewsets.ModelViewSet):
@@ -200,10 +200,10 @@ class ReportCAViewsets(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('facility__district__province', 'facility__district', 'facility')
 
-    def get_queryset(self):
-        if self.request.GET.get('week', ''):
-            week = self.request.GET.get('week', '')[1:]
-            return self.queryset.filter(reporting_date__week=int(week))
+    # def get_queryset(self):
+    #     if self.request.GET.get('week', ''):
+    #         week = self.request.GET.get('week', '')[1:]
+    #         return self.queryset.filter(reporting_date__week=int(week))
 
 
 class ReportSTViewsets(ReportCAViewsets):

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport, Product, Report, CasesPaluProv, CasesPaluDis, CasesPaluCDS, StockProductProv, StockProductDis, StockProductCDS
+from stock.models import StockProduct, StockOutReport, Product, Report, CasesPalu, Tests
+from bdiadmin.models import CDS, District, Province
+from django.db.models import Sum
+import datetime
 
 
 class StockProductSerializer(serializers.ModelSerializer):
@@ -23,18 +26,23 @@ class StockProductSerializer(serializers.ModelSerializer):
 
 
 class StockProductProvSerializer(serializers.ModelSerializer):
-    province = serializers.SerializerMethodField()
-    id = serializers.SerializerMethodField()
+    quantity_sf = serializers.SerializerMethodField()
+    quantity_sd = serializers.SerializerMethodField()
+    quantity_sr = serializers.SerializerMethodField()
 
     class Meta:
-        model = StockProductProv
-        fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province')
+        model = Province
+        fields = ('id', 'quantity_sf', 'quantity_sd', 'quantity_sr', 'name', 'code')
 
-    def get_province(self, obj):
-        return obj.province.name
+    def get_quantity_sf(self, obj):
+        print obj
+        return StockProduct.objects.filter(report__facility__district__province=obj, report__category='SR')
 
-    def get_id(self, obj):
-        return obj.province.id
+    def get_quantity_sd(self, obj):
+        return StockProduct.objects.filter(report__facility__district__province=obj, report__category='SF')
+
+    def get_quantity_sr(self, obj):
+        return StockProduct.objects.filter(report__facility__district__province=obj, report__category='SR')
 
 
 class StockProductDisSerializer(serializers.ModelSerializer):
@@ -43,7 +51,7 @@ class StockProductDisSerializer(serializers.ModelSerializer):
     district = serializers.SerializerMethodField()
 
     class Meta:
-        model = StockProductDis
+        model = StockProduct
         fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district')
 
     def get_district(self, obj):
@@ -63,7 +71,7 @@ class StockProductCDSSerializer(serializers.ModelSerializer):
     province = serializers.SerializerMethodField()
 
     class Meta:
-        model = StockProductCDS
+        model = StockProduct
         fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district', 'cds')
 
     def get_cds(self, obj):
@@ -121,60 +129,234 @@ class CasesPaluSerializer(serializers.Serializer):
 
 
 class CasesPaluProvSerializer(serializers.ModelSerializer):
+    simple = serializers.SerializerMethodField()
+    acute = serializers.SerializerMethodField()
+    pregnant_women = serializers.SerializerMethodField()
+    decease = serializers.SerializerMethodField()
+    ge = serializers.SerializerMethodField()
+    tdr = serializers.SerializerMethodField()
     province = serializers.SerializerMethodField()
-    id = serializers.SerializerMethodField()
 
     class Meta:
-        model = CasesPaluProv
-        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'year', 'week')
+        model = Province
+        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'code')
+
+    def get_province(self, obj):
+        return obj.name
+
+    def get_simple(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district__province=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(simples=Sum('simple'))['simples']
+
+    def get_acute(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district__province=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(acutes=Sum('acute'))['acutes']
+
+    def get_pregnant_women(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district__province=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(pregnant_womens=Sum('pregnant_women'))['pregnant_womens']
+
+    def get_decease(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district__province=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(deceases=Sum('decease'))['deceases']
+
+    def get_ge(self, obj):
+        queryset = Tests.objects.filter(report__facility__district__province=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(ges=Sum('ge'))['ges']
+
+    def get_tdr(self, obj):
+        queryset = Tests.objects.filter(report__facility__district__province=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(tdrs=Sum('tdr'))['tdrs']
+
+
+class CasesPaluDisSerializer(CasesPaluProvSerializer):
+    province = serializers.SerializerMethodField()
+    district = serializers.SerializerMethodField()
+
+    class Meta:
+        model = District
+        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'code', 'district')
 
     def get_province(self, obj):
         return obj.province.name
 
-    def get_id(self, obj):
-        return obj.province.id
+    def get_district(self, obj):
+        return obj.name
+
+    def get_simple(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(simples=Sum('simple'))['simples']
+
+    def get_acute(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(acutes=Sum('acute'))['acutes']
+
+    def get_pregnant_women(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(pregnant_womens=Sum('pregnant_women'))['pregnant_womens']
+
+    def get_decease(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility__district=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(deceases=Sum('decease'))['deceases']
+
+    def get_ge(self, obj):
+        queryset = Tests.objects.filter(report__facility__district=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(ges=Sum('ge'))['ges']
+
+    def get_tdr(self, obj):
+        queryset = Tests.objects.filter(report__facility__district=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(tdrs=Sum('tdr'))['tdrs']
 
 
-class CasesPaluDisSerializer(CasesPaluProvSerializer):
-    district = serializers.SerializerMethodField()
+class CasesPaluCdsSerializer(CasesPaluProvSerializer):
     province = serializers.SerializerMethodField()
-    id = serializers.SerializerMethodField()
+    district = serializers.SerializerMethodField()
+    cds = serializers.SerializerMethodField()
 
     class Meta:
-        model = CasesPaluDis
-        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'district', 'week', 'year', 'province')
-
-    def get_district(self, obj):
-        return obj.district.name
+        model = CDS
+        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'code', 'district', 'cds')
 
     def get_province(self, obj):
         return obj.district.province.name
 
-    def get_id(self, obj):
-        return obj.district.id
-
-
-class CasesPaluCdsSerializer(CasesPaluDisSerializer):
-    cds = serializers.SerializerMethodField()
-    district = serializers.SerializerMethodField()
-    province = serializers.SerializerMethodField()
-    id = serializers.SerializerMethodField()
-
-    class Meta:
-        model = CasesPaluCDS
-        fields = ('id', 'simple', 'acute', 'pregnant_women', 'decease', 'ge', 'tdr', 'province', 'week', 'district', 'cds', 'year')
-
-    def get_province(self, obj):
-        return obj.cds.district.province.name
-
     def get_district(self, obj):
-        return obj.cds.district.name
+        return obj.district.name
 
     def get_cds(self, obj):
-        return obj.cds.name
+        return obj.name
 
-    def get_id(self, obj):
-        return obj.cds.id
+    def get_simple(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(simples=Sum('simple'))['simples']
+
+    def get_acute(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(acutes=Sum('acute'))['acutes']
+
+    def get_pregnant_women(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(pregnant_womens=Sum('pregnant_women'))['pregnant_womens']
+
+    def get_decease(self, obj):
+        queryset = CasesPalu.objects.filter(report__facility=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(deceases=Sum('decease'))['deceases']
+
+    def get_ge(self, obj):
+        queryset = Tests.objects.filter(report__facility=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(ges=Sum('ge'))['ges']
+
+    def get_tdr(self, obj):
+        queryset = Tests.objects.filter(report__facility=obj)
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(tdrs=Sum('tdr'))['tdrs']
 
 
 class RateSerializer(serializers.Serializer):

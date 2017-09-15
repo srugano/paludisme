@@ -28,7 +28,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
                   $scope.districts = response.data;
                   $scope.cdss = "";
               });
-              $http.get("/stock/casespalusProv/?province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              $http.get("/stock/casespalusProv/?id=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   $scope.districtss = false;
                   $scope.cdsss = false;
@@ -47,7 +47,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
               .then(function (response) {
                   $scope.cdss = response.data;
               });
-              $http.get("/stock/casespalusDis/?district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              $http.get("/stock/casespalusDis/?id=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   $scope.cdsss = false;
                   if (response.data.length > 0) {
@@ -62,7 +62,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
             $scope.districtss = true;
             $scope.cdsss = true;
             if (cds) {
-              $http.get("/stock/casespalusCds/?cds=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              $http.get("/stock/casespalusCds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   if (response.data.length > 0) {
                   $scope.structures = response.data;
@@ -76,19 +76,19 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
     $scope.open = function() {
       $scope.reports = {};
       if($(this)[0].y.cds){
-        $http.get("/stock/reportsCA/?facility=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
+        $http.get("/stock/reportsCA/?facility=" + $(this)[0].y.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.reports = response.data;
                   }
           });
       } else if ($(this)[0].y.district){
-        $http.get("/stock/reportsCA/?facility__district=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
+        $http.get("/stock/reportsCA/?facility__district=" + $(this)[0].y.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.reports = response.data;
                   }
           });
       } else if ($(this)[0].y.province) {
-        $http.get("/stock/reportsCA/?facility__district__province=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
+        $http.get("/stock/reportsCA/?facility__district__province=" + $(this)[0].y.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.reports = response.data;
                   }

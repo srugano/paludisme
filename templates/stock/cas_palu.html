@@ -23,7 +23,7 @@
                     <th ng-if="districtss" rowspan="3">District</th>
                     <th ng-if="cdsss" rowspan="3">Cds</th>
                     {% endverbatim %}
-                    <th rowspan="3">Week </th>
+                    <th rowspan="3">Code </th>
                     <th colspan="4">Paludisme</th>
                     <th colspan="2">Tests réalisés</th>
                     <th rowspan="3">Total Tests positifs</th>
@@ -46,7 +46,7 @@
                     <td >{{ y.province}}</td>
                     <td ng-if="districtss">{{y.district}}</td>
                     <td ng-if="cdsss">{{y.cds}}</td>
-                    <td ><a class="btn"  ng-click="open()">{{ y.week}}</a></td>
+                    <td ><a class="btn"  ng-click="open()">{{ y.code}}</a></td>
                     <td >{{ y.simple }}</td>
                     <td >{{ y.acute }}</td>
                     <td >{{ y.pregnant_women }}</td>

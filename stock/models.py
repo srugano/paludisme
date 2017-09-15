@@ -72,48 +72,6 @@ class StockProduct(models.Model):
         ordering = ('report',)
 
 
-class StockProductProv(models.Model):
-    province = models.ForeignKey(Province)
-    year = models.PositiveIntegerField(default=2017)
-    week = models.CharField(max_length=3)
-    week_number = models.IntegerField(default=0)
-    product = models.CharField(max_length=50)
-    quantity_sr = models.FloatField(default=0.0)
-    quantity_sd = models.FloatField(default=0.0)
-    quantity_sf = models.FloatField(default=0.0)
-
-    def __unicode__(self):
-        return "{0} - {1} - week: {2}, rest:{3}".format(self.year, self.province, self.week, self.product)
-
-
-class StockProductDis(models.Model):
-    district = models.ForeignKey(District)
-    year = models.PositiveIntegerField(default=2017)
-    week = models.CharField(max_length=3)
-    week_number = models.IntegerField(default=0)
-    product = models.CharField(max_length=50)
-    quantity_sr = models.FloatField(default=0.0)
-    quantity_sd = models.FloatField(default=0.0)
-    quantity_sf = models.FloatField(default=0.0)
-
-    def __unicode__(self):
-        return "{0} - {1} - week: {2}, rest:{3}".format(self.year, self.district, self.week, self.product)
-
-
-class StockProductCDS(models.Model):
-    cds = models.ForeignKey(CDS)
-    year = models.PositiveIntegerField(default=2017)
-    week = models.CharField(max_length=3)
-    week_number = models.IntegerField(default=0)
-    product = models.CharField(max_length=50)
-    quantity_sr = models.FloatField(default=0.0)
-    quantity_sd = models.FloatField(default=0.0)
-    quantity_sf = models.FloatField(default=0.0)
-
-    def __unicode__(self):
-        return "{0} - {1} - week: {2}, rest:{3}".format(self.year, self.cds, self.week, self.product)
-
-
 class Tests(models.Model):
     report = models.ForeignKey(Report)
     reporting_date = models.DateField(default=timezone.now)
@@ -134,54 +92,6 @@ class CasesPalu(models.Model):
 
     def __unicode__(self):
         return "{0} - {1} - {2} - {3}".format(self.simple, self.acute, self.pregnant_women, self.decease)
-
-
-class CasesPaluProv(models.Model):
-    province = models.ForeignKey(Province)
-    year = models.PositiveIntegerField(default=2017)
-    week = models.CharField(max_length=3)
-    week_number = models.IntegerField(default=0)
-    simple = models.FloatField(default=0.0)
-    acute = models.FloatField(default=0.0)
-    pregnant_women = models.FloatField(default=0.0)
-    decease = models.FloatField(default=0.0)
-    ge = models.FloatField(default=0.0)
-    tdr = models.FloatField(default=0.0)
-
-    def __unicode__(self):
-        return "{0} - {1} - week: {2}".format(self.year, self.province, self.week)
-
-
-class CasesPaluDis(models.Model):
-    district = models.ForeignKey(District)
-    year = models.PositiveIntegerField(default=2017)
-    week = models.CharField(max_length=3)
-    week_number = models.IntegerField(default=0)
-    simple = models.FloatField(default=0.0)
-    acute = models.FloatField(default=0.0)
-    pregnant_women = models.FloatField(default=0.0)
-    decease = models.FloatField(default=0.0)
-    ge = models.FloatField(default=0.0)
-    tdr = models.FloatField(default=0.0)
-
-    def __unicode__(self):
-        return "{0} - {1} - week: {2}".format(self.year, self.district, self.week)
-
-
-class CasesPaluCDS(models.Model):
-    cds = models.ForeignKey(CDS)
-    year = models.PositiveIntegerField(default=2017)
-    week = models.CharField(max_length=3)
-    week_number = models.IntegerField(default=0)
-    simple = models.FloatField(default=0.0)
-    acute = models.FloatField(default=0.0)
-    pregnant_women = models.FloatField(default=0.0)
-    decease = models.FloatField(default=0.0)
-    ge = models.FloatField(default=0.0)
-    tdr = models.FloatField(default=0.0)
-
-    def __unicode__(self):
-        return "{0} - {1} - week: {2}".format(self.year, self.cds, self.week)
 
 
 class PotentialCases(models.Model):
