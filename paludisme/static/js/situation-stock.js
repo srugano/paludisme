@@ -82,17 +82,8 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
     // CDS
         $scope.update_product = function () {
             var product = $scope.product;
-            if (cds) {
-              $http.get("/bdiadmin/cds/" + cds.id + "/" )
-              .then(function (response) {
-                  $scope.etablissements = response.data;
-              });
-              $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
-              .then(function (response) {
-                  if (response.data.length > 0) {
-                  $scope.structures = response.data;
-                  } else  $scope.structures = {};
-              });
+            if (product) {
+              console.log(product);
       }
     };
 
