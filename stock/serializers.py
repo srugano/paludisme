@@ -29,62 +29,135 @@ class StockProductProvSerializer(serializers.ModelSerializer):
     quantity_sf = serializers.SerializerMethodField()
     quantity_sd = serializers.SerializerMethodField()
     quantity_sr = serializers.SerializerMethodField()
+    province = serializers.SerializerMethodField()
 
     class Meta:
         model = Province
-        fields = ('id', 'quantity_sf', 'quantity_sd', 'quantity_sr', 'name', 'code')
+        fields = ('id', 'quantity_sf', 'quantity_sd', 'quantity_sr', 'province', 'code')
+
+    def get_province(self, obj):
+        return obj.name
 
     def get_quantity_sf(self, obj):
-        print obj
-        return StockProduct.objects.filter(report__facility__district__province=obj, report__category='SR')
+        queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SF')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
     def get_quantity_sd(self, obj):
-        return StockProduct.objects.filter(report__facility__district__province=obj, report__category='SF')
+        queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SF')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
     def get_quantity_sr(self, obj):
-        return StockProduct.objects.filter(report__facility__district__province=obj, report__category='SR')
+        queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SR')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
 
-class StockProductDisSerializer(serializers.ModelSerializer):
-    id = serializers.SerializerMethodField()
-    province = serializers.SerializerMethodField()
+class StockProductDisSerializer(StockProductProvSerializer):
     district = serializers.SerializerMethodField()
 
     class Meta:
-        model = StockProduct
-        fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district')
+        model = District
+        fields = ('id', 'quantity_sf', 'quantity_sd', 'quantity_sr', 'province', 'district', 'code')
+
+    def get_district(self, obj):
+        return obj.name
+
+    def get_province(self, obj):
+        return obj.province.name
+
+    def get_quantity_sf(self, obj):
+        queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SF')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
+
+    def get_quantity_sd(self, obj):
+        queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SF')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
+
+    def get_quantity_sr(self, obj):
+        queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SR')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
+
+
+class StockProductCDSSerializer(StockProductProvSerializer):
+    cds = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CDS
+        fields = ('id', 'quantity_sf', 'quantity_sd', 'quantity_sr', 'province', 'district', 'cds', 'code')
+
+    def get_cds(self, obj):
+        return obj.name
 
     def get_district(self, obj):
         return obj.district.name
 
-    def get_id(self, obj):
-        return obj.district.id
-
     def get_province(self, obj):
         return obj.district.province.name
 
+    def get_quantity_sf(self, obj):
+        queryset = StockProduct.objects.filter(report__facility=obj, report__category='SF')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
-class StockProductCDSSerializer(serializers.ModelSerializer):
-    id = serializers.SerializerMethodField()
-    cds = serializers.SerializerMethodField()
-    district = serializers.SerializerMethodField()
-    province = serializers.SerializerMethodField()
+    def get_quantity_sd(self, obj):
+        queryset = StockProduct.objects.filter(report__facility=obj, report__category='SF')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
-    class Meta:
-        model = StockProduct
-        fields = ('id', 'product', 'quantity_sf',  'year', 'week', 'quantity_sd', 'quantity_sr', 'province', 'district', 'cds')
-
-    def get_cds(self, obj):
-        return obj.cds.name
-
-    def get_id(self, obj):
-        return obj.cds.id
-
-    def get_district(self, obj):
-        return obj.cds.district.name
-
-    def get_province(self, obj):
-        return obj.cds.district.province.name
+    def get_quantity_sr(self, obj):
+        queryset = StockProduct.objects.filter(report__facility=obj, report__category='SR')
+        startdate = self.context['request'].GET.get('startdate', '')
+        enddate = self.context['request'].GET.get('enddate', '')
+        if startdate and startdate != 'undefined':
+            queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
+        if enddate and enddate != 'undefined':
+            queryset = queryset.filter(reporting_date__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d"))
+        return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
 
 class StockOutProductSerializer(serializers.ModelSerializer):

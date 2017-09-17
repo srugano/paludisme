@@ -49,48 +49,21 @@ class StockProductProvViewsets(viewsets.ModelViewSet):
     queryset = Province.objects.all()
     serializer_class = StockProductProvSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    # filter_fields = ('id',)
-
-    # def get_queryset(self):
-    #     startdate = self.request.GET.get('startdate', '')
-    #     enddate = self.request.GET.get('enddate', '')
-    #     if startdate and startdate != 'undefined':
-    #         self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
-    #     if enddate and enddate != 'undefined':
-    #         self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
-    #     return self.queryset
+    filter_fields = ('id', 'code', )
 
 
 class StockProductDisViewsets(viewsets.ModelViewSet):
-    queryset = StockProduct.objects.filter(report__category='SF')
+    queryset = District.objects.all()
     serializer_class = StockProductDisSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('district', 'district__province',)
-
-    def get_queryset(self):
-        startdate = self.request.GET.get('startdate', '')
-        enddate = self.request.GET.get('enddate', '')
-        if startdate and startdate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
-        if enddate and enddate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
-        return self.queryset
+    filter_fields = ('id', 'code', )
 
 
 class StockProductCDSViewsets(viewsets.ModelViewSet):
-    queryset = StockProduct.objects.filter(report__category='SF')
+    queryset = CDS.objects.all()
     serializer_class = StockProductCDSSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('cds', 'cds__district', 'cds__district__province',)
-
-    def get_queryset(self):
-        startdate = self.request.GET.get('startdate', '')
-        enddate = self.request.GET.get('enddate', '')
-        if startdate and startdate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d").isocalendar()[1])
-        if enddate and enddate != 'undefined':
-            self.queryset = self.queryset.filter(week_number__lte=datetime.datetime.strptime(enddate, "%Y-%m-%d").isocalendar()[1])
-        return self.queryset
+    filter_fields = ('id', 'code', )
 
 
 class StockProductSRViewsets(StockProductSFViewsets):

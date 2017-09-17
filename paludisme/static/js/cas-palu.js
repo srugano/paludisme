@@ -109,19 +109,19 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($
       var startdate = $scope.startdate;
       $scope.reports = {};
       if(cds){
-        $http.get("/stock/casespalusCds/?cds=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/casespalusCds/?id=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (district){
-        $http.get("/stock/casespalusDis/?district=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/casespalusDis/?id=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (province) {
-        $http.get("/stock/casespalusProv/?province=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/casespalusProv/?id=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }

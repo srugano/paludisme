@@ -31,7 +31,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
                 $scope.districts = response.data;
                 $scope.cdss = "";
             });
-            $http.get("/stock/stockfinalprov/?province=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+            $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   $scope.districtss = false;
                   $scope.cdsss = false;
@@ -50,7 +50,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               .then(function (response) {
                   $scope.cdss = response.data;
               });
-              $http.get("/stock/stockfinaldis/?district=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   $scope.cdsss = false;
                   if (response.data.length > 0) {
@@ -59,6 +59,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               });
           }
       };
+
         // CDS
         $scope.update_cds = function () {
             var cds = $scope.cds;
@@ -69,7 +70,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               .then(function (response) {
                   $scope.etablissements = response.data;
               });
-              $http.get("/stock/stockfinalcds/?cds=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
               .then(function (response) {
                   if (response.data.length > 0) {
                   $scope.structures = response.data;
@@ -77,6 +78,24 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               });
       }
     };
+
+    // CDS
+        $scope.update_product = function () {
+            var product = $scope.product;
+            if (cds) {
+              $http.get("/bdiadmin/cds/" + cds.id + "/" )
+              .then(function (response) {
+                  $scope.etablissements = response.data;
+              });
+              $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              .then(function (response) {
+                  if (response.data.length > 0) {
+                  $scope.structures = response.data;
+                  } else  $scope.structures = {};
+              });
+      }
+    };
+
     // Export
     $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(25);
 
@@ -84,19 +103,19 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
     $scope.open = function() {
         $scope.reports = {};
         if($(this)[0].y.cds){
-          $http.get("/stock/reportsST/?facility=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
+          $http.get("/stock/reportsST/?facility=" + $(this)[0].y.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate).then(function (response) {
                 if (response.data.length > 0) {
                   $scope.reports = response.data;
                     }
             });
         } else if ($(this)[0].y.district){
-          $http.get("/stock/reportsST/?facility__district=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
+          $http.get("/stock/reportsST/?facility__district=" + $(this)[0].y.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate).then(function (response) {
                 if (response.data.length > 0) {
                   $scope.reports = response.data;
                     }
             });
         } else if ($(this)[0].y.province) {
-          $http.get("/stock/reportsST/?facility__district__province=" + $(this)[0].y.id +"&week=" + $(this)[0].y.week).then(function (response) {
+          $http.get("/stock/reportsST/?facility__district__province=" + $(this)[0].y.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate).then(function (response) {
                 if (response.data.length > 0) {
                   $scope.reports = response.data;
                     }
@@ -118,19 +137,19 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
       var startdate = $scope.startdate;
       $scope.reports = {};
       if(cds){
-        $http.get("/stock/stockfinalcds/?cds=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (district){
-        $http.get("/stock/stockfinaldis/?district=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (province) {
-        $http.get("/stock/casespalusProv/?province=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/casespalusProv/?id=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }

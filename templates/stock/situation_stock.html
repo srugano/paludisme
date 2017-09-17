@@ -4,6 +4,12 @@
 {% block titles %}Situation Stock{% endblock titles %}
 
 {% block additional_filter %}
+<div class="form-group">
+    <label for="product">{% trans "Product:" %}</label>
+    <select id="product" class="form-control"  ng-model="product" ng-options="x.designation for x in products track by x.code" ng-change="update_product()">
+    <option name="optradio" selected="selected">[ {% trans "Select Product" %} ]</option>'
+    </select>
+</div>
 {% endblock additional_filter %}
 
 
@@ -23,8 +29,7 @@
                     <th ng-if="districtss" >District</th>
                     <th ng-if="cdsss" >Cds</th>
                     {% endverbatim %}
-                    <th >Week</th>
-                    <th >Product</th>
+                    <th >Code</th>
                     <th >Qté au début de la semaine</th>
                     <th >Quantités reçues</th>
                     <th >Quantités distribuées</th>
@@ -34,11 +39,10 @@
             <tbody>
                 {% verbatim %}
                 <tr ng-repeat="(x, y) in structures" >
-                    <td >{{ y.province}}</td>
+                    <td >{{y.province}}</td>
                     <td ng-if="districtss">{{y.district}}</td>
                     <td ng-if="cdsss">{{y.cds}}</td>
-                    <td ><a href="#" ng-click="open()">{{ y.week}}</a></td>
-                    <td >{{ y.product}}</td>
+                    <td ><a href="#" ng-click="open()">{{y.code}}</a></td>
                     <td >{{ y.quantity_sd }}</td>
                     <td >{{ y.quantity_sr }}</td>
                     <td >{{ y.quantity_sr + y.quantity_sd - y.quantity_sf }}</td>
