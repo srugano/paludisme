@@ -93,7 +93,7 @@ class StockProductDisSerializer(StockProductProvSerializer):
         return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
     def get_quantity_sd(self, obj):
-        queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SF')
+        queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SD')
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
@@ -140,7 +140,7 @@ class StockProductCDSSerializer(StockProductProvSerializer):
         return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
     def get_quantity_sd(self, obj):
-        queryset = StockProduct.objects.filter(report__facility=obj, report__category='SF')
+        queryset = StockProduct.objects.filter(report__facility=obj, report__category='SD')
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
