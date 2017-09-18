@@ -6,7 +6,7 @@
 {% block additional_filter %}
 <div class="form-group">
     <label for="product">{% trans "Product:" %}</label>
-    <select id="product" class="form-control"  ng-model="product" ng-options="x.dosage for x in products track by x.id" ng-change="update_product()">
+    <select id="product" class="form-control"  ng-model="product" ng-options="x.dosage for x in products track by x.id" ng-change="update_product()" ng-init="product = products[0]">
     <option name="optradio" selected="selected">[ {% trans "Select Product" %} ]</option>'
     </select>
 </div>

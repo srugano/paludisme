@@ -2,6 +2,14 @@ var app = angular.module('PaludismeApp', ['ngSanitize', 'datatables', 'datatable
 
 app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', function($scope, $http, $locale, DTOptionsBuilder) {
         $locale.NUMBER_FORMATS.GROUP_SEP = ' ';
+        // product
+        $http.get("/stock/products/")
+        .then(function (response) {
+            if (response.data.length > 0) {
+            $scope.products = response.data;
+            $scope.product = response.data[0];
+            }
+        });
         // province
         $http.get("/bdiadmin/province/")
         .then(function (response) {
@@ -9,17 +17,10 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
                 $scope.provinces = response.data;
             } 
         });
-        $http.get("/stock/stockfinalprov/")
+        $http.get("/stock/stockfinalprov/?product=" + 1)
         .then(function (response) {
             if (response.data.length > 0) {
             $scope.structures = response.data;
-            }
-        });
-        // product
-        $http.get("/stock/products/")
-        .then(function (response) {
-            if (response.data.length > 0) {
-            $scope.products = response.data;
             }
         });
 
