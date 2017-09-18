@@ -34,7 +34,7 @@ class ReportAdminResource(resources.ModelResource):
 class ReportAdmin(ImportExportModelAdmin):
     resource_class = ReportAdminResource
     list_display = ("facility", "reporting_date", "text", "category")
-    search_fields = ("facility", "text", "category")
+    search_fields = ("facility__name", "text", "category")
     list_filter = ("category",)
     date_hierarchy = ("reporting_date")
 

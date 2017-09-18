@@ -192,14 +192,19 @@ def create_stockproduct(report=None, product=None, *args, **kwargs):
             ps = PotentialDeceased.objects.create(report=report, fpa=values[0], cholera=values[0], meningit=values[0], rougeole=values[0], tnn=values[0], fievre_hemoragique=values[0], paludisme=values[0], other=values[0])
         ps.save()
         return "Kuri {0}, handitswe hari abagwaye FPA {1}, Cholera {2}, Menengite {3}, Rougeole {4}, TNN {5}, Fievre Hemoragique {6}, Paludisme {7}, n'abandi {8}. Murakoze".format(report.facility, ps.fpa, ps.cholera, ps.meningit, ps.rougeole, ps.tnn, ps.fievre_hemoragique, ps.paludisme, ps.other)
-    elif re.match(r'^(SF|SR)\s+(\d{6})\s+(qui|ACT|ART|TDR|SP)(\s+\d+){1,4}$', report.text, re.I):
+    elif re.match(r'^(SF|SR|SD)\s+(\d{6})\s+(qui|ACT|ART|TDR|SP)(\s+\d+){1,4}$', report.text, re.I):
         values = report.text.split(" ")[3:]
         if report.text.split(" ")[0] in ["SF"] and report.reporting_date.weekday() != 0:
             return "Itariki mwandiste siyo, kuko itariki bandika ari iyo ku wambere. Bibwire uwubatwara."
         message = ""
         dosages = product.dosages.all()
         for dose in dosages:
-            sp = StockProduct.objects.create(product=product, report=report, dosage=dose, quantity=values[dose.rank])
+            sp = StockProduct.objects.create(product=product, report=report, dosage=dose)
+            try:
+                sp.quantity = values[dose.rank]
+            except IndexError:
+                sp.quantity = 0
+            sp.reporting_date = report.reporting_date
             sp.save()
             message += sp.quantity + " (" + dose.dosage + "), "
         return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
@@ -239,7 +244,7 @@ def update_stockproduct(report=None, product=None, *args, **kwargs):
         send_sms_through_rapidpro({'urns': ["tel:"+reporter.supervisor_phone_number, ], "groups": [GROUPS], 'text': "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))})
         return "Kuri {0}, handitswe ko hasigaye {1} za {2} kw'itariki {3}. Murakoze.".format(report.facility, st.remaining, product.designation, st.reporting_date.strftime('%Y-%m-%d'))
 
-    elif re.match(r'^(SF|SR)\s+(\d{6})\s+(qui|ACT|ART|TDR|SP)(\s+\d+){1,4}$', report.text, re.I):
+    elif re.match(r'^(SF|SR|SD)\s+(\d{6})\s+(qui|ACT|ART|TDR|SP)(\s+\d+){1,4}$', report.text, re.I):
         if report.text.split(" ")[0] in ["SF"] and report.reporting_date.weekday() != 0:
             return "Itariki mwandiste siyo, kuko itariki bandika ari iyo ku wambere. Bibwire uwubatwara."
         values = report.text.split(" ")[3:]
@@ -247,9 +252,13 @@ def update_stockproduct(report=None, product=None, *args, **kwargs):
         message = ""
         for dose in dosages:
             sp, created = StockProduct.objects.get_or_create(product=product, report=report, dosage=dose)
-            sp.quantity = values[dose.rank]
+            sp.reporting_date = report.reporting_date
+            try:
+                sp.quantity = values[dose.rank]
+            except IndexError:
+                sp.quantity = 0
             sp.save()
-            message += sp.quantity + " (" + dose.dosage + "), "
+            message += "{0}".format(sp.quantity) + " (" + dose.dosage + "), "
 
         return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
 

@@ -49,7 +49,7 @@ class StockProductProvSerializer(serializers.ModelSerializer):
         return queryset.aggregate(quantities=Sum('quantity'))['quantities']
 
     def get_quantity_sd(self, obj):
-        queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SF')
+        queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SD')
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
@@ -184,9 +184,14 @@ class StockOutProductSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    dosages = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
-        fields = ('id', 'designation', 'code')
+        fields = ('id', 'designation', 'code', 'dosages')
+
+    def get_dosages(self, obj):
+        return obj.dosages.all().values()
 
 
 class CasesPaluSerializer(serializers.Serializer):
