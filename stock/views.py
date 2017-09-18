@@ -148,7 +148,7 @@ class ReportCAViewsets(viewsets.ModelViewSet):
 
 
 class ReportSTViewsets(ReportCAViewsets):
-    queryset = Report.objects.filter(category__in=['SR', 'SF'])
+    queryset = Report.objects.filter(category__in=['SR', 'SF', 'SD'])
 
 
 @login_required
