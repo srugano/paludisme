@@ -7,7 +7,6 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
         .then(function (response) {
             if (response.data.length > 0) {
             $scope.products = response.data;
-            $scope.product = response.data[0];
             }
         });
         // province
@@ -17,7 +16,7 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
                 $scope.provinces = response.data;
             } 
         });
-        $http.get("/stock/stockfinalprov/?product=" + 1)
+        $http.get("/stock/stockfinalprov/")
         .then(function (response) {
             if (response.data.length > 0) {
             $scope.structures = response.data;
@@ -26,13 +25,17 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
 
         $scope.update_province = function () {
             var province = $scope.province;
+            var product = '';
+            if ($scope.product) {
+              product.id = $scope.product.id;
+            }
             if (province) {
               $http.get("/bdiadmin/district/?province=" + province.id)
               .then(function (response) {
                 $scope.districts = response.data;
                 $scope.cdss = "";
             });
-            $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + $scope.product.id)
+            $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + product.id)
               .then(function (response) {
                   $scope.districtss = false;
                   $scope.cdsss = false;
@@ -45,13 +48,17 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
           // district
           $scope.update_district = function () {
             var district = $scope.district;
+            var product = '';
+            if ($scope.product) {
+              product.id = $scope.product.id;
+            }
             $scope.districtss = true;
             if (district) {
               $http.get("/bdiadmin/cds/?district=" + district.id)
               .then(function (response) {
                   $scope.cdss = response.data;
               });
-              $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + $scope.product.id)
+              $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + product.id)
               .then(function (response) {
                   $scope.cdsss = false;
                   if (response.data.length > 0) {
@@ -66,12 +73,16 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
             var cds = $scope.cds;
             $scope.districtss = true;
             $scope.cdsss = true;
+            var product = '';
+            if ($scope.product) {
+              product.id = $scope.product.id;
+            }
             if (cds) {
               $http.get("/bdiadmin/cds/" + cds.id + "/" )
               .then(function (response) {
                   $scope.etablissements = response.data;
               });
-              $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + $scope.product.id)
+              $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + product.id)
               .then(function (response) {
                   if (response.data.length > 0) {
                   $scope.structures = response.data;
@@ -155,29 +166,33 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
       var province = $scope.province;
       var district = $scope.district;
       var cds = $scope.cds;
+      var product = '';
+      if ($scope.product) {
+        product.id = $scope.product.id;
+      }
       var enddate = $scope.enddate;
       var startdate = $scope.startdate;
       $scope.reports = {};
       if(cds){
-        $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+        $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (district){
-        $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+        $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (province) {
-        $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+        $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else {
-        $http.get("/stock/stockfinalprov/?startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+        $http.get("/stock/stockfinalprov/?startdate=" + startdate + "&enddate=" + enddate + "&product=" + product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
