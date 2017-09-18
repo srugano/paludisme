@@ -206,7 +206,7 @@ def create_stockproduct(report=None, product=None, *args, **kwargs):
                 sp.quantity = 0
             sp.reporting_date = report.reporting_date
             sp.save()
-            message += sp.quantity + " (" + dose.dosage + "), "
+            message += "{0}".format(sp.quantity) + " (" + dose.dosage + "), "
         return "Kuri {0}, handitswe kuri {2}, {1} murakoze".format(report.facility, message, product.designation)
     else:
         return "Ivyo mwanditse sivyo. Andika uko bakwigishije."
