@@ -31,7 +31,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
                 $scope.districts = response.data;
                 $scope.cdss = "";
             });
-            $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+            $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + $scope.product.id)
               .then(function (response) {
                   $scope.districtss = false;
                   $scope.cdsss = false;
@@ -50,7 +50,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               .then(function (response) {
                   $scope.cdss = response.data;
               });
-              $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + $scope.product.id)
               .then(function (response) {
                   $scope.cdsss = false;
                   if (response.data.length > 0) {
@@ -70,7 +70,7 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
               .then(function (response) {
                   $scope.etablissements = response.data;
               });
-              $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate)
+              $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + $scope.startdate + "&enddate=" + $scope.enddate + "&product=" + $scope.product.id)
               .then(function (response) {
                   if (response.data.length > 0) {
                   $scope.structures = response.data;
@@ -83,9 +83,39 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
         $scope.update_product = function () {
             var product = $scope.product;
             if (product) {
-              console.log(product);
-      }
-    };
+              var province = $scope.province;
+              var district = $scope.district;
+              var cds = $scope.cds;
+              var enddate = $scope.enddate;
+              var startdate = $scope.startdate;
+              $scope.reports = {};
+              if(cds){
+                $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+                      if (response.data.length > 0) {
+                        $scope.structures = response.data;
+                          }
+                  });
+              } else if (district){
+                $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+                      if (response.data.length > 0) {
+                        $scope.structures = response.data;
+                          }
+                  });
+              } else if (province) {
+                $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+                      if (response.data.length > 0) {
+                        $scope.structures = response.data;
+                          }
+                  });
+              } else {
+                $http.get("/stock/stockfinalprov/?startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
+                      if (response.data.length > 0) {
+                        $scope.structures = response.data;
+                          }
+                  });
+                }
+              }
+            };
 
     // Export
     $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(25);
@@ -128,25 +158,25 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
       var startdate = $scope.startdate;
       $scope.reports = {};
       if(cds){
-        $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/stockfinalcds/?id=" + cds.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (district){
-        $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/stockfinaldis/?id=" + district.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else if (province) {
-        $http.get("/stock/casespalusProv/?id=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/stockfinalprov/?id=" + province.id + "&startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }
           });
       } else {
-        $http.get("/stock/stockfinalprov/?startdate=" + startdate + "&enddate=" + enddate).then(function (response) {
+        $http.get("/stock/stockfinalprov/?startdate=" + startdate + "&enddate=" + enddate + "&product=" + $scope.product.id).then(function (response) {
               if (response.data.length > 0) {
                 $scope.structures = response.data;
                   }

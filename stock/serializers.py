@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from stock.models import StockProduct, StockOutReport, Product, Report, CasesPalu, Tests
+from stock.models import StockProduct, StockOutReport, Dosage, Report, CasesPalu, Tests
 from bdiadmin.models import CDS, District, Province
 from django.db.models import Sum
 import datetime
@@ -42,6 +42,9 @@ class StockProductProvSerializer(serializers.ModelSerializer):
         queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SF')
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         if startdate and startdate != 'undefined':
             queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
         if enddate and enddate != 'undefined':
@@ -50,6 +53,9 @@ class StockProductProvSerializer(serializers.ModelSerializer):
 
     def get_quantity_sd(self, obj):
         queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SD')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
@@ -60,6 +66,9 @@ class StockProductProvSerializer(serializers.ModelSerializer):
 
     def get_quantity_sr(self, obj):
         queryset = StockProduct.objects.filter(report__facility__district__province=obj, report__category='SR')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
@@ -84,6 +93,9 @@ class StockProductDisSerializer(StockProductProvSerializer):
 
     def get_quantity_sf(self, obj):
         queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SF')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
@@ -94,6 +106,9 @@ class StockProductDisSerializer(StockProductProvSerializer):
 
     def get_quantity_sd(self, obj):
         queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SD')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
@@ -104,6 +119,9 @@ class StockProductDisSerializer(StockProductProvSerializer):
 
     def get_quantity_sr(self, obj):
         queryset = StockProduct.objects.filter(report__facility__district=obj, report__category='SR')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
         if startdate and startdate != 'undefined':
@@ -133,6 +151,9 @@ class StockProductCDSSerializer(StockProductProvSerializer):
         queryset = StockProduct.objects.filter(report__facility=obj, report__category='SF')
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         if startdate and startdate != 'undefined':
             queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
         if enddate and enddate != 'undefined':
@@ -143,6 +164,9 @@ class StockProductCDSSerializer(StockProductProvSerializer):
         queryset = StockProduct.objects.filter(report__facility=obj, report__category='SD')
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         if startdate and startdate != 'undefined':
             queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
         if enddate and enddate != 'undefined':
@@ -153,6 +177,9 @@ class StockProductCDSSerializer(StockProductProvSerializer):
         queryset = StockProduct.objects.filter(report__facility=obj, report__category='SR')
         startdate = self.context['request'].GET.get('startdate', '')
         enddate = self.context['request'].GET.get('enddate', '')
+        product = self.context['request'].GET.get('product', '')
+        if product and product != 'undefined':
+            queryset = queryset.filter(product=product)
         if startdate and startdate != 'undefined':
             queryset = queryset.filter(reporting_date__gte=datetime.datetime.strptime(startdate, "%Y-%m-%d"))
         if enddate and enddate != 'undefined':
@@ -184,14 +211,10 @@ class StockOutProductSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    dosages = serializers.SerializerMethodField()
 
     class Meta:
-        model = Product
-        fields = ('id', 'designation', 'code', 'dosages')
-
-    def get_dosages(self, obj):
-        return obj.dosages.all().values()
+        model = Dosage
+        fields = ('id', 'dosage', 'rank',)
 
 
 class CasesPaluSerializer(serializers.Serializer):

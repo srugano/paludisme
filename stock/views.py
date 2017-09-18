@@ -1,4 +1,4 @@
-from stock.models import StockProduct, Product, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report
+from stock.models import StockProduct, Dosage, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report
 from rest_framework import viewsets
 import django_filters
 from django.db.models.functions import Extract
@@ -78,10 +78,10 @@ class StockOutProductViewsets(viewsets.ModelViewSet):
 
 
 class ProductViewsets(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Dosage.objects.all()
     serializer_class = ProductSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ('code', 'id')
+    filter_fields = ('dosage', 'id')
 
 
 class CasesPaluViewsets(viewsets.ModelViewSet):
