@@ -43,10 +43,10 @@
                     <td ng-if="districtss">{{y.district}}</td>
                     <td ng-if="cdsss">{{y.cds}}</td>
                     <td ><a href="#" ng-click="open()">{{y.code}}</a></td>
-                    <td >{{ y.quantity_sd }}</td>
-                    <td >{{ y.quantity_sr }}</td>
-                    <td >{{ y.quantity_sr + y.quantity_sd - y.quantity_sf }}</td>
-                    <td >{{ y.quantity_sf }}</td>
+                    <td >{{ y.quantity_sd | number }}</td>
+                    <td >{{ y.quantity_sr | number }}</td>
+                    <td ng-class="{'danger': y.quantity_sr + y.quantity_sd <= y.quantity_sf}">{{ y.quantity_sr + y.quantity_sd - y.quantity_sf | abs | number}}</td>
+                    <td >{{ y.quantity_sf | number }}</td>
                 </tr>
               {% endverbatim %}
           </tbody>

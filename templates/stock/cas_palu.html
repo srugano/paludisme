@@ -47,13 +47,13 @@
                     <td ng-if="districtss">{{y.district}}</td>
                     <td ng-if="cdsss">{{y.cds}}</td>
                     <td ><a class="btn"  ng-click="open()">{{ y.code}}</a></td>
-                    <td >{{ y.simple }}</td>
-                    <td >{{ y.acute }}</td>
-                    <td >{{ y.pregnant_women }}</td>
-                    <td >{{ y.decease }}</td>
-                    <td >{{ y.ge }}</td>
-                    <td >{{ y.tdr }}</td>
-                    <td >{{ y.ge + y.tdr }}</td>
+                    <td >{{ y.simple | number }}</td>
+                    <td >{{ y.acute | number }}</td>
+                    <td >{{ y.pregnant_women | number }}</td>
+                    <td >{{ y.decease | number }}</td>
+                    <td >{{ y.ge | number }}</td>
+                    <td >{{ y.tdr | number }}</td>
+                    <td >{{ y.ge + y.tdr | number }}</td>
                 </tr>
               {% endverbatim %}
           </tbody>

@@ -2,7 +2,8 @@ var app = angular.module('PaludismeApp', ['ngSanitize', 'datatables', 'datatable
 
 
 
-app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder',  function($scope, $http, DTOptionsBuilder) {
+app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', function($scope, $http, $locale, DTOptionsBuilder) {
+        $locale.NUMBER_FORMATS.GROUP_SEP = ' ';
         $scope.districtss = false;
         $scope.cdsss = false;
         // province

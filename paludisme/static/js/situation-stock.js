@@ -1,7 +1,7 @@
 var app = angular.module('PaludismeApp', ['ngSanitize', 'datatables', 'datatables.buttons', "ui.bootstrap.modal"]);
 
-app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($scope, $http, DTOptionsBuilder) {
-
+app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', function($scope, $http, $locale, DTOptionsBuilder) {
+        $locale.NUMBER_FORMATS.GROUP_SEP = ' ';
         // province
         $http.get("/bdiadmin/province/")
         .then(function (response) {
@@ -188,3 +188,9 @@ app.controller('FilterCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($s
 
 
 app.controller('ExportCtrl', ['$scope', '$http', 'DTOptionsBuilder', function($scope, $http, DTOptionsBuilder) {$scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers').withButtons([ 'copy', 'csv', 'excel', 'pdf', 'print']).withDOM("<'row'<'col-sm-3'l><'col-sm-4'i><'col-sm-5'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4'B><'col-sm-8'p>>").withDisplayLength(25);}]);
+
+app.filter('abs', function () {
+  return function(val) {
+    return Math.abs(val);
+  }
+});
