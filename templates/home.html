@@ -234,28 +234,36 @@
         {% block loggins %}
             <!-- Jumbotron -->
         <div class="jumbotron">
-        <h1>Marketing stuff!</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+        <h1>Tracking Malaria </h1>
+        <p class="lead"><b>Burundi</b> is facing a major malaria outbreak. Under the supervision of <b>Ministry of Public Health and the Fight against AIDS</b>, <b>UNICEF</b> helped build a system to monitor the outbreak and operate quick response by all actors involved into combating malaria.</p>
+        <p><a class="btn btn-lg btn-success" href="#MOH" role="button">Read More</a></p>
       </div>
 
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-lg-4">
-          <h2>Safari bug warning!</h2>
-          <p class="text-danger">As of v9.1.2, Safari exhibits a bug in which resizing your browser horizontally causes rendering errors in the justified nav that are cleared upon refreshing.</p>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+        <div class="col-lg-4 section" id="MOH">
+          <h2><a href="http://minisante.bi">Ministry of Public Health and the Fight against AIDS</a></h2>
+          <div class="thumbnail">
+            <img class="img-rounded" src="{% static "img/Burundi.png" %}" alt="Ministry of Public Health and the Fight against AIDS">
+          </div>
+          <p class="text-bold">The Ministry of Public Health and the Fight against AIDS has the role of Designing national policy on public health, hygiene and sanitation, ensuring the improvement of the health status of the population. It also coordinate actions to promote health, prevention and medical and psychosocial care and coordinate the partnership framework for the development of the Health sector. It is also involved in developing public health cooperation policy between <b>Burundi</b> and foreign partners.</p>
+          <p><a class="btn btn-primary" href="http://minisante.bi" role="button">More details &raquo;</a></p>
         </div>
         <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+          <h2><a href="https://www.unicef.org">UNICEF</a></h2>
+          <div class="thumbnail">
+            <img class="img-rounded" src="{% static "img/UNICEF.png" %}" alt="UNICEF">
+          </div>
+          <p>For over 70 years, <b>UNICEF</b> has been the defender of children around the world, regardless of gender, religion, race or economic background. When the world’s most vulnerable need a champion in the face of conflict, disease or exclusion, <b>UNICEF</b> has been there. <b>UNICEF</b> has been promoting the rights and wellbeing of children in Burundi since 1964. </p>
+          <p><a class="btn btn-primary" href="https://www.unicef.org" role="button">More details &raquo;</a></p>
        </div>
         <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+          <h2>ICT4D</h2>
+          <div class="thumbnail">
+            <img class="img-rounded" src="{% static "img/Rapidpro.jpg" %}" alt="ICT4D">
+          </div>
+          <p>Information and communication technologies (ICTs) can support and amplify the impact of a variety of child-focused development efforts when the focus is first and foremost on the needs of the child, not on the technology, nor indeed on innovation for its own sake. E.g "<a href="https://www.unicef.org/innovation/innovation_75975.html">RapidPro</a> works very well and is better than the old reporting system, everybody sees directly what we have worked during the day" says Hyacinthe Ndihokubwayo, Deputy Responsible at the Murayi Health Center, Gitega province, who has used SMS reporting.</p>
+          <p><a class="btn btn-primary" href="https://www.facebook.com/UNICEFBurundi/" role="button">More details &raquo;</a></p>
         </div>
       </div>
         <!-- /.row -->
@@ -264,7 +272,7 @@
 
       <!-- Site footer -->
       <footer class="footer">
-        <p>&copy; 2017 UNICEF Burundi</p>
+        <p>&copy; 2017 <b>UNICEF</b> Burundi</p>
       </footer>
 
     </div> <!-- /container -->
