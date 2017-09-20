@@ -237,6 +237,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Bujumbura'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+WHITENOISE_AUTOREFRESH = True
 
 # try to load local_settings.py if it exists
 try:
