@@ -1,0 +1,348 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <kuristockyrugano at gmail dot com>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-27 16:06+0200\n"
+"PO-Revision-Date: 2017-09-27 16:07+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#: bdiadmin/forms.py:85
+#, python-brace-format
+msgid "Profile created and mail sent to {0}."
+msgstr "Profil créé et le mail envoyé à {0}"
+
+#: bdiadmin/forms.py:87
+#, python-brace-format
+msgid "Profil created, but unable to send mail to {0}."
+msgstr "Profil créé et mais impossible d'envoyer le mail à {0}"
+
+#: bdiadmin/models.py:17
+msgid "Phone number in the format: '+999999999'. Up to 15 digits allowed."
+msgstr "Le numero de telephone au format: '+999999999'. Jusqu'à 15 chiffres."
+
+#: bdiadmin/models.py:18
+msgid "The facility attached to this user."
+msgstr "L’établissement sanitaire attaché déjà cet utilisateur."
+
+#: bdiadmin/models.py:19 stock/models.py:134 stock/models.py:135
+msgid "telephone"
+msgstr "téléphone "
+
+#: bdiadmin/models.py:19 stock/models.py:37 stock/models.py:38
+msgid "The telephone to contact you."
+msgstr "Le téléphone pour te contacter."
+
+#: bdiadmin/models.py:33 bdiadmin/models.py:50 bdiadmin/models.py:67
+msgid "name"
+msgstr "nom"
+
+#: bdiadmin/models.py:84
+msgid "nom"
+msgstr "nom"
+
+#: bdiadmin/models.py:107
+msgid "Either Public, Conf, Ass, Prive  or Hospital status."
+msgstr "Soit Public, Conf, Assoc, Prive ou Hopital"
+
+#: paludisme/settings.py:191
+msgid "Registering"
+msgstr "Enregistrer"
+
+#: paludisme/settings.py:192
+msgid "Final Stock"
+msgstr "Stock Final"
+
+#: paludisme/settings.py:193
+msgid "Stock debut de semaine"
+msgstr "Stock début de semaine"
+
+#: paludisme/settings.py:194
+msgid "Stock Received"
+msgstr "Stock Reçu "
+
+#: paludisme/settings.py:195
+msgid "Rupture"
+msgstr "Rupture"
+
+#: paludisme/settings.py:196
+msgid "Cases"
+msgstr "Cas"
+
+#: paludisme/settings.py:197
+msgid "Test"
+msgstr "Test"
+
+#: paludisme/settings.py:198
+msgid "Repports on cases"
+msgstr "Rapports sur les cas"
+
+#: paludisme/settings.py:199
+msgid "Reports on death"
+msgstr "Rapports sur les décès"
+
+#: paludisme/utils.py:11
+msgid "Phone number in the format: '+25799999999'. Up to 15 digits allowed."
+msgstr "Le numero de telephone au format: '+999999999'. Jusqu'à 15 chiffres."
+
+#: stock/models.py:37
+msgid "Reporter telephone"
+msgstr "Téléphone dur raporteur"
+
+#: stock/models.py:38
+msgid "Supervisor phone"
+msgstr "Téléphone du superviseur"
+
+#: stock/models.py:134
+msgid "The telephone to contact the sender."
+msgstr "Le téléphone pour te contacter."
+
+#: stock/models.py:135
+msgid "The telephone to contact your supervisor."
+msgstr "Le téléphone pour contacter le superviseur."
+
+#: templates/home.html:13 templates/home.html:106 templates/landing.html:13
+msgid "Home"
+msgstr "Accueil"
+
+#: templates/home.html:101 templates/landing.html:54
+#: templates/stock/cas_palu.html:27
+msgid "Malaria"
+msgstr "Paludisme"
+
+#: templates/home.html:109 templates/home.html:176 templates/landing.html:62
+msgid "Malaria cases"
+msgstr "Cas de paludisme"
+
+#: templates/home.html:112 templates/landing.html:65
+msgid "Stocks of medicines"
+msgstr "Stocks de médicaments "
+
+#: templates/home.html:115 templates/landing.html:68
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: templates/home.html:119 templates/landing.html:72
+msgid "Login"
+msgstr "Se connecter"
+
+#: templates/home.html:132 templates/stock/stockproduct_list.html:98
+msgid "Province:"
+msgstr "Province:"
+
+#: templates/home.html:133 templates/stock/stockproduct_list.html:99
+msgid "Select Province"
+msgstr "Sélectionnez la Province"
+
+#: templates/home.html:136 templates/stock/stockproduct_list.html:102
+msgid "District:"
+msgstr "District:"
+
+#: templates/home.html:137 templates/stock/stockproduct_list.html:103
+msgid "Select District"
+msgstr "Sélectionnez le District"
+
+#: templates/home.html:141 templates/stock/stockproduct_list.html:107
+msgid "CDS:"
+msgstr "CDS:"
+
+#: templates/home.html:143 templates/stock/stockproduct_list.html:109
+msgid "Select CDS"
+msgstr "Sélectionnez le CDS"
+
+#: templates/home.html:147 templates/stock/stockproduct_list.html:113
+msgid "Start Date"
+msgstr "Début:"
+
+#: templates/home.html:156 templates/stock/stockproduct_list.html:122
+msgid "End Date"
+msgstr "Fin:"
+
+#: templates/home.html:187
+msgid "Stock situation"
+msgstr "Situation du Stock"
+
+#: templates/home.html:199 templates/home.html:207
+msgid "Reporting rate"
+msgstr "Taux de raportage"
+
+#: templates/home.html:205
+msgid "Expected reports"
+msgstr "Rapports attendus"
+
+#: templates/home.html:206
+msgid "Received raports"
+msgstr "Rapports reçus "
+
+#: templates/landing.html:58
+msgid "Landing"
+msgstr "Accueil"
+
+#: templates/landing.html:82
+msgid "Dashboard on Malaria in Burundi"
+msgstr "Tableau de bord sur le paludisme au Burundi"
+
+#: templates/landing.html:83
+msgid "Visualizations of malaria data in Burundi"
+msgstr "Tableau de bord sur le paludisme au Burundi"
+
+#: templates/landing.html:84
+msgid "Read More"
+msgstr "Lire la suite"
+
+#: templates/landing.html:90
+msgid ""
+"Malaria remains one of the leading causes of global morbidity and mortality "
+"and more than 85 &percnt; of cases and 90 &percnt; of deaths occur in sub-"
+"Saharan Africa. Malaria is caused by parasites of the genus Plasmodium "
+"transmitted to humans by bites of infected Anopheles mosquitoes, known as "
+"malaria vectors. There are 5 species of parasites responsible for malaria in "
+"humans, of which 2 - Plasmodium falciparum and P. vivax are the most "
+"dangerous. Plasmodium falciparum is the most widespread malaria parasite on "
+"the African continent."
+msgstr ""
+"Le paludisme reste une des principales causes de morbi-mortalité au niveau "
+"mondial et plus de 85% des cas et 90% des décès surviennent en Afrique sub-"
+"saharienne. Le paludisme est dû à des parasites du genre Plasmodium transmis "
+"à l’homme par des piqûres de moustiques Anopheles femelles infectés, appelés "
+"«vecteurs du paludisme». Il existe 5 espèces de parasites responsables du "
+"paludisme chez l’homme, dont 2 – Plasmodium falciparum et P. vivax sont les "
+"plus dangereux. Plasmodium falciparum est le parasite du paludisme le plus "
+"répandu sur le continent africain."
+
+#: templates/landing.html:101
+msgid ""
+"In Burundi, malaria is the first public health problem and a major socio-"
+"economic burden. By 2016, the year-to-date has reached almost 8 million "
+"cases and more than 3,000 deaths. The vast majority of cases are due to "
+"Plasmodium falciparum (86 &percnt;) which is the deadly parasite. Children "
+"under 5 are the most affected, although care is free for this category. In "
+"addition to climatic factors, factors related to immunity, socio-economic "
+"factors and the ineffective use of preventive measures, there is a high "
+"prevalence of malnutrition in the most affected areas."
+msgstr ""
+"Au Burundi, le paludisme constitue le premier problème de santé publique et "
+"représente un important fardeau socio-économique. En 2016, le cumul annuel a "
+"atteint près de 8 millions de cas et plus de 3000 décès. La grande majorité "
+"des cas sont imputables au plasmodium falciparum (86%) qui est le parasite "
+"mortel. Les enfants de moins 5 ans sont les plus touchés, bien que les soins "
+"soient gratuits pour cette catégorie. En plus des facteurs climatiques, des "
+"facteurs liés à l’immunité, des facteurs socio-économiques et la non "
+"utilisation efficace des moyens de préventions, on note une forte prévalence "
+"de malnutrition dans les zones les plus affectées ."
+
+#: templates/landing.html:106
+msgid ""
+"The use of mobile and wireless devices to support medical and public health "
+"practice and research (m-Health) is attracting more and more attention "
+"because it offers opportunities to connect quickly to people, thus reducing "
+"delays in the whole chain of health decisions and positively affecting the "
+"lives of millions of people. SMS is based on a well-recognized communication "
+"system and can reach areas where there are limited communication "
+"possibilities and hard to reach areas, so that it can be used by the lowest "
+"health."
+msgstr ""
+"L'utilisation de dispositifs mobiles et sans fil pour soutenir la pratique "
+"et la recherche médicales et de santé publique (m-Health) attire de plus en "
+"plus d'attention car elle offre des opportunités pour se connecter "
+"rapidement aux personnes, réduisant ainsi les retards dans l'ensemble de la "
+"chaîne de décisions en matière de santé et affectant positivement la vie de "
+"millions de personnes. Le SMS s'appuie sur un système de communication bien "
+"reconnu et peut atteindre des domaines où il existe des possibilités de "
+"communication limitées et des zones difficiles à atteindre, d'où la "
+"possiblité de le faire utiliser par le niveau le plus bas du système de "
+"santé."
+
+#: templates/stock/cas_palu.html:4
+msgid "Malaria Cases"
+msgstr "Cas de paludisme"
+
+#: templates/stock/cas_palu.html:28
+msgid "Tests done"
+msgstr "Testes fait"
+
+#: templates/stock/cas_palu.html:29
+msgid "Negative tests"
+msgstr "Testes negatifs"
+
+#: templates/stock/cas_palu.html:30
+msgid "Positive tests"
+msgstr "Testes positifs"
+
+#: templates/stock/cas_palu.html:33
+msgid "Confirmed cases"
+msgstr "Cas confirmés "
+
+#: templates/stock/cas_palu.html:34
+msgid "Death"
+msgstr "Décès "
+
+#: templates/stock/cas_palu.html:35
+msgid "Tick drop"
+msgstr "Goutte épaisse "
+
+#: templates/stock/cas_palu.html:36
+msgid "Rapid diagnostic test"
+msgstr "Test de diagnostic rapide"
+
+#: templates/stock/cas_palu.html:39
+msgid "Simple cases"
+msgstr "Cas simples"
+
+#: templates/stock/cas_palu.html:40
+msgid "Accute"
+msgstr "Graves"
+
+#: templates/stock/cas_palu.html:41
+msgid "Pregnant women"
+msgstr "Femmes enceintes"
+
+#: templates/stock/cas_palu.html:80 templates/stock/situation_stock.html:71
+msgid "Text"
+msgstr "Texte"
+
+#: templates/stock/cas_palu.html:81 templates/stock/situation_stock.html:72
+msgid "Category"
+msgstr "Catégorie"
+
+#: templates/stock/situation_stock.html:4
+msgid "Stock Situation"
+msgstr "Situation du Stock"
+
+#: templates/stock/situation_stock.html:8
+msgid "Product:"
+msgstr "Produit:"
+
+#: templates/stock/situation_stock.html:10
+msgid "Select Product"
+msgstr "Sélectionnez un produit:"
+
+#: templates/stock/situation_stock.html:33
+msgid "Qty at the beginning of the week"
+msgstr "Qté au début de la semaine"
+
+#: templates/stock/situation_stock.html:34
+msgid "Received Quantities"
+msgstr "Quantités reçues"
+
+#: templates/stock/situation_stock.html:35
+msgid "Quantities distributed"
+msgstr "Quantités distribuées"
+
+#: templates/stock/situation_stock.html:36
+msgid "Final stock at the end of the week"
+msgstr "Stock Final à la fin de la semaine"
+
+#~ msgid "Tableau sur le paludisme au Burundi"
+#~ msgstr "Tableau sur le paludisme au Burundi"

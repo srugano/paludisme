@@ -15,62 +15,15 @@
     <!-- Bootstrap Core CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
     <!-- jQuery Version 3.1.1 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <!-- Include Bootstrap Datepicker -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
-
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
-
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-    <script src="{% static "js/angular.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/angular-sanitize.min.js" %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/angular-datatables.min.js"></script>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/css/angular-datatables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/plugins/buttons/angular-datatables.buttons.min.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
-    <script src="http://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
-    <style type="text/css">
-    /**
-     * Override feedback icon position
-     * See http://formvalidation.io/examples/adjusting-feedback-icon-position/
-     */
-    #eventForm .form-control-feedback {
-        top: 0;
-        right: -15px;
-    }
-    .row.vdivide [class*='col-']:not(:last-child):after {
-      background: #e0e0e0;
-      width: 1px;
-      content: "";
-      display:block;
-      position: absolute;
-      top:0;
-      bottom: 0;
-      right: 0;
-      min-height: 70px;
-    }
-    .bg-danger {
-       background-color: #f2dede;
-    }
-  </style>
     {% block extra_scripts %}{% endblock extra_scripts %}
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="{% static "css/ie10-viewport-bug-workaround.css" %}" rel="stylesheet">
@@ -126,38 +79,35 @@
         {% block loggins %}
             <!-- Jumbotron -->
         <div class="jumbotron">
-        <h1>Tracking Malaria </h1>
-        <p class="lead"><b>Burundi</b> is facing a major malaria outbreak. Under the supervision of <b>Ministry of Public Health and the Fight against AIDS</b>, <b>UNICEF</b> helped build a system to monitor the outbreak and operate quick response by all actors involved into combating malaria.</p>
-        <p><a class="btn btn-lg btn-success" href="#MOH" role="button">Read More</a></p>
+        <h1>{% trans "Dashboard on Malaria in Burundi" %}</b></h1>
+        <p class="lead">{% trans "Visualizations of malaria data in Burundi" %}</p>
+        <p><a class="btn btn-lg btn-success" href="#MOH" role="button">{% trans "Read More" %}</a></p>
       </div>
 
       <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-lg-4 section" id="MOH">
-          <h2><a href="http://minisante.bi">Ministry of Public Health and the Fight against AIDS</a></h2>
-          <div class="thumbnail">
-            <img class="img-rounded" src="{% static 'img/Burundi.png' %}" alt="Ministry of Public Health and the Fight against AIDS">
-          </div>
-          <p class="text-bold">The Ministry of Public Health and the Fight against AIDS has the role of Designing national policy on public health, hygiene and sanitation, ensuring the improvement of the health status of the population. It also coordinate actions to promote health, prevention and medical and psychosocial care and coordinate the partnership framework for the development of the Health sector. It is also involved in developing public health cooperation policy between <b>Burundi</b> and foreign partners.</p>
-          <p><a class="btn btn-primary" href="http://minisante.bi" role="button">More details &raquo;</a></p>
+      <hr class="featurette-divider">
+      <div class="row featurette" id="MOH" >
+        <div class="col-md-7 lead">{% trans "Malaria remains one of the leading causes of global morbidity and mortality and more than 85 &percnt; of cases and 90 &percnt; of deaths occur in sub-Saharan Africa. Malaria is caused by parasites of the genus Plasmodium transmitted to humans by bites of infected Anopheles mosquitoes, known as malaria vectors. There are 5 species of parasites responsible for malaria in humans, of which 2 - Plasmodium falciparum and P. vivax are the most dangerous. Plasmodium falciparum is the most widespread malaria parasite on the African continent." %}
         </div>
-        <div class="col-lg-4">
-          <h2><a href="https://www.unicef.org">UNICEF</a></h2>
-          <div class="thumbnail">
-            <img class="img-rounded" src="{% static 'img/UNICEF.png' %}" alt="UNICEF">
-          </div>
-          <p>For over 70 years, <b>UNICEF</b> has been the defender of children around the world, regardless of gender, religion, race or economic background. When the world’s most vulnerable need a champion in the face of conflict, disease or exclusion, <b>UNICEF</b> has been there. <b>UNICEF</b> has been promoting the rights and wellbeing of children in Burundi since 1964. </p>
-          <p><a class="btn btn-primary" href="https://www.unicef.org" role="button">More details &raquo;</a></p>
-       </div>
-        <div class="col-lg-4">
-          <h2>ICT4D</h2>
-          <div class="thumbnail">
-            <img class="img-rounded" src="{% static 'img/Rapidpro.jpg' %}" alt="ICT4D">
-          </div>
-          <p>Information and communication technologies (ICTs) can support and amplify the impact of a variety of child-focused development efforts when the focus is first and foremost on the needs of the child, not on the technology, nor indeed on innovation for its own sake. E.g "<a href="https://www.unicef.org/innovation/innovation_75975.html">RapidPro</a> works very well and is better than the old reporting system, everybody sees directly what we have worked during the day" says Hyacinthe Ndihokubwayo, Deputy Responsible at the Murayi Health Center, Gitega province, who has used SMS reporting.</p>
-          <p><a class="btn btn-primary" href="https://www.facebook.com/UNICEFBurundi/" role="button">More details &raquo;</a></p>
+        <div class="col-md-5">
+          <img class="featurette-image img-responsive" src="{% static 'img/Burundi.png' %}" alt="Ministry of Public Health and the Fight against AIDS" >
         </div>
       </div>
+      <hr class="featurette-divider">
+      <div class="row featurette">
+        <div class="col-md-5">
+            <img class="featurette-image img-responsive" src="{% static 'img/Mousticaire.jpg' %}" alt="Mousticaire">
+        </div>
+        <div class="col-md-7 lead">{% trans "In Burundi, malaria is the first public health problem and a major socio-economic burden. By 2016, the year-to-date has reached almost 8 million cases and more than 3,000 deaths. The vast majority of cases are due to Plasmodium falciparum (86 &percnt;) which is the deadly parasite. Children under 5 are the most affected, although care is free for this category. In addition to climatic factors, factors related to immunity, socio-economic factors and the ineffective use of preventive measures, there is a high prevalence of malnutrition in the most affected areas." %}
+        </div>
+      </div>
+      <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7 lead">{% trans "The use of mobile and wireless devices to support medical and public health practice and research (m-Health) is attracting more and more attention because it offers opportunities to connect quickly to people, thus reducing delays in the whole chain of health decisions and positively affecting the lives of millions of people. SMS is based on a well-recognized communication system and can reach areas where there are limited communication possibilities and hard to reach areas, so that it can be used by the lowest health." %}</div>
+          <div <div class="col-md-5">
+            <img class="featurette-image img-responsive pull-left" src="{% static 'img/Rapidpro.jpg' %}" alt="ICT4D">
+          </div>
+        </div>
         <!-- /.row -->
         {% endblock loggins %}
 
