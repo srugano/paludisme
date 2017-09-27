@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from paludisme.views import settings, password, add_report, add_reporter, confirm_reporter, add_stockout, home
+from paludisme.views import settings, password, add_report, add_reporter, confirm_reporter, add_stockout, home, landing
 from stock.utils import export_to_excel
 
 
@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^settings/$', settings, name='settings'),
     url(r'^settings/password/$', password, name='password'),
     url(r'^export/xlsx/$', export_to_excel, name='export_to_excel'),
-    url(r'^$', home, name='home'),
+    url(r'^home/$', home, name='home'),
+    url(r'^$', landing, name='landing'),
 ]

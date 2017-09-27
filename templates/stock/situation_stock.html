@@ -1,7 +1,7 @@
 {% extends 'home.html' %}
 {% load static %}
 {% load i18n %}
-{% block titles %}Situation Stock{% endblock titles %}
+{% block titles %}{% trans "Stock Situation" %}{% endblock titles %}
 
 {% block additional_filter %}
 <div class="form-group">
@@ -30,10 +30,10 @@
                     <th ng-if="cdsss" >Cds</th>
                     {% endverbatim %}
                     <th >Code</th>
-                    <th >Qté au début de la semaine</th>
-                    <th >Quantités reçues</th>
-                    <th >Quantités distribuées</th>
-                    <th >Stock Final à la fin de la semaine</th>
+                    <th >{% trans "Qty at the beginning of the week" %}</th>
+                    <th >{% trans "Received Quantities" %}</th>
+                    <th >{% trans "Quantities distributed" %}</th>
+                    <th >{% trans "Final stock at the end of the week" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,10 +43,10 @@
                     <td ng-if="districtss">{{y.district}}</td>
                     <td ng-if="cdsss">{{y.cds}}</td>
                     <td ><a href="#" ng-click="open()">{{y.code}}</a></td>
-                    <td >{{ y.quantity_sd | number }}</td>
-                    <td >{{ y.quantity_sr | number }}</td>
-                    <td ng-class="{'danger': y.quantity_sr + y.quantity_sd <= y.quantity_sf}">{{ y.quantity_sr + y.quantity_sd - y.quantity_sf | abs | number}}</td>
-                    <td >{{ y.quantity_sf | number }}</td>
+                    <td >{{ y.quantity_sd  }}</td>
+                    <td >{{ y.quantity_sr  }}</td>
+                    <td ng-class="{'danger': y.quantity_sr + y.quantity_sd <= y.quantity_sf}">{{ y.quantity_sr + y.quantity_sd - y.quantity_sf | abs }}</td>
+                    <td >{{ y.quantity_sf  }}</td>
                 </tr>
               {% endverbatim %}
           </tbody>
@@ -68,8 +68,8 @@
                             <th>Province</th>
                             <th>District</th>
                             <th>CDS</th>
-                            <th>Text</th>
-                            <th>Category</th>
+                            <th>{% trans "Text" %}</th>
+                            <th>{% trans "Category" %}</th>
                         </tr>
                     </thead>
                     <tbody>

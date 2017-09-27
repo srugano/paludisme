@@ -100,8 +100,13 @@ def add_stockout(request):
     pass
 
 
+@login_required
 def home(request):
     return render(request, 'home.html')
+
+
+def landing(request):
+    return render(request, 'landing.html')
 
 
 @login_required

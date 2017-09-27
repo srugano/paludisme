@@ -1,7 +1,7 @@
 {% extends 'home.html' %}
 {% load static %}
 {% load i18n %}
-{% block titles %}Cas Palu{% endblock titles %}
+{% block titles %}{% trans "Malaria Cases" %}{% endblock titles %}
 
 {% block additional_filter %}
 {% endblock additional_filter %}
@@ -24,21 +24,21 @@
                     <th ng-if="cdsss" rowspan="3">Cds</th>
                     {% endverbatim %}
                     <th rowspan="3">Code </th>
-                    <th colspan="4">Paludisme</th>
-                    <th colspan="2">Tests réalisés</th>
-                    <th rowspan="3">Tests Negatifs</th>
-                    <th rowspan="3">Tests Positifs</th>
+                    <th colspan="4">{% trans "Malaria" %}</th>
+                    <th colspan="2">{% trans "Tests done" %}</th>
+                    <th rowspan="3">{% trans "Negative tests" %}</th>
+                    <th rowspan="3">{% trans "Positive tests" %}</th>
                 </tr>
                 <tr>
-                    <th colspan="3">Cas confirmés</th>
-                    <th rowspan="2">Décès</th>
-                    <th rowspan="2">GE</th>
-                    <th rowspan="2">TDR</th>
+                    <th colspan="3">{% trans "Confirmed cases" %}</th>
+                    <th rowspan="2">{% trans "Death" %}</th>
+                    <th rowspan="2">{% trans "Tick drop" %}</th>
+                    <th rowspan="2">{% trans "Rapid diagnostic test" %}</th>
                 </tr>
                 <tr>
-                    <th >Simple</th>
-                    <th >Grave</th>
-                    <th >Femme enceinte</th>
+                    <th >{% trans "Simple cases" %}</th>
+                    <th >{% trans "Accute" %}</th>
+                    <th >{% trans "Pregnant women" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,14 +48,14 @@
                     <td ng-if="districtss">{{y.district}}</td>
                     <td ng-if="cdsss">{{y.cds}}</td>
                     <td ><a class="btn"  ng-click="open()">{{ y.code}}</a></td>
-                    <td >{{ y.simple | number }}</td>
-                    <td >{{ y.acute | number }}</td>
-                    <td >{{ y.pregnant_women | number }}</td>
-                    <td >{{ y.decease | number }}</td>
-                    <td >{{ y.ge | number }}</td>
-                    <td >{{ y.tdr | number }}</td>
-                    <td >{{ - y.simple - y.acute - y.pregnant_women + y.ge + y.tdr | number }}</td>
-                    <td >{{ y.simple + y.acute + y.pregnant_women | number }}</td>
+                    <td >{{ y.simple  }}</td>
+                    <td >{{ y.acute  }}</td>
+                    <td >{{ y.pregnant_women  }}</td>
+                    <td >{{ y.decease  }}</td>
+                    <td >{{ y.ge  }}</td>
+                    <td >{{ y.tdr  }}</td>
+                    <td >{{ - y.simple - y.acute - y.pregnant_women + y.ge + y.tdr  }}</td>
+                    <td >{{ y.simple + y.acute + y.pregnant_women  }}</td>
                 </tr>
               {% endverbatim %}
           </tbody>
@@ -76,9 +76,9 @@
                             <th>Date</th>
                             <th>Province</th>
                             <th>District</th>
-                            <th>CDS</th>
-                            <th>Text</th>
-                            <th>Category</th>
+                            <th>Cds</th>
+                            <th>{% trans "Text" %}</th>
+                            <th>{% trans "Category" %}</th>
                         </tr>
                     </thead>
                     <tbody>

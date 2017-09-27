@@ -1,0 +1,180 @@
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block titles %}{% trans "Home" %}{% endblock titles %}</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- jQuery Version 3.1.1 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Include Bootstrap Datepicker -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    <script src="{% static "js/angular.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/angular-sanitize.min.js" %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/angular-datatables.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/css/angular-datatables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-datatables/0.6.1/plugins/buttons/angular-datatables.buttons.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
+    <style type="text/css">
+    /**
+     * Override feedback icon position
+     * See http://formvalidation.io/examples/adjusting-feedback-icon-position/
+     */
+    #eventForm .form-control-feedback {
+        top: 0;
+        right: -15px;
+    }
+    .row.vdivide [class*='col-']:not(:last-child):after {
+      background: #e0e0e0;
+      width: 1px;
+      content: "";
+      display:block;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      right: 0;
+      min-height: 70px;
+    }
+    .bg-danger {
+       background-color: #f2dede;
+    }
+  </style>
+    {% block extra_scripts %}{% endblock extra_scripts %}
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static "css/ie10-viewport-bug-workaround.css" %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/justified-nav.css" %}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{% static "js/ie-emulation-modes-warning.js" %}"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- The justified navigation menu is meant for single line per list item.
+           Multiple lines will require custom code not provided by Bootstrap. -->
+      <div class="masthead">
+        <h3 class="text-muted">{% trans "Malaria" %}</h3>
+        <nav>
+          <ul class="nav nav-justified">
+            <li >
+                <a href="{% url 'landing' %}">{% trans "Landing" %}</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'cas_palu' %}">{% trans "Malaria cases" %}</a>
+            </li>
+            <li>
+                <a href="{% url 'situation_stock' %}">{% trans "Stocks of medicines" %}</a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">{% trans "Logout" %}</a>
+            </li>
+            {% else %}
+                <li>
+                <a href="{% url 'login' %}">{% trans "Login" %}</a>
+            </li>  
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      <div >
+        {% block loggins %}
+            <!-- Jumbotron -->
+        <div class="jumbotron">
+        <h1>Tracking Malaria </h1>
+        <p class="lead"><b>Burundi</b> is facing a major malaria outbreak. Under the supervision of <b>Ministry of Public Health and the Fight against AIDS</b>, <b>UNICEF</b> helped build a system to monitor the outbreak and operate quick response by all actors involved into combating malaria.</p>
+        <p><a class="btn btn-lg btn-success" href="#MOH" role="button">Read More</a></p>
+      </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-lg-4 section" id="MOH">
+          <h2><a href="http://minisante.bi">Ministry of Public Health and the Fight against AIDS</a></h2>
+          <div class="thumbnail">
+            <img class="img-rounded" src="{% static 'img/Burundi.png' %}" alt="Ministry of Public Health and the Fight against AIDS">
+          </div>
+          <p class="text-bold">The Ministry of Public Health and the Fight against AIDS has the role of Designing national policy on public health, hygiene and sanitation, ensuring the improvement of the health status of the population. It also coordinate actions to promote health, prevention and medical and psychosocial care and coordinate the partnership framework for the development of the Health sector. It is also involved in developing public health cooperation policy between <b>Burundi</b> and foreign partners.</p>
+          <p><a class="btn btn-primary" href="http://minisante.bi" role="button">More details &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+          <h2><a href="https://www.unicef.org">UNICEF</a></h2>
+          <div class="thumbnail">
+            <img class="img-rounded" src="{% static 'img/UNICEF.png' %}" alt="UNICEF">
+          </div>
+          <p>For over 70 years, <b>UNICEF</b> has been the defender of children around the world, regardless of gender, religion, race or economic background. When the world’s most vulnerable need a champion in the face of conflict, disease or exclusion, <b>UNICEF</b> has been there. <b>UNICEF</b> has been promoting the rights and wellbeing of children in Burundi since 1964. </p>
+          <p><a class="btn btn-primary" href="https://www.unicef.org" role="button">More details &raquo;</a></p>
+       </div>
+        <div class="col-lg-4">
+          <h2>ICT4D</h2>
+          <div class="thumbnail">
+            <img class="img-rounded" src="{% static 'img/Rapidpro.jpg' %}" alt="ICT4D">
+          </div>
+          <p>Information and communication technologies (ICTs) can support and amplify the impact of a variety of child-focused development efforts when the focus is first and foremost on the needs of the child, not on the technology, nor indeed on innovation for its own sake. E.g "<a href="https://www.unicef.org/innovation/innovation_75975.html">RapidPro</a> works very well and is better than the old reporting system, everybody sees directly what we have worked during the day" says Hyacinthe Ndihokubwayo, Deputy Responsible at the Murayi Health Center, Gitega province, who has used SMS reporting.</p>
+          <p><a class="btn btn-primary" href="https://www.facebook.com/UNICEFBurundi/" role="button">More details &raquo;</a></p>
+        </div>
+      </div>
+        <!-- /.row -->
+        {% endblock loggins %}
+
+      <!-- Site footer -->
+      <footer class="footer">
+        <p>&copy; 2017 <b>UNICEF</b> Burundi</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js">
+    </script>
+</body>
+
+</html>
