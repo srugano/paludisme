@@ -7,8 +7,8 @@ if(!Date.now) Date.now = function() { return new Date(); }
 Date.time = function() { return Date.now().getUnixTime(); }
 
 function getDateOfWeek(w, y) {
-    var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
-    return new Date(y, 0, d).getUnixTime();
+  var v = moment(y).add(w, 'weeks'); // 1st of January + 7 days for each week
+  return Date.UTC(v.year(), v.month(), v.date());
 }
 
 
@@ -21,7 +21,6 @@ Highcharts.setOptions({
         getTimezoneOffset: function (timestamp) {
             var zone = 'Africa/Bujumbura',
                 timezoneOffset = -moment.tz(timestamp, zone).utcOffset();
-
             return timezoneOffset;
         }
     }
@@ -32,7 +31,6 @@ var update_chart1 = function (series) {
   chart1.series[1].setData(series[1].data);
   chart1.series[2].setData(series[2].data);
   chart1.series[3].setData(series[3].data);
-  console.log("Updated chart 1");
 };
 
 var update_chart2 = function (series) {
@@ -45,7 +43,6 @@ var update_chart2 = function (series) {
   chart2.series[6].setData(series[6].data);
   chart2.series[7].setData(series[7].data);
   chart2.series[8].setData(series[8].data);
-  console.log("Updated chart 2");
 };
 
 
@@ -78,7 +75,8 @@ var align_data1 = function(data){
       deceases.push([getDateOfWeek(item.week,item.year),decease]);
     }
   }
-  return [{name: 'Simple', data:simples}, {name: 'Acute', data: acutes }, {name:"Pregnant women", data: pregnant_womens}, {name: "Decease", data:deceases}];
+  console.log([{name: 'Simple', data:simples}, {name: 'Acute', data: acutes }, {name:"Pregnant women", data: pregnant_womens}, {name: "Decease", data:deceases}]);
+   return [{name: 'Simple', data:simples}, {name: 'Acute', data: acutes }, {name:"Pregnant women", data: pregnant_womens}, {name: "Decease", data:deceases}];
 };
 
 var align_data2 = function(data){
@@ -111,7 +109,6 @@ var draw_chart1 = function (url1) {
           'situation_cas_palu', 
           {
              chart: {
-                type: 'spline',
                  zoomType: 'x'
             },
             title: {
@@ -119,14 +116,18 @@ var draw_chart1 = function (url1) {
             },
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br>',
-                pointFormat: '{point.x:%e. %b}: {point.y:.0f} cas'
+                pointFormat: '{point.x:%e. %b %Y}: {point.y:.0f} cas'
             },
             xAxis:
               { 
                 type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%Y'
+                },
                 title: {
                     text: 'Date'
-                },
+                }
               },
             rangeSelector: {
                 selected: 1
@@ -153,19 +154,20 @@ var draw_chart2 = function (url2) {
           'situation_stock', 
           {
              chart: {
-                type: 'bar'
+                type: 'column'
             },
             title: {
                 text: 'Situation de Stock'
             },
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br>',
-                valueSuffix: ' paquest'
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b> paquest<br/>'
             },
             plotOptions: {
                 bar: {
                     dataLabels: {
-                        enabled: true
+                        enabled: true,
+                        format: '{point.y:.1f}%'
                     }
                 }
             },
@@ -184,8 +186,7 @@ var draw_chart2 = function (url2) {
                 enabled: false
             },
             xAxis: {
-                categories : ['Stock']
-                // crosshair: true
+                categories : ['Stock de medicaments']
             },
             rangeSelector: {
                 selected: 1
