@@ -116,7 +116,7 @@ var draw_chart1 = function (url1) {
             },
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br>',
-                pointFormat: '{point.x:%e. %b %Y}: {point.y:.0f} cas'
+                pointFormat: '{point.x:%e. %b}: {point.y:.0f} cas'
             },
             xAxis:
               { 

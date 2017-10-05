@@ -54,10 +54,10 @@
         <h3 class="text-muted">{% trans "Malaria" %}</h3>
         <nav>
           <ul class="nav nav-justified">
-            <li >
-                <a href="{% url 'landing' %}">{% trans "Landing" %}</a>
-            </li>
             {% if user.is_authenticated %}
+            <li >
+                <a href="{% url 'home' %}">{% trans "Dashboard" %}</a>
+            </li>
             <li>
                 <a href="{% url 'cas_palu' %}">{% trans "Malaria cases" %}</a>
             </li>
@@ -68,7 +68,10 @@
                 <a href="{% url 'logout' %}">{% trans "Logout" %}</a>
             </li>
             {% else %}
-                <li>
+            <li >
+                <a href="{% url 'landing' %}">{% trans "Landing" %}</a>
+            </li>
+            <li>
                 <a href="{% url 'login' %}">{% trans "Login" %}</a>
             </li>  
             {% endif %}
