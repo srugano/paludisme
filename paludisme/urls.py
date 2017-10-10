@@ -7,16 +7,16 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    ]
-
-urlpatterns += i18n_patterns(
-    url(r'^explorer/', include('explorer.urls')),
-    url(r'^bdiadmin/', include('bdiadmin.urls')),
     url(r'^stock/', include('stock.urls')),
     url(r'^add_report/', add_report, name="add-report"),
     url(r'^add_reporter/', add_reporter, name="add-reporter"),
     url(r'^add_stockoutr/', add_stockout, name="add-stockout"),
     url(r'^confirm_reporter/', confirm_reporter, name="confirm_reporter"),
+    ]
+
+urlpatterns += i18n_patterns(
+    url(r'^explorer/', include('explorer.urls')),
+    url(r'^bdiadmin/', include('bdiadmin.urls')),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
