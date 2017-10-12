@@ -122,7 +122,7 @@ class CasesPaluCdsViewsets(viewsets.ModelViewSet):
 
 
 class RateViewsets(viewsets.ModelViewSet):
-    queryset = Report.objects.annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(nombre=Count('pk'))
+    queryset = Report.objects.filter(category__in=['SF', 'SD', 'CA', 'TS']).annotate(year=Extract('reporting_date', 'year'), week=Extract('reporting_date', 'week')).values('year', 'week').annotate(nombre=Count('pk'))
     serializer_class = RateSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_fields = ('facility__district__province', 'facility__district', 'facility')

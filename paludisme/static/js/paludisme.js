@@ -23,6 +23,9 @@ Highcharts.setOptions({
                 timezoneOffset = -moment.tz(timestamp, zone).utcOffset();
             return timezoneOffset;
         }
+    },
+    lang: {
+        numericSymbols: null //otherwise by default ['k', 'M', 'G', 'T', 'P', 'E']
     }
 });
 
@@ -150,6 +153,7 @@ var draw_chart1 = function (url1) {
 var draw_chart2 = function (url2) {
   $.getJSON(url2, function(data) {
         var new_data = align_data2(data);
+        console.log(new_data);
         chart2 = new Highcharts.chart(
           'situation_stock', 
           {
@@ -161,32 +165,34 @@ var draw_chart2 = function (url2) {
             },
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br>',
-                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b> paquest<br/>'
+                pointFormat: '<b>{point.y:.0f} paquests<br/>'
             },
             plotOptions: {
-                bar: {
+                column: {
                     dataLabels: {
                         enabled: true,
-                        format: '{point.y:.1f}%'
+                        rotation: -90,
+                        align: 'right',
+                        format: '{point.y:.0f}', // one decimal
+                        y: 10, // 10 pixels down from the top
+                        style: {
+                            fontSize: '10px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
                     }
                 }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -40,
-                y: 15           ,
-                floating: true,
-                borderWidth: 1,
-                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                shadow: true
             },
             credits: {
                 enabled: false
             },
             xAxis: {
-                categories : ['Stock de medicaments']
+                labels: {
+                  rotation: -45,
+                  style: {
+                      fontSize: '13px',
+                      fontFamily: 'Verdana, sans-serif'
+                  }
+              }
             },
             rangeSelector: {
                 selected: 1
