@@ -467,7 +467,7 @@ class RateSerializer(serializers.Serializer):
     expected = serializers.SerializerMethodField()
 
     def get_expected(self, obj):
-        reports = Report.objects.filter(reporting_date__year=obj["year"], reporting_date__week=obj["week"], category__in=['SF', 'SD', 'CA', 'TS']).values('facility').distinct().count()
+        reports = Report.objects.filter(category__in=['SF', 'CA', 'TS'], reporting_date__year=obj["year"], reporting_date__week=obj["week"]).values('facility').distinct().count()
         return reports * 7
 
 
