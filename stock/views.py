@@ -1,16 +1,19 @@
-from stock.models import StockProduct, Dosage, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report
-from rest_framework import viewsets
+import re
+import datetime
+from django.shortcuts import render
+from django.conf import settings
 import django_filters
 from django.db.models.functions import Extract
 from django.db.models import Sum, Count
-from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPaluProvSerializer, CasesPaluDisSerializer, CasesPaluCdsSerializer, StockProductCDSSerializer, StockProductDisSerializer, StockProductProvSerializer, ReportSerializer
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-import re
-from django.conf import settings
+from stock.models import StockProduct, Dosage, StockOutReport, CasesPalu, Tests, PotentialCases, PotentialDeceased, Reporter, Report
+from rest_framework import viewsets
+from stock.serializers import StockProductSerializer, StockOutProductSerializer, ProductSerializer, CasesPaluSerializer, RateSerializer, CasesPaluProvSerializer, CasesPaluDisSerializer, CasesPaluCdsSerializer, StockProductCDSSerializer, StockProductDisSerializer, StockProductProvSerializer, ReportSerializer
 from paludisme.utils import send_sms_through_rapidpro
 from bdiadmin.models import CDS, District, Province
-import datetime
+from django.views.generic import View
+from django.http import StreamingHttpResponse
+from stock.resources import CasesPaluResource, StockProductResource
 
 
 GROUPS = getattr(settings, 'RUPTURE_GROUPS', '')
@@ -267,3 +270,21 @@ def update_stockproduct(report=None, product=None, *args, **kwargs):
 
     else:
         return "Ivyo mwanditse sivyo. Andika uko bakwigishije."
+
+
+class CasesPaluExport(View):
+
+    def get(self, *args, **kwargs):
+        dataset = CasesPaluResource().export()
+        response = StreamingHttpResponse(dataset.csv, content_type="csv")
+        response['Content-Disposition'] = 'attachment; filename=CasesPaluExport.csv'
+        return response
+
+
+class StockProductExport(View):
+
+    def get(self, *args, **kwargs):
+        dataset = StockProductResource().export()
+        response = StreamingHttpResponse(dataset.csv, content_type="csv")
+        response['Content-Disposition'] = 'attachment; filename=StockProductExport.csv'
+        return response

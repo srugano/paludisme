@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from stock.views import StockProductSFViewsets, cas_palu, situation_stock, StockOutProductViewsets, show_reports_rp, ProductViewsets, CasesPaluViewsets, RateViewsets, CasesPaluProvViewsets, CasesPaluDisViewsets, CasesPaluCdsViewsets, StockProductProvViewsets, StockProductDisViewsets, StockProductCDSViewsets, ReportCAViewsets, ReportSTViewsets
+from stock.views import StockProductSFViewsets, cas_palu, situation_stock, StockOutProductViewsets, show_reports_rp, ProductViewsets, CasesPaluViewsets, RateViewsets, CasesPaluProvViewsets, CasesPaluDisViewsets, CasesPaluCdsViewsets, StockProductProvViewsets, StockProductDisViewsets, StockProductCDSViewsets, ReportCAViewsets, ReportSTViewsets, CasesPaluExport, StockProductExport
 from rest_framework import routers
 
 
@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^cas_palu/$', cas_palu, name='cas_palu'),
     url(r'^situation_stock/$', situation_stock, name='situation_stock'),
     url(r'^show_reports_rp/$', show_reports_rp, name='show_reports_rp'),
+    url(r'^casepaluexport/$', CasesPaluExport.as_view(), name='casepaluexport'),
+    url(r'^stockproductexport/$', StockProductExport.as_view(), name='stockproductexport'),
 ]
