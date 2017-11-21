@@ -21,8 +21,10 @@
 {% block content %}
     <div class="container-fluid">
         <div class="col-lg-12" ng-controller="ExportCtrl">
-        <a href="{% url 'stockproductexport' %}" class="btn btn-success" role="button">Export All</a>
-        <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
+        <div class="col-md-3"><a  ng-click="download_stock_product()" class="btn btn-success" role="button">Export All</a></div>
+        <div ng-if="showmessage" class="alert alert-success alert-dismissable col-md-9" ng-model='messagess'><a href="#" ng-close="close_message()" class="close" data-dismiss="alert" aria-label="close">&times;</a>{% verbatim %}{{messagess}}{% endverbatim %}</div>
+        <div class="col-lg-12">
+            <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
             <thead>
                 <tr>
                     <th >Province</th>
@@ -52,6 +54,7 @@
               {% endverbatim %}
           </tbody>
       </table>
+        </div>
     </div>
 </div>
 <div modal="showModal" close="ok()" class="modal fade" role="dialog">

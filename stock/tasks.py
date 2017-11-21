@@ -3,30 +3,56 @@ from celery.decorators import periodic_task, task
 from celery.utils.log import get_task_logger
 import datetime
 from stock.models import Report, Product
-from stock.views import create_stockproduct, update_stockproduct
+from stock.recorders import create_stockproduct, update_stockproduct
 from stock.resources import CasesPaluResource, StockProductResource
-from django.urls import reverse
-from django.core.mail import send_mail
-from django.contrib.auth import get_user_model
-from quick_publisher.celery import app
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+from django.template.loader import render_to_string
+import logging
+from django.contrib.auth.models import User
 logger = get_task_logger(__name__)
 
 
-@task(bind=True, name="export_cases_palu")
-def export_cases_palu(request):
-    UserModel = get_user_model()
+@task(name="export_cases_palu")
+def export_cases_palu(user_id=None):
+    user = User.objects.get(id=user_id)
+    dataset = CasesPaluResource().export().xlsx
+    file_name = 'Cases_palu_{0}.xlsx'.format(datetime.datetime.now())
+    f = open(settings.MEDIA_ROOT + '/' + file_name, 'wb')
+    f.write(dataset)
+    f.close()
     try:
-        user = UserModel.objects.get(pk=request.user.id)
-        send_mail(
-            'Export for cases palu are ready',
-            'Follow this to download your account: '
-                'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(user.verification_uuid)}),
-            'from@quickpublisher.dev',
-            [user.email],
-            fail_silently=False,
-        )
-    except UserModel.DoesNotExist:
-        logger.warning("Tried to send download email to non-existing user '%s'" % request.user)
+        d = {'username': user.username, 'link': file_name}
+        plaintext = render_to_string('stock/download_case_palu.txt', d)
+        htmly = render_to_string('stock/download_case_palu.html', d)
+
+        subject, from_email, to = 'Download all cases palu', settings.DEFAULT_FROM_EMAIL, user.email
+        msg = EmailMultiAlternatives(subject, plaintext, from_email, [to])
+        msg.attach_alternative(htmly, "text/html")
+        msg.send()
+    except:
+        logging.warning("Tried to send download files to user {0} but it failed. ".format(user))
+
+
+@task(name="export_stock_product")
+def export_stock_product(user_id=None):
+    user = User.objects.get(id=user_id)
+    dataset = StockProductResource().export().xlsx
+    file_name = 'Stock_product_{0}.xlsx'.format(datetime.datetime.now())
+    f = open(settings.MEDIA_ROOT + '/' + file_name, 'wb')
+    f.write(dataset)
+    f.close()
+    try:
+        d = {'username': user.username, 'link': file_name }
+        plaintext = render_to_string('stock/download_case_palu.txt', d)
+        htmly = render_to_string('stock/download_case_palu.html', d)
+
+        subject, from_email, to = 'Download all cases palu', settings.DEFAULT_FROM_EMAIL, user.email
+        msg = EmailMultiAlternatives(subject, plaintext, from_email, [to])
+        msg.attach_alternative(htmly, "text/html")
+        msg.send()
+    except:
+        logging.warning("Tried to send download files to user {0} but it failed. ".format(user))
 
 
 @periodic_task(run_every=(crontab(minute='*/45')), name="update_cds_task", ignore_result=True)
@@ -46,7 +72,3 @@ def update_cds_task():
             update_stockproduct(report=report, product=product)
             reports_updated += 1
     logger.info("Finished updating reports with {0} reports created and  {1} reports updated".format(reports_created, reports_updated))
-
-
-
-

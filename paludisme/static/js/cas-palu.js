@@ -98,9 +98,29 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
       $scope.showModal = true;
     };
 
+    $scope.download_case_palu = function() {
+      $scope.showmessage = false;
+      $http.post("/stock/casepaluexport/").then(function (response) {
+              if (response) {
+                $scope.messagess = response.data.Ok;
+                $scope.showmessage = true;
+                console.log( response.data.Ok);
+                  } else {
+                    console.log( response.data.Ok);
+                  }
+          });
+    };
+
+
+
     $scope.ok = function() {
       $scope.showModal = false;
     };
+
+    $scope.close_message = function() {
+      $scope.showmessage = false;
+    };
+
     // startdate
     $scope.get_by_date = function () {
       var province = $scope.province;

@@ -2,7 +2,7 @@ from import_export import resources
 from .models import CasesPalu, StockProduct, Tests
 from import_export import fields
 from django.db.models import Sum
-import datetime
+from django.db.models.functions import Coalesce
 
 
 class CasesPaluResource(resources.ModelResource):
@@ -28,11 +28,11 @@ class CasesPaluResource(resources.ModelResource):
 
     def dehydrate_goute_epaisse(self, book):
         queryset = Tests.objects.filter(report__facility=book.report.facility, reporting_date=book.reporting_date)
-        return queryset.aggregate(ges=Sum('ge'))['ges']
+        return queryset.aggregate(ges=Coalesce(Sum('ge'), 0))['ges']
 
     def dehydrate_tdr(self, book):
         queryset = Tests.objects.filter(report__facility=book.report.facility, reporting_date=book.reporting_date)
-        return queryset.aggregate(tdrs=Sum('tdr'))['tdrs']
+        return queryset.aggregate(tdrs=Coalesce(Sum('tdr'), 0))['tdrs']
 
 
 class StockProductResource(resources.ModelResource):

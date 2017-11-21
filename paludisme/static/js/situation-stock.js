@@ -161,6 +161,19 @@ app.controller('FilterCtrl', ['$scope', '$http', '$locale', 'DTOptionsBuilder', 
       $scope.showModal = false;
     };
 
+    $scope.download_stock_product = function() {
+      $scope.showmessage = false;
+      $http.post("/stock/stockproductexport/").then(function (response) {
+              if (response) {
+                $scope.messagess = response.data.Ok;
+                $scope.showmessage = true;
+                console.log( response.data.Ok);
+                  } else {
+                    console.log( response.data.Ok);
+                  }
+          });
+    };
+
     // startdate
     $scope.get_by_date = function () {
       var province = $scope.province;

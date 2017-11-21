@@ -4,6 +4,9 @@ from django.contrib.auth import views as auth_views
 from paludisme.views import password, add_report, add_reporter, confirm_reporter, add_stockout, home, landing
 from stock.utils import export_to_excel
 from django.conf.urls.i18n import i18n_patterns
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -12,7 +15,7 @@ urlpatterns = [
     url(r'^add_reporter/', add_reporter, name="add-reporter"),
     url(r'^add_stockoutr/', add_stockout, name="add-stockout"),
     url(r'^confirm_reporter/', confirm_reporter, name="confirm_reporter"),
-    ]
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
     url(r'^explorer/', include('explorer.urls')),
@@ -24,4 +27,4 @@ urlpatterns += i18n_patterns(
     url(r'^export/xlsx/$', export_to_excel, name='export_to_excel'),
     url(r'^home/$', home, name='home'),
     url(r'^$', landing, name='landing'),
-)
+) 

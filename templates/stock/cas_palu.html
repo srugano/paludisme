@@ -15,52 +15,55 @@
 {% block content %}
     <div class="container-fluid">
         <div class="col-lg-12" >
-        <a href="{% url 'casepaluexport' %}" class="btn btn-success" role="button">Export All</a>
-        <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
-            <thead>
-                <tr>
-                    <th rowspan="3">Province</th>
+        <div class="col-md-3"><a  ng-click="download_case_palu()" class="btn btn-success" role="button">Export All</a></div>
+        <div ng-if="showmessage" class="alert alert-success alert-dismissable col-md-9" ng-model='messagess'><a href="#" ng-close="close_message()" class="close" data-dismiss="alert" aria-label="close">&times;</a>{% verbatim %}{{messagess}}{% endverbatim %}</div>
+        <div class="col-lg-12" >
+            <table  class="table table-bordered text-center"  data-toggle="table" datatable="ng" dt-options="dtOptions" >
+                <thead>
+                    <tr>
+                        <th rowspan="3">Province</th>
+                        {% verbatim %}
+                        <th ng-if="districtss" rowspan="3">District</th>
+                        <th ng-if="cdsss" rowspan="3">Cds</th>
+                        {% endverbatim %}
+                        <th rowspan="3">Code </th>
+                        <th colspan="4">{% trans "Malaria" %}</th>
+                        <th colspan="2">{% trans "Tests done" %}</th>
+                        <th rowspan="3">{% trans "Negative tests" %}</th>
+                        <th rowspan="3">{% trans "Positive tests" %}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">{% trans "Confirmed cases" %}</th>
+                        <th rowspan="2">{% trans "Death" %}</th>
+                        <th rowspan="2">{% trans "Tick drop" %}</th>
+                        <th rowspan="2">{% trans "Rapid diagnostic test" %}</th>
+                    </tr>
+                    <tr>
+                        <th >{% trans "Simple cases" %}</th>
+                        <th >{% trans "Accute" %}</th>
+                        <th >{% trans "Pregnant women" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% verbatim %}
-                    <th ng-if="districtss" rowspan="3">District</th>
-                    <th ng-if="cdsss" rowspan="3">Cds</th>
-                    {% endverbatim %}
-                    <th rowspan="3">Code </th>
-                    <th colspan="4">{% trans "Malaria" %}</th>
-                    <th colspan="2">{% trans "Tests done" %}</th>
-                    <th rowspan="3">{% trans "Negative tests" %}</th>
-                    <th rowspan="3">{% trans "Positive tests" %}</th>
-                </tr>
-                <tr>
-                    <th colspan="3">{% trans "Confirmed cases" %}</th>
-                    <th rowspan="2">{% trans "Death" %}</th>
-                    <th rowspan="2">{% trans "Tick drop" %}</th>
-                    <th rowspan="2">{% trans "Rapid diagnostic test" %}</th>
-                </tr>
-                <tr>
-                    <th >{% trans "Simple cases" %}</th>
-                    <th >{% trans "Accute" %}</th>
-                    <th >{% trans "Pregnant women" %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% verbatim %}
-                <tr ng-repeat="(x, y) in structures" >
-                    <td >{{ y.province}}</td>
-                    <td ng-if="districtss">{{y.district}}</td>
-                    <td ng-if="cdsss">{{y.cds}}</td>
-                    <td ><a class="btn"  ng-click="open()">{{ y.code}}</a></td>
-                    <td >{{ y.simple  }}</td>
-                    <td >{{ y.acute  }}</td>
-                    <td >{{ y.pregnant_women  }}</td>
-                    <td >{{ y.decease  }}</td>
-                    <td >{{ y.ge  }}</td>
-                    <td >{{ y.tdr  }}</td>
-                    <td >{{ - y.simple - y.acute - y.pregnant_women + y.ge + y.tdr  }}</td>
-                    <td >{{ y.simple + y.acute + y.pregnant_women  }}</td>
-                </tr>
-              {% endverbatim %}
-          </tbody>
-      </table>
+                    <tr ng-repeat="(x, y) in structures" >
+                        <td >{{ y.province}}</td>
+                        <td ng-if="districtss">{{y.district}}</td>
+                        <td ng-if="cdsss">{{y.cds}}</td>
+                        <td ><a class="btn"  ng-click="open()">{{ y.code}}</a></td>
+                        <td >{{ y.simple  }}</td>
+                        <td >{{ y.acute  }}</td>
+                        <td >{{ y.pregnant_women  }}</td>
+                        <td >{{ y.decease  }}</td>
+                        <td >{{ y.ge  }}</td>
+                        <td >{{ y.tdr  }}</td>
+                        <td >{{ - y.simple - y.acute - y.pregnant_women + y.ge + y.tdr  }}</td>
+                        <td >{{ y.simple + y.acute + y.pregnant_women  }}</td>
+                    </tr>
+                  {% endverbatim %}
+              </tbody>
+          </table>
+        </div>
     </div>
 </div>
 <div modal="showModal" close="ok()" class="modal fade" role="dialog">

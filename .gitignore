@@ -24,4 +24,4 @@ staticfiles/img/
 *.gz
 celerybeat*
 *.rdb
-	
+media/

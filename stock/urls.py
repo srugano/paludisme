@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^cas_palu/$', cas_palu, name='cas_palu'),
     url(r'^situation_stock/$', situation_stock, name='situation_stock'),
     url(r'^show_reports_rp/$', show_reports_rp, name='show_reports_rp'),
-    url(r'^casepaluexport/$', CasesPaluExport.as_view(), name='casepaluexport'),
-    url(r'^stockproductexport/$', StockProductExport.as_view(), name='stockproductexport'),
+    url(r'^casepaluexport/$', CasesPaluExport, name='casepaluexport'),
+    url(r'^stockproductexport/$', StockProductExport, name='stockproductexport'),
 ]
