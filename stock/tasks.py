@@ -43,7 +43,7 @@ def export_stock_product(user_id=None):
     f.write(dataset)
     f.close()
     try:
-        d = {'username': user.username, 'link': file_name }
+        d = {'username': user.username, 'link': file_name}
         plaintext = render_to_string('stock/download_case_palu.txt', d)
         htmly = render_to_string('stock/download_case_palu.html', d)
 

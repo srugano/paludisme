@@ -30,12 +30,20 @@ def validate_date(date_text):
         return date
 
 
+def byteify(input):
+    if isinstance(input, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
+
+
 def split_message(request):
-    response_data = {}
-    liste_data = request.body.split("&")
-    for i in liste_data:
-        response_data[i.split("=")[0]] = re.sub(' +', ' ', urllib.unquote_plus(i.split("=")[1]).upper())
-    return response_data
+    return byteify(json.loads(request.body))
 
 
 def get_or_none(model, *args, **kwargs):
