@@ -1,5 +1,4 @@
 import datetime
-import urllib
 from django.http import JsonResponse
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
@@ -9,6 +8,18 @@ from django.conf import settings
 import json
 
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message=_("Phone number in the format: '+25799999999'. Up to 15 digits allowed."))
+
+
+def byteify(input):
+    if isinstance(input, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
 
 
 def validate_phone(phone=None):
@@ -31,11 +42,11 @@ def validate_date(date_text):
 
 
 def split_message(request):
-    response_data = {}
-    liste_data = request.body.split("&")
-    for i in liste_data:
-        response_data[i.split("=")[0]] = re.sub(' +', ' ', urllib.unquote_plus(i.split("=")[1]).upper())
-    return response_data
+    # Let's put all the incoming data in the dictionary 'incoming_data'
+    incoming_data = byteify(json.loads(request.body))
+    incoming_data['phone'] = incoming_data['contact']['urn'].replace("tel:", "")
+    incoming_data['text'] = incoming_data['results']['rapport1']['input']
+    return incoming_data
 
 
 def get_or_none(model, *args, **kwargs):
