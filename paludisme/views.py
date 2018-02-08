@@ -49,7 +49,7 @@ def add_report(request):
 @csrf_exempt
 def add_reporter(request):
     response_data = split_message(request)
-    message = response_data['text'].split(" ")
+    message = [elem.upper() for elem in response_data['text'].split(" ")]
     if message[0] == "REG":
         if not len(message) == 4:
             return JsonResponse({'Ok': "False", 'info_to_contact': "Ivyo wanditse sivyo. Andika ibitigiri bikwiye."}, safe=False)
@@ -80,7 +80,7 @@ def add_reporter(request):
 @csrf_exempt
 def confirm_reporter(request):
     response_data = split_message(request)
-    message = response_data['text'].split(" ")
+    message = [elem.upper() for elem in response_data['text'].split(" ")]
     temporary = get_or_none(Temporary, phone_number__icontains=validate_phone(message[0]), supervisor_phone_number__icontains=validate_phone(message[1]))
     if temporary:
         reporter, created = Reporter.objects.get_or_create(phone_number=temporary.phone_number)

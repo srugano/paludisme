@@ -1,5 +1,4 @@
 import datetime
-import urllib
 from django.http import JsonResponse
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
@@ -43,7 +42,11 @@ def byteify(input):
 
 
 def split_message(request):
-    return byteify(json.loads(request.body))
+    # Let's put all the incoming data in the dictionary 'incoming_data'
+    incoming_data = byteify(json.loads(request.body))
+    incoming_data['phone'] = incoming_data['contact']['urn'].replace("tel:", "")
+    incoming_data['text'] = incoming_data['results']['rapport1']['input']
+    return incoming_data
 
 
 def get_or_none(model, *args, **kwargs):
@@ -55,11 +58,8 @@ def get_or_none(model, *args, **kwargs):
 
 def send_sms_through_rapidpro(args):
     ''' This function sends messages through rapidpro. Contact(s) and the message to send to them must be in args['data'] '''
-    # the_contact_phone_number = "tel:" + args['the_sender'].phone_number
-    # data = {"urns": [the_contact_phone_number],"text": args['info_to_contact']}
     url = 'https://api.rapidpro.io/api/v2/broadcasts.json'
     token = getattr(settings, 'TOKEN', '')
 
     response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data=json.dumps(args))
     print response
-
