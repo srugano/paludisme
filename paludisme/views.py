@@ -16,6 +16,7 @@ from bdiadmin.models import CDS
 
 @csrf_exempt
 def add_report(request):
+    info_to_contact = ""
     response_data = split_message(request)
     if Reporter.objects.filter(phone_number=response_data['phone']).count() == 0:
         return JsonResponse({'Ok': "False", 'info_to_contact': "Ntimwanditse. Banza mwiyandikishe."}, safe=False)
