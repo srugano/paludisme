@@ -9,20 +9,34 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bdiadmin', '0013_auto_20170319_1415'),
-        ('stock', '0018_casespalucds'),
+        ("bdiadmin", "0013_auto_20170319_1415"),
+        ("stock", "0018_casespalucds"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='StockProductProv',
+            name="StockProductProv",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('year', models.PositiveIntegerField(default=2017)),
-                ('week', models.CharField(max_length=3)),
-                ('product', models.CharField(max_length=50)),
-                ('quantity', models.FloatField(default=0.0)),
-                ('province', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bdiadmin.Province')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("year", models.PositiveIntegerField(default=2017)),
+                ("week", models.CharField(max_length=3)),
+                ("product", models.CharField(max_length=50)),
+                ("quantity", models.FloatField(default=0.0)),
+                (
+                    "province",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="bdiadmin.Province",
+                    ),
+                ),
             ],
-        ),
+        )
     ]

@@ -4,6 +4,7 @@ from bdiadmin.models import Province, District, CDS
 
 class ProvinceSerializer(serializers.ModelSerializer):
     """ Serializer to represent the Province model """
+
     class Meta:
         model = Province
         fields = ("name", "code", "id")
@@ -11,6 +12,7 @@ class ProvinceSerializer(serializers.ModelSerializer):
 
 class DistrictSerializer(serializers.ModelSerializer):
     """ Serializer to represent the District model """
+
     class Meta:
         model = District
         fields = ("name", "code", "province", "id")
@@ -18,6 +20,7 @@ class DistrictSerializer(serializers.ModelSerializer):
 
 class CDSSerializer(serializers.ModelSerializer):
     """ Serializer to represent the District model """
+
     class Meta:
         model = CDS
         fields = ("name", "code", "district", "id")

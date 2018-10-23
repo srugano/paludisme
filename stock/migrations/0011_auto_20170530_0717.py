@@ -7,18 +7,9 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0010_auto_20170530_0623'),
-    ]
+    dependencies = [("stock", "0010_auto_20170530_0623")]
 
     operations = [
-        migrations.RenameField(
-            model_name='tests',
-            old_name='quantity',
-            new_name='tdr',
-        ),
-        migrations.RemoveField(
-            model_name='tests',
-            name='product',
-        ),
+        migrations.RenameField(model_name="tests", old_name="quantity", new_name="tdr"),
+        migrations.RemoveField(model_name="tests", name="product"),
     ]

@@ -1,15 +1,27 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
-from stock.models import Product, Report, Reporter, Dosage, StockProduct, Temporary, StockOutReport, PotentialCases, PotentialDeceased, Tests, CasesPalu
+from stock.models import (
+    Product,
+    Report,
+    Reporter,
+    Dosage,
+    StockProduct,
+    Temporary,
+    StockOutReport,
+    PotentialCases,
+    PotentialDeceased,
+    Tests,
+    CasesPalu,
+)
 from import_export import fields
 
 
 @admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin):
-    list_display = ("designation", "code",)
-    search_fields = ("designation", "dosages", "code",)
-    list_filter = ('designation',)
+    list_display = ("designation", "code")
+    search_fields = ("designation", "dosages", "code")
+    list_filter = ("designation",)
 
 
 class ReportAdminResource(resources.ModelResource):
@@ -19,7 +31,7 @@ class ReportAdminResource(resources.ModelResource):
 
     class Meta:
         model = Report
-        fields = ('cds', 'district', 'province', 'reporting_date', 'text', 'category', )
+        fields = ("cds", "district", "province", "reporting_date", "text", "category")
 
     def dehydrate_cds(self, report):
         return report.facility.name
@@ -36,14 +48,14 @@ class ReportAdmin(ImportExportModelAdmin):
     list_display = ("facility", "reporting_date", "text", "category")
     search_fields = ("facility__name", "text", "category")
     list_filter = ("category",)
-    date_hierarchy = ("reporting_date")
+    date_hierarchy = "reporting_date"
 
 
 @admin.register(Reporter)
 class ReporterAdmin(ImportExportModelAdmin):
-    list_display = ("facility", "phone_number", "supervisor_phone_number", )
-    search_fields = ("facility__name", "phone_number", "supervisor_phone_number", )
-    list_filter = ("facility", "phone_number", "supervisor_phone_number", )
+    list_display = ("facility", "phone_number", "supervisor_phone_number")
+    search_fields = ("facility__name", "phone_number", "supervisor_phone_number")
+    list_filter = ("facility", "phone_number", "supervisor_phone_number")
 
 
 @admin.register(Dosage)
@@ -53,10 +65,10 @@ class DosageAdmin(ImportExportModelAdmin):
 
 @admin.register(StockProduct)
 class StockProductAdmin(ImportExportModelAdmin):
-    list_display = ("report", "product", "dosage", "quantity", "reporting_date", )
+    list_display = ("report", "product", "dosage", "quantity", "reporting_date")
     search_fields = ("report__text",)
-    list_filter = ("report__category", "product", )
-    date_hierarchy = ("reporting_date")
+    list_filter = ("report__category", "product")
+    date_hierarchy = "reporting_date"
 
 
 @admin.register(Temporary)
@@ -87,5 +99,6 @@ class PotentialDeceasedAdmin(ImportExportModelAdmin):
 @admin.register(PotentialCases)
 class PotentialCasesAdmin(ImportExportModelAdmin):
     pass
+
 
 admin.site.register(Report, ReportAdmin)

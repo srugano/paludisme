@@ -7,19 +7,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0015_casespaluprov'),
-    ]
+    dependencies = [("stock", "0015_casespaluprov")]
 
     operations = [
         migrations.AddField(
-            model_name='casespaluprov',
-            name='ge',
-            field=models.FloatField(default=0.0),
+            model_name="casespaluprov", name="ge", field=models.FloatField(default=0.0)
         ),
         migrations.AddField(
-            model_name='casespaluprov',
-            name='tdr',
-            field=models.FloatField(default=0.0),
+            model_name="casespaluprov", name="tdr", field=models.FloatField(default=0.0)
         ),
     ]

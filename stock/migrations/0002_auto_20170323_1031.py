@@ -8,62 +8,83 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0001_initial'),
-    ]
+    dependencies = [("stock", "0001_initial")]
 
     operations = [
         migrations.CreateModel(
-            name='Dosage',
+            name="Dosage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('dosage', models.CharField(max_length=30)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("dosage", models.CharField(max_length=30)),
             ],
-            options={
-                'ordering': ('dosage',),
-            },
+            options={"ordering": ("dosage",)},
         ),
         migrations.CreateModel(
-            name='StockProduct',
+            name="StockProduct",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.FloatField(default=0.0)),
-                ('dosage', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Dosage')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quantity", models.FloatField(default=0.0)),
+                (
+                    "dosage",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="stock.Dosage"
+                    ),
+                ),
             ],
-            options={
-                'ordering': ('report',),
-            },
+            options={"ordering": ("report",)},
         ),
         migrations.AlterModelOptions(
-            name='report',
-            options={'ordering': ('reporting_date',)},
+            name="report", options={"ordering": ("reporting_date",)}
         ),
         migrations.AlterModelOptions(
-            name='reporter',
-            options={'ordering': ('phone_number',)},
+            name="reporter", options={"ordering": ("phone_number",)}
         ),
-        migrations.RemoveField(
-            model_name='product',
-            name='general_measuring_unit',
-        ),
+        migrations.RemoveField(model_name="product", name="general_measuring_unit"),
         migrations.AlterField(
-            model_name='report',
-            name='category',
-            field=models.CharField(choices=[('SDG', 'Stock Start of Day'), ('REC', 'Received'), ('DIS', 'Distributed')], max_length=3),
+            model_name="report",
+            name="category",
+            field=models.CharField(
+                choices=[
+                    ("SDG", "Stock Start of Day"),
+                    ("REC", "Received"),
+                    ("DIS", "Distributed"),
+                ],
+                max_length=3,
+            ),
         ),
         migrations.AddField(
-            model_name='stockproduct',
-            name='product',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Product'),
+            model_name="stockproduct",
+            name="product",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="stock.Product"
+            ),
         ),
         migrations.AddField(
-            model_name='stockproduct',
-            name='report',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Report'),
+            model_name="stockproduct",
+            name="report",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="stock.Report"
+            ),
         ),
         migrations.AddField(
-            model_name='product',
-            name='dosages',
-            field=models.ManyToManyField(to='stock.Dosage'),
+            model_name="product",
+            name="dosages",
+            field=models.ManyToManyField(to="stock.Dosage"),
         ),
     ]

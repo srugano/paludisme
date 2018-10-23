@@ -7,39 +7,37 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0021_auto_20170910_2134'),
-    ]
+    dependencies = [("stock", "0021_auto_20170910_2134")]
 
     operations = [
         migrations.AddField(
-            model_name='casespalucds',
-            name='week_number',
+            model_name="casespalucds",
+            name="week_number",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='casespaludis',
-            name='week_number',
+            model_name="casespaludis",
+            name="week_number",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='casespaluprov',
-            name='week_number',
+            model_name="casespaluprov",
+            name="week_number",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='stockproductcds',
-            name='week_number',
+            model_name="stockproductcds",
+            name="week_number",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='stockproductdis',
-            name='week_number',
+            model_name="stockproductdis",
+            name="week_number",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='stockproductprov',
-            name='week_number',
+            model_name="stockproductprov",
+            name="week_number",
             field=models.IntegerField(default=0),
         ),
     ]

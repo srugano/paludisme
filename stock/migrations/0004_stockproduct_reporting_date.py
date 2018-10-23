@@ -8,14 +8,12 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0003_auto_20170329_1209'),
-    ]
+    dependencies = [("stock", "0003_auto_20170329_1209")]
 
     operations = [
         migrations.AddField(
-            model_name='stockproduct',
-            name='reporting_date',
+            model_name="stockproduct",
+            name="reporting_date",
             field=models.DateField(default=django.utils.timezone.now),
-        ),
+        )
     ]

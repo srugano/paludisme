@@ -7,19 +7,25 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0002_auto_20170323_1031'),
-    ]
+    dependencies = [("stock", "0002_auto_20170323_1031")]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='code',
+            model_name="product",
+            name="code",
             field=models.CharField(blank=True, max_length=3),
         ),
         migrations.AlterField(
-            model_name='report',
-            name='category',
-            field=models.CharField(choices=[(b'REG', 'Registering'), (b'SF', 'Final Stock'), (b'SR', 'Stoc Received'), (b'RUP', 'Rupture')], max_length=3),
+            model_name="report",
+            name="category",
+            field=models.CharField(
+                choices=[
+                    (b"REG", "Registering"),
+                    (b"SF", "Final Stock"),
+                    (b"SR", "Stoc Received"),
+                    (b"RUP", "Rupture"),
+                ],
+                max_length=3,
+            ),
         ),
     ]

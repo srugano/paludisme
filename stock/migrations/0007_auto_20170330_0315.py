@@ -8,29 +8,71 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0006_auto_20170330_0112'),
-    ]
+    dependencies = [("stock", "0006_auto_20170330_0112")]
 
     operations = [
         migrations.AlterField(
-            model_name='reporter',
-            name='phone_number',
-            field=models.CharField(blank=True, help_text='The telephone to contact you.', max_length=16, validators=[django.core.validators.RegexValidator(message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.", regex=b'^\\+?1?\\d{9,15}$')], verbose_name='telephone'),
+            model_name="reporter",
+            name="phone_number",
+            field=models.CharField(
+                blank=True,
+                help_text="The telephone to contact you.",
+                max_length=16,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.",
+                        regex=b"^\\+?1?\\d{9,15}$",
+                    )
+                ],
+                verbose_name="telephone",
+            ),
         ),
         migrations.AlterField(
-            model_name='reporter',
-            name='supervisor_phone_number',
-            field=models.CharField(blank=True, help_text='The telephone to contact you.', max_length=16, validators=[django.core.validators.RegexValidator(message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.", regex=b'^\\+?1?\\d{9,15}$')], verbose_name='telephone'),
+            model_name="reporter",
+            name="supervisor_phone_number",
+            field=models.CharField(
+                blank=True,
+                help_text="The telephone to contact you.",
+                max_length=16,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.",
+                        regex=b"^\\+?1?\\d{9,15}$",
+                    )
+                ],
+                verbose_name="telephone",
+            ),
         ),
         migrations.AlterField(
-            model_name='temporary',
-            name='phone_number',
-            field=models.CharField(blank=True, help_text='The telephone to contact you.', max_length=16, validators=[django.core.validators.RegexValidator(message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.", regex=b'^\\+?1?\\d{9,15}$')], verbose_name='telephone'),
+            model_name="temporary",
+            name="phone_number",
+            field=models.CharField(
+                blank=True,
+                help_text="The telephone to contact you.",
+                max_length=16,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.",
+                        regex=b"^\\+?1?\\d{9,15}$",
+                    )
+                ],
+                verbose_name="telephone",
+            ),
         ),
         migrations.AlterField(
-            model_name='temporary',
-            name='supervisor_phone_number',
-            field=models.CharField(blank=True, help_text='The telephone to contact you.', max_length=16, validators=[django.core.validators.RegexValidator(message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.", regex=b'^\\+?1?\\d{9,15}$')], verbose_name='telephone'),
+            model_name="temporary",
+            name="supervisor_phone_number",
+            field=models.CharField(
+                blank=True,
+                help_text="The telephone to contact you.",
+                max_length=16,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.",
+                        regex=b"^\\+?1?\\d{9,15}$",
+                    )
+                ],
+                verbose_name="telephone",
+            ),
         ),
     ]

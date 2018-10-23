@@ -10,39 +10,69 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('bdiadmin', '0013_auto_20170319_1415'),
-    ]
+    dependencies = [("bdiadmin", "0013_auto_20170319_1415")]
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('designation', models.CharField(max_length=40)),
-                ('general_measuring_unit', models.CharField(max_length=40)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("designation", models.CharField(max_length=40)),
+                ("general_measuring_unit", models.CharField(max_length=40)),
             ],
-            options={
-                'ordering': ('designation',),
-            },
+            options={"ordering": ("designation",)},
         ),
         migrations.CreateModel(
-            name='Report',
+            name="Report",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reporting_date', models.DateField()),
-                ('text', models.CharField(max_length=200)),
-                ('category', models.CharField(max_length=100)),
-                ('facility', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bdiadmin.CDS')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("reporting_date", models.DateField()),
+                ("text", models.CharField(max_length=200)),
+                ("category", models.CharField(max_length=100)),
+                (
+                    "facility",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="bdiadmin.CDS"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Reporter',
+            name="Reporter",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phone_number', models.CharField(max_length=20)),
-                ('supervisor_phone_number', models.CharField(max_length=20)),
-                ('facility', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bdiadmin.CDS')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("phone_number", models.CharField(max_length=20)),
+                ("supervisor_phone_number", models.CharField(max_length=20)),
+                (
+                    "facility",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="bdiadmin.CDS"
+                    ),
+                ),
             ],
         ),
     ]

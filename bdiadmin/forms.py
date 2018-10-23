@@ -13,12 +13,12 @@ class UserCreateForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(UserCreateForm, self).__init__(*args, **kwargs)
-        self.fields['password1'].required = False
-        self.fields['password2'].required = False
+        self.fields["password1"].required = False
+        self.fields["password2"].required = False
         # If one field gets autocompleted but not the other, our 'neither
         # password or both password' validation will be triggered.
-        self.fields['password1'].widget.attrs['autocomplete'] = 'off'
-        self.fields['password2'].widget.attrs['autocomplete'] = 'off'
+        self.fields["password1"].widget.attrs["autocomplete"] = "off"
+        self.fields["password2"].widget.attrs["autocomplete"] = "off"
 
     class Meta:
         model = User
@@ -37,19 +37,19 @@ class UserCreateForm(UserCreationForm):
 class ProvinceForm(forms.ModelForm):
     class Meta:
         model = Province
-        fields = ('name', 'code')
+        fields = ("name", "code")
 
 
 class CommuneForm(forms.ModelForm):
     class Meta:
         model = Commune
-        fields = ('province', 'name', 'code')
+        fields = ("province", "name", "code")
 
 
 class CollineForm(forms.ModelForm):
     class Meta:
         model = Colline
-        fields = ('commune', 'name', 'code')
+        fields = ("commune", "name", "code")
 
 
 class ProfileUserForm(forms.ModelForm):
@@ -62,28 +62,46 @@ class ProfileUserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProfileUserForm, self).__init__(*args, **kwargs)
-        self.fields['password1'].required = False
-        self.fields['password2'].required = False
-        self.fields['password1'].widget.attrs['autocomplete'] = 'off'
-        self.fields['password2'].widget.attrs['autocomplete'] = 'off'
+        self.fields["password1"].required = False
+        self.fields["password2"].required = False
+        self.fields["password1"].widget.attrs["autocomplete"] = "off"
+        self.fields["password2"].widget.attrs["autocomplete"] = "off"
 
     class Meta:
         model = ProfileUser
-        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'level', 'telephone',)
+        fields = (
+            "username",
+            "email",
+            "password1",
+            "password2",
+            "first_name",
+            "last_name",
+            "level",
+            "telephone",
+        )
 
     def send_email(self, request):
         try:
-            reset_form = PasswordResetForm({'email': self.cleaned_data['email']})
+            reset_form = PasswordResetForm({"email": self.cleaned_data["email"]})
             assert reset_form.is_valid()
             reset_form.save(
                 request=request,
                 from_email="cmam.burundi@gmail.com",
                 use_https=request.is_secure(),
-                subject_template_name='bdiadmin/account_creation_subject.txt',
-                email_template_name='bdiadmin/account_creation_email.html',
+                subject_template_name="bdiadmin/account_creation_subject.txt",
+                email_template_name="bdiadmin/account_creation_email.html",
             )
-            messages.success(request, _('Profile created and mail sent to {0}.').format(self.cleaned_data['email']))
+            messages.success(
+                request,
+                _("Profile created and mail sent to {0}.").format(
+                    self.cleaned_data["email"]
+                ),
+            )
         except:
-            messages.warning(request, _('Profil created, but unable to send mail to {0}.').format(self.cleaned_data['email']))
+            messages.warning(
+                request,
+                _("Profil created, but unable to send mail to {0}.").format(
+                    self.cleaned_data["email"]
+                ),
+            )
             pass
-

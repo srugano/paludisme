@@ -9,85 +9,140 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0009_auto_20170403_0953'),
-    ]
+    dependencies = [("stock", "0009_auto_20170403_0953")]
 
     operations = [
         migrations.CreateModel(
-            name='CasesPalu',
+            name="CasesPalu",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reporting_date', models.DateField(default=django.utils.timezone.now)),
-                ('simple', models.FloatField(default=0.0)),
-                ('acute', models.FloatField(default=0.0)),
-                ('pregnant_women', models.FloatField(default=0.0)),
-                ('decease', models.FloatField(default=0.0)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("reporting_date", models.DateField(default=django.utils.timezone.now)),
+                ("simple", models.FloatField(default=0.0)),
+                ("acute", models.FloatField(default=0.0)),
+                ("pregnant_women", models.FloatField(default=0.0)),
+                ("decease", models.FloatField(default=0.0)),
             ],
         ),
         migrations.CreateModel(
-            name='PotentialCases',
+            name="PotentialCases",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reporting_date', models.DateField(default=django.utils.timezone.now)),
-                ('fpa', models.FloatField(default=0.0)),
-                ('cholera', models.FloatField(default=0.0)),
-                ('meningit', models.FloatField(default=0.0)),
-                ('rougeole', models.FloatField(default=0.0)),
-                ('tnn', models.FloatField(default=0.0)),
-                ('fievre_hemoragique', models.FloatField(default=0.0)),
-                ('paludisme', models.FloatField(default=0.0)),
-                ('other', models.FloatField(default=0.0)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("reporting_date", models.DateField(default=django.utils.timezone.now)),
+                ("fpa", models.FloatField(default=0.0)),
+                ("cholera", models.FloatField(default=0.0)),
+                ("meningit", models.FloatField(default=0.0)),
+                ("rougeole", models.FloatField(default=0.0)),
+                ("tnn", models.FloatField(default=0.0)),
+                ("fievre_hemoragique", models.FloatField(default=0.0)),
+                ("paludisme", models.FloatField(default=0.0)),
+                ("other", models.FloatField(default=0.0)),
             ],
         ),
         migrations.CreateModel(
-            name='PotentialDeceased',
+            name="PotentialDeceased",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reporting_date', models.DateField(default=django.utils.timezone.now)),
-                ('fpa', models.FloatField(default=0.0)),
-                ('cholera', models.FloatField(default=0.0)),
-                ('meningit', models.FloatField(default=0.0)),
-                ('rougeole', models.FloatField(default=0.0)),
-                ('tnn', models.FloatField(default=0.0)),
-                ('fievre_hemoragique', models.FloatField(default=0.0)),
-                ('paludisme', models.FloatField(default=0.0)),
-                ('other', models.FloatField(default=0.0)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("reporting_date", models.DateField(default=django.utils.timezone.now)),
+                ("fpa", models.FloatField(default=0.0)),
+                ("cholera", models.FloatField(default=0.0)),
+                ("meningit", models.FloatField(default=0.0)),
+                ("rougeole", models.FloatField(default=0.0)),
+                ("tnn", models.FloatField(default=0.0)),
+                ("fievre_hemoragique", models.FloatField(default=0.0)),
+                ("paludisme", models.FloatField(default=0.0)),
+                ("other", models.FloatField(default=0.0)),
             ],
         ),
         migrations.CreateModel(
-            name='Tests',
+            name="Tests",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reporting_date', models.DateField(default=django.utils.timezone.now)),
-                ('ge', models.FloatField(default=0.0)),
-                ('quantity', models.FloatField(default=0.0)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Product')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("reporting_date", models.DateField(default=django.utils.timezone.now)),
+                ("ge", models.FloatField(default=0.0)),
+                ("quantity", models.FloatField(default=0.0)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="stock.Product"
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
-            model_name='report',
-            name='category',
-            field=models.CharField(choices=[(b'REG', 'Registering'), (b'SF', 'Final Stock'), (b'SR', 'Stock Received'), (b'RP', 'Rupture'), (b'CA', 'Cases'), (b'TS', 'Test'), (b'HBC', 'Repports on cases'), (b'HBD', 'Reports on death')], max_length=3),
+            model_name="report",
+            name="category",
+            field=models.CharField(
+                choices=[
+                    (b"REG", "Registering"),
+                    (b"SF", "Final Stock"),
+                    (b"SR", "Stock Received"),
+                    (b"RP", "Rupture"),
+                    (b"CA", "Cases"),
+                    (b"TS", "Test"),
+                    (b"HBC", "Repports on cases"),
+                    (b"HBD", "Reports on death"),
+                ],
+                max_length=3,
+            ),
         ),
         migrations.AddField(
-            model_name='tests',
-            name='report',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Report'),
+            model_name="tests",
+            name="report",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="stock.Report"
+            ),
         ),
         migrations.AddField(
-            model_name='potentialdeceased',
-            name='report',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Report'),
+            model_name="potentialdeceased",
+            name="report",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="stock.Report"
+            ),
         ),
         migrations.AddField(
-            model_name='potentialcases',
-            name='report',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Report'),
+            model_name="potentialcases",
+            name="report",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="stock.Report"
+            ),
         ),
         migrations.AddField(
-            model_name='casespalu',
-            name='report',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Report'),
+            model_name="casespalu",
+            name="report",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="stock.Report"
+            ),
         ),
     ]

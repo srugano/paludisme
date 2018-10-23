@@ -9,19 +9,34 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0011_auto_20170530_0717'),
-    ]
+    dependencies = [("stock", "0011_auto_20170530_0717")]
 
     operations = [
         migrations.AlterField(
-            model_name='temporary',
-            name='facility',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='bdiadmin.CDS'),
+            model_name="temporary",
+            name="facility",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="bdiadmin.CDS",
+            ),
         ),
         migrations.AlterField(
-            model_name='temporary',
-            name='supervisor_phone_number',
-            field=models.CharField(blank=True, help_text='The telephone to contact your supervisor.', max_length=16, null=True, validators=[django.core.validators.RegexValidator(message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.", regex=b'^\\+?1?\\d{9,15}$')], verbose_name='telephone'),
+            model_name="temporary",
+            name="supervisor_phone_number",
+            field=models.CharField(
+                blank=True,
+                help_text="The telephone to contact your supervisor.",
+                max_length=16,
+                null=True,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.",
+                        regex=b"^\\+?1?\\d{9,15}$",
+                    )
+                ],
+                verbose_name="telephone",
+            ),
         ),
     ]

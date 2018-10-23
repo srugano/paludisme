@@ -9,24 +9,37 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bdiadmin', '0013_auto_20170319_1415'),
-        ('stock', '0017_casespaludis'),
+        ("bdiadmin", "0013_auto_20170319_1415"),
+        ("stock", "0017_casespaludis"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CasesPaluCDS',
+            name="CasesPaluCDS",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('year', models.PositiveIntegerField(default=2017)),
-                ('week', models.CharField(max_length=3)),
-                ('simple', models.FloatField(default=0.0)),
-                ('acute', models.FloatField(default=0.0)),
-                ('pregnant_women', models.FloatField(default=0.0)),
-                ('decease', models.FloatField(default=0.0)),
-                ('ge', models.FloatField(default=0.0)),
-                ('tdr', models.FloatField(default=0.0)),
-                ('cds', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bdiadmin.CDS')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("year", models.PositiveIntegerField(default=2017)),
+                ("week", models.CharField(max_length=3)),
+                ("simple", models.FloatField(default=0.0)),
+                ("acute", models.FloatField(default=0.0)),
+                ("pregnant_women", models.FloatField(default=0.0)),
+                ("decease", models.FloatField(default=0.0)),
+                ("ge", models.FloatField(default=0.0)),
+                ("tdr", models.FloatField(default=0.0)),
+                (
+                    "cds",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="bdiadmin.CDS"
+                    ),
+                ),
             ],
-        ),
+        )
     ]

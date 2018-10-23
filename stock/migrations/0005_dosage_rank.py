@@ -7,14 +7,10 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0004_stockproduct_reporting_date'),
-    ]
+    dependencies = [("stock", "0004_stockproduct_reporting_date")]
 
     operations = [
         migrations.AddField(
-            model_name='dosage',
-            name='rank',
-            field=models.IntegerField(default=0),
-        ),
+            model_name="dosage", name="rank", field=models.IntegerField(default=0)
+        )
     ]

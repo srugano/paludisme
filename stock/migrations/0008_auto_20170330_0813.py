@@ -10,29 +10,67 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0007_auto_20170330_0315'),
-    ]
+    dependencies = [("stock", "0007_auto_20170330_0315")]
 
     operations = [
         migrations.CreateModel(
-            name='StockOutReport',
+            name="StockOutReport",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('remaining', models.FloatField(default=0.0)),
-                ('reporting_date', models.DateField(default=django.utils.timezone.now)),
-                ('produit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Product')),
-                ('report', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stock.Report')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("remaining", models.FloatField(default=0.0)),
+                ("reporting_date", models.DateField(default=django.utils.timezone.now)),
+                (
+                    "produit",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="stock.Product"
+                    ),
+                ),
+                (
+                    "report",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="stock.Report"
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
-            model_name='temporary',
-            name='phone_number',
-            field=models.CharField(blank=True, help_text='The telephone to contact the sender.', max_length=16, validators=[django.core.validators.RegexValidator(message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.", regex=b'^\\+?1?\\d{9,15}$')], verbose_name='telephone'),
+            model_name="temporary",
+            name="phone_number",
+            field=models.CharField(
+                blank=True,
+                help_text="The telephone to contact the sender.",
+                max_length=16,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.",
+                        regex=b"^\\+?1?\\d{9,15}$",
+                    )
+                ],
+                verbose_name="telephone",
+            ),
         ),
         migrations.AlterField(
-            model_name='temporary',
-            name='supervisor_phone_number',
-            field=models.CharField(blank=True, help_text='The telephone to contact your supervisor.', max_length=16, validators=[django.core.validators.RegexValidator(message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.", regex=b'^\\+?1?\\d{9,15}$')], verbose_name='telephone'),
+            model_name="temporary",
+            name="supervisor_phone_number",
+            field=models.CharField(
+                blank=True,
+                help_text="The telephone to contact your supervisor.",
+                max_length=16,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number in the format: '+25799999999'. Up to 15 digits allowed.",
+                        regex=b"^\\+?1?\\d{9,15}$",
+                    )
+                ],
+                verbose_name="telephone",
+            ),
         ),
     ]

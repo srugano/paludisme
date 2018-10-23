@@ -7,54 +7,46 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('stock', '0020_stockproductcds_stockproductdis'),
-    ]
+    dependencies = [("stock", "0020_stockproductcds_stockproductdis")]
 
     operations = [
         migrations.RenameField(
-            model_name='stockproductcds',
-            old_name='quantity',
-            new_name='quantity_sf',
+            model_name="stockproductcds", old_name="quantity", new_name="quantity_sf"
         ),
         migrations.RenameField(
-            model_name='stockproductdis',
-            old_name='quantity',
-            new_name='quantity_sf',
+            model_name="stockproductdis", old_name="quantity", new_name="quantity_sf"
         ),
         migrations.RenameField(
-            model_name='stockproductprov',
-            old_name='quantity',
-            new_name='quantity_sf',
+            model_name="stockproductprov", old_name="quantity", new_name="quantity_sf"
         ),
         migrations.AddField(
-            model_name='stockproductcds',
-            name='quantity_sd',
+            model_name="stockproductcds",
+            name="quantity_sd",
             field=models.FloatField(default=0.0),
         ),
         migrations.AddField(
-            model_name='stockproductcds',
-            name='quantity_sr',
+            model_name="stockproductcds",
+            name="quantity_sr",
             field=models.FloatField(default=0.0),
         ),
         migrations.AddField(
-            model_name='stockproductdis',
-            name='quantity_sd',
+            model_name="stockproductdis",
+            name="quantity_sd",
             field=models.FloatField(default=0.0),
         ),
         migrations.AddField(
-            model_name='stockproductdis',
-            name='quantity_sr',
+            model_name="stockproductdis",
+            name="quantity_sr",
             field=models.FloatField(default=0.0),
         ),
         migrations.AddField(
-            model_name='stockproductprov',
-            name='quantity_sd',
+            model_name="stockproductprov",
+            name="quantity_sd",
             field=models.FloatField(default=0.0),
         ),
         migrations.AddField(
-            model_name='stockproductprov',
-            name='quantity_sr',
+            model_name="stockproductprov",
+            name="quantity_sr",
             field=models.FloatField(default=0.0),
         ),
     ]
