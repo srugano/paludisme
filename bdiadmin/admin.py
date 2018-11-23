@@ -7,7 +7,7 @@ from bdiadmin.models import Province, District, CDS, Commune, Colline, ProfileUs
 class ProvinceResource(resources.ModelResource):
     class Meta:
         model = Province
-        fields = ("name", "code")
+        fields = ("id", "name", "code")
 
 
 @admin.register(Province)
@@ -20,7 +20,7 @@ class ProvinceAdmin(ImportExportModelAdmin):
 class CommuneResource(resources.ModelResource):
     class Meta:
         model = Commune
-        fields = ("name", "code", "province__name")
+        fields = ("id", "name", "code", "province__name")
 
 
 @admin.register(Commune)
@@ -34,7 +34,7 @@ class CommuneAdmin(ImportExportModelAdmin):
 class CollineResource(resources.ModelResource):
     class Meta:
         model = Colline
-        fields = ("name", "code", "commune__name", "commune__province__name")
+        fields = ("id", "name", "code", "commune__name", "commune__province__name")
 
 
 @admin.register(Colline)
